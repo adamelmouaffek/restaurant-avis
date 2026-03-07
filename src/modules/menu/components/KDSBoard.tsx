@@ -146,7 +146,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
     );
 
     try {
-      const res = await fetch(`/api/menu/orders/${orderId}`, {
+      const res = await fetch(`/api/kds/${restaurantSlug}/orders/${orderId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
