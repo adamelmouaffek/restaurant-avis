@@ -47,6 +47,7 @@ export default async function RestaurantPage({ params }: PageProps) {
               alt={restaurant.name}
               width={96}
               height={96}
+              priority
               className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover mx-auto shadow-lg"
             />
           ) : (
@@ -98,7 +99,7 @@ export default async function RestaurantPage({ params }: PageProps) {
         {/* CTA */}
         <Link
           href={`/r/${restaurant.slug}/review`}
-          className="block w-full max-w-[280px] h-14 rounded-2xl font-semibold text-lg text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center"
+          className="w-full max-w-[280px] h-14 rounded-2xl font-semibold text-lg text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center"
           style={{ backgroundColor: primaryColor }}
         >
           Donner mon avis

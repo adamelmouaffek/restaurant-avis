@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Card, CardContent } from "@/shared/components/ui/card";
@@ -19,6 +21,8 @@ export function EmailReviewForm({
   restaurantName,
   onSuccess,
 }: EmailReviewFormProps) {
+  const params = useParams();
+  const slug = params.slug as string;
   const [formData, setFormData] = useState<ReviewFormData & { email: string; name: string }>({
     rating: 0,
     comment: "",
@@ -27,6 +31,7 @@ export function EmailReviewForm({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [alreadyParticipated, setAlreadyParticipated] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +67,7 @@ export function EmailReviewForm({
 
       if (!response.ok) {
         if (data.alreadyParticipated) {
-          setError("Vous avez déjà donné votre avis pour ce restaurant.");
+          setAlreadyParticipated(true);
         } else {
           setError(data.error || "Une erreur est survenue.");
         }
@@ -76,6 +81,66 @@ export function EmailReviewForm({
       setIsSubmitting(false);
     }
   };
+
+  if (alreadyParticipated) {
+    return (
+      <Card className="w-full max-w-md mx-auto border-0 shadow-lg">
+        <CardContent className="p-8 sm:p-10">
+          <div className="flex flex-col items-center text-center space-y-6">
+            {/* Check icon */}
+            <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-10 h-10 text-green-500"
+              >
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+
+            {/* Message */}
+            <div className="space-y-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Vous avez deja donne votre avis !
+              </h2>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                Merci pour votre participation. Votre avis pour{" "}
+                <span className="font-medium text-gray-700">{restaurantName}</span>{" "}
+                a bien ete pris en compte.
+              </p>
+            </div>
+
+            {/* CTA */}
+            <Link
+              href={`/r/${slug}`}
+              className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-gray-900 text-white font-semibold text-base shadow-md transition-all duration-200 hover:bg-gray-800 hover:shadow-lg active:scale-[0.98]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-5 h-5"
+              >
+                <path d="M19 12H5" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              Retour au restaurant
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto border-0 shadow-lg">

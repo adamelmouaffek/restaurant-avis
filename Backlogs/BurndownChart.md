@@ -79,11 +79,43 @@ Points
 
 ---
 
-## Sprint 3 — Polish + Deploiement (EN COURS)
+## Sprint 3 — Polish + Deploiement
 
-**Total points** : 7
-**Points restants** : 7
+**Total points** : 14
+**Points restants** : 0 (TERMINE)
+
+```
+Points
+  14 |*
+  12 |  *
+  10 |    *
+   8 |      *
+   6 |        *
+   4 |          *
+   2 |            *
+   0 |______________*___________________________________
+      J1  J2  J3  J4  J5  J6  J7
+
+  * = points restants
+```
+
+### Historique Sprint 3
 
 | Date | Tache completee | Points | Restant |
 |------|-----------------|--------|---------|
-| 2026-03-07 | Sprint demarre | — | 7 |
+| 2026-03-07 | US-020 Test responsive mobile | 2 | 12 |
+| 2026-03-07 | US-021 Deploiement Vercel | 3 | 9 |
+| 2026-03-07 | US-022 Test flow complet production | 3 | 6 |
+| 2026-03-07 | US-023 Mode email + choix auth | 3 | 3 |
+| 2026-03-07 | US-024 Polish accents + UX | 3 | 0 |
+
+---
+
+## Recap Global
+
+| Sprint | Points | Status |
+|--------|--------|--------|
+| Sprint 1 — Fondations + Flow Client | 29 | TERMINE |
+| Sprint 2 — Dashboard + Landing Page | 29 | TERMINE |
+| Sprint 3 — Polish + Deploiement | 14 | TERMINE |
+| **TOTAL** | **72** | **MVP COMPLETE** |

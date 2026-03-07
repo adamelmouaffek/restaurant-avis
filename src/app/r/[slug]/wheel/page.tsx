@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { SpinningWheel } from "@/modules/avis/components/SpinningWheel";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import type { Prize } from "@/shared/types";
 import type { SpinResult } from "@/modules/avis/types";
 
@@ -82,10 +83,19 @@ export default function WheelPage() {
 
   if (loading) {
     return (
-      <main className="min-h-dvh bg-white flex items-center justify-center px-4">
-        <div className="text-center space-y-4">
-          <div className="w-10 h-10 border-4 border-gray-200 border-t-gray-800 rounded-full animate-spin mx-auto" />
-          <p className="text-sm text-gray-500">Chargement de la roue...</p>
+      <main className="min-h-dvh bg-white flex flex-col items-center justify-center px-4 py-8">
+        <div className="w-full max-w-sm mx-auto flex flex-col items-center gap-6">
+          {/* Header skeleton */}
+          <div className="text-center space-y-2 w-full">
+            <Skeleton className="h-7 w-52 mx-auto" />
+            <Skeleton className="h-4 w-64 mx-auto" />
+          </div>
+
+          {/* Wheel skeleton */}
+          <Skeleton className="w-full aspect-square max-w-[320px] rounded-full" />
+
+          {/* Button skeleton */}
+          <Skeleton className="h-14 w-full max-w-[280px] rounded-2xl" />
         </div>
       </main>
     );

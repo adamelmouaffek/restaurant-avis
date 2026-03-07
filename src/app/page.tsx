@@ -24,7 +24,7 @@ import { Separator } from "@/shared/components/ui/separator";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -55,7 +55,7 @@ export default function Home() {
           <Badge variant="secondary" className="mb-6 text-sm px-4 py-1">
             +50 avis Google en 60 jours — Garanti
           </Badge>
-          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-foreground leading-tight mb-6">
+          <h1 className="text-3xl sm:text-6xl font-bold tracking-tight text-foreground leading-tight mb-6">
             Multipliez vos avis Google{" "}
             <span className="bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent">
               par 6 en 30 jours
@@ -209,7 +209,7 @@ export default function Home() {
                   L&apos;indispensable pour demarrer
                 </CardDescription>
                 <div className="pt-2">
-                  <span className="text-4xl font-bold">1 490</span>
+                  <span className="text-3xl sm:text-4xl font-bold">1 490</span>
                   <span className="text-muted-foreground ml-1">EUR HT</span>
                 </div>
               </CardHeader>
@@ -248,7 +248,7 @@ export default function Home() {
                   La suite complete pour dominer Google
                 </CardDescription>
                 <div className="pt-2">
-                  <span className="text-4xl font-bold">2 990</span>
+                  <span className="text-3xl sm:text-4xl font-bold">2 990</span>
                   <span className="text-muted-foreground ml-1">EUR HT</span>
                 </div>
               </CardHeader>
@@ -296,7 +296,7 @@ export default function Home() {
                 La suite digitale tout-en-un pour les restaurants, hotels, cafes et bars.
               </p>
             </div>
-            <div className="flex gap-12">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12">
               <div>
                 <h4 className="font-semibold mb-3 text-sm">Produit</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
@@ -311,11 +311,11 @@ export default function Home() {
                   <li><span className="hover:text-background transition-colors cursor-pointer">Confidentialite</span></li>
                 </ul>
               </div>
-              <div>
+              <div className="col-span-2 sm:col-span-1">
                 <h4 className="font-semibold mb-3 text-sm">Contact</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>Paris, France</li>
-                  <li>contact@restaurant-avis.fr</li>
+                  <li className="break-all">contact@restaurant-avis.fr</li>
                 </ul>
               </div>
             </div>

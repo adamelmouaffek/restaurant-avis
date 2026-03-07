@@ -23,6 +23,7 @@ export function SpinningWheel({
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [alreadySpun, setAlreadySpun] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
 
   const segmentAngle = 360 / prizes.length;
@@ -55,7 +56,11 @@ export function SpinningWheel({
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Erreur lors du tirage.");
+        if (response.status === 409) {
+          setAlreadySpun(true);
+        } else {
+          setError(data.error || "Erreur lors du tirage.");
+        }
         setIsSpinning(false);
         return;
       }
@@ -147,8 +152,36 @@ export function SpinningWheel({
         </div>
       </div>
 
+      {/* Already spun message */}
+      {alreadySpun && (
+        <div className="rounded-xl bg-amber-50 border border-amber-200 p-5 text-center w-full space-y-3">
+          <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mx-auto">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6 text-amber-600"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <p className="text-sm font-semibold text-amber-800">
+            Vous avez deja tourne la roue !
+          </p>
+          <p className="text-xs text-amber-600">
+            Chaque participant ne peut tourner la roue qu&apos;une seule fois.
+          </p>
+        </div>
+      )}
+
       {/* Error */}
-      {error && (
+      {error && !alreadySpun && (
         <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 text-center w-full">
           {error}
         </div>
@@ -157,7 +190,7 @@ export function SpinningWheel({
       {/* Spin button */}
       <Button
         onClick={handleSpin}
-        disabled={isSpinning}
+        disabled={isSpinning || alreadySpun}
         className="w-full max-w-[280px] h-14 text-lg font-bold rounded-2xl shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:scale-100 disabled:shadow-none bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0"
       >
         {isSpinning ? (

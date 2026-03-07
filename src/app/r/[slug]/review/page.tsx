@@ -179,7 +179,7 @@ export default function ReviewPage() {
 
         <button
           onClick={() => setAuthMode("choice")}
-          className="text-xs text-gray-400 hover:text-gray-600 mt-6 transition-colors"
+          className="text-xs text-gray-400 hover:text-gray-600 mt-6 transition-colors min-h-[44px] px-4"
         >
           Retour au choix d&apos;authentification
         </button>

@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Star } from "lucide-react";
 
 interface ReviewWithParticipant {
@@ -72,8 +73,39 @@ export function ReviewsTable({ restaurantId }: ReviewsTableProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12 text-muted-foreground">
-        Chargement...
+      <div className="space-y-6">
+        <div>
+          <Skeleton className="h-8 w-20" />
+          <Skeleton className="h-4 w-48 mt-2" />
+        </div>
+        <div className="rounded-xl border bg-white shadow-sm p-6">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-12 w-12 rounded-lg" />
+            <div className="space-y-2">
+              <Skeleton className="h-7 w-20" />
+              <Skeleton className="h-4 w-36" />
+            </div>
+          </div>
+        </div>
+        <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+          <div className="p-6 pb-4">
+            <Skeleton className="h-6 w-32" />
+          </div>
+          <div className="px-4 pb-4 space-y-3">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-4 py-2">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-28" />
+                <div className="flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <Skeleton key={j} className="h-4 w-4 rounded-sm" />
+                  ))}
+                </div>
+                <Skeleton className="h-4 w-48 hidden md:block" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

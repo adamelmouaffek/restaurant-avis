@@ -7,9 +7,7 @@
 ### TODO
 | ID | Tache | Phase | Priorite |
 |----|-------|-------|----------|
-| US-020 | Test responsive mobile | Phase 5 | HAUTE |
-| US-021 | Deploiement Vercel | Phase 5 | HAUTE |
-| US-022 | Test flow complet production | Phase 5 | HAUTE |
+| — | — | — | — |
 
 ### IN PROGRESS
 | ID | Tache | Phase | Assignee |
@@ -38,15 +36,20 @@
 | US-017 | Section tarifs + CTA | Phase 4 | 2026-03-07 |
 | US-018 | Section "Comment ca marche" | Phase 4 | 2026-03-07 |
 | US-019 | Footer + mentions legales | Phase 4 | 2026-03-07 |
+| US-020 | Test responsive mobile | Phase 5 | 2026-03-07 |
+| US-021 | Deploiement Vercel | Phase 5 | 2026-03-07 |
+| US-022 | Test flow complet production | Phase 5 | 2026-03-07 |
+| US-023 | Mode email + choix authentification | Bonus | 2026-03-07 |
+| US-024 | Polish accents francais + UX | Bonus | 2026-03-07 |
 
 ---
 
 ## Metriques Sprint
 
-- **Velocite actuelle** : 58 points (Sprint 1 + Sprint 2)
-- **Taches completees** : 19 / 22
-- **Progression** : 86%
+- **Velocite actuelle** : 72 points (Sprint 1 + Sprint 2 + Sprint 3)
+- **Taches completees** : 24 / 24
+- **Progression** : 100%
 
 ```
-[=================...] 86%
+[====================] 100% MVP COMPLETE
 ```
