@@ -1,0 +1,61 @@
+export interface CartItem {
+  menuItemId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  notes: string;
+}
+
+export interface CreateOrderPayload {
+  restaurant_id: string;
+  table_number: string;
+  notes: string;
+  items: Array<{
+    menu_item_id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    notes: string;
+  }>;
+}
+
+export interface CreateOrderResponse {
+  orderId: string;
+  tableNumber: string;
+  totalAmount: number;
+}
+
+export const ORDER_STATUS_LABELS: Record<string, string> = {
+  pending: "En attente",
+  confirmed: "Confirmée",
+  preparing: "En préparation",
+  ready: "Prête",
+  delivered: "Servie",
+  cancelled: "Annulée",
+};
+
+export const ORDER_STATUS_COLORS: Record<string, string> = {
+  pending: "bg-yellow-100 text-yellow-800",
+  confirmed: "bg-blue-100 text-blue-800",
+  preparing: "bg-orange-100 text-orange-800",
+  ready: "bg-green-100 text-green-800",
+  delivered: "bg-gray-100 text-gray-800",
+  cancelled: "bg-red-100 text-red-800",
+};
+
+export const ALLERGENS_EU = [
+  "Gluten",
+  "Lactose",
+  "Oeufs",
+  "Poisson",
+  "Crustacés",
+  "Noix",
+  "Arachides",
+  "Soja",
+  "Sésame",
+  "Céleri",
+  "Moutarde",
+  "Lupin",
+  "Mollusques",
+  "Sulfites",
+] as const;

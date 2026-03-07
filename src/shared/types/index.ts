@@ -58,5 +58,81 @@ export interface QRCode {
   restaurant_id: string;
   table_number: string;
   url: string;
+  type: "avis" | "menu";
   created_at: string;
+}
+
+// ==================== MODULE MENU ====================
+
+export interface RestaurantTable {
+  id: string;
+  restaurant_id: string;
+  number: string;
+  capacity: number | null;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface MenuCategory {
+  id: string;
+  restaurant_id: string;
+  name: string;
+  description: string | null;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface MenuItem {
+  id: string;
+  restaurant_id: string;
+  category_id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  image_url: string | null;
+  allergens: string[];
+  is_available: boolean;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface MenuItemWithCategory extends MenuItem {
+  menu_categories: Pick<MenuCategory, "id" | "name">;
+}
+
+export type OrderStatus =
+  | "pending"
+  | "confirmed"
+  | "preparing"
+  | "ready"
+  | "delivered"
+  | "cancelled";
+
+export interface Order {
+  id: string;
+  restaurant_id: string;
+  table_number: string;
+  status: OrderStatus;
+  notes: string | null;
+  total_amount: number;
+  payment_method: "server" | "stripe";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderItem {
+  id: string;
+  order_id: string;
+  menu_item_id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface OrderWithItems extends Order {
+  order_items: OrderItem[];
 }

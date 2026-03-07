@@ -12,6 +12,8 @@ import {
   LogOut,
   Menu,
   X,
+  UtensilsCrossed,
+  ClipboardList,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Separator } from "@/shared/components/ui/separator";
@@ -21,6 +23,8 @@ const navItems = [
   { href: "/dashboard/prizes", label: "Cadeaux", icon: Gift },
   { href: "/dashboard/reviews", label: "Avis", icon: Star },
   { href: "/dashboard/qr-codes", label: "QR Codes", icon: QrCode },
+  { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
+  { href: "/dashboard/orders", label: "Commandes", icon: ClipboardList },
   { href: "/dashboard/stats", label: "Stats", icon: BarChart3 },
 ];
 
