@@ -14,7 +14,7 @@
 | **Module** | Landing Page |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que restaurateur visiteur, je veux voir immediatement ce que propose Restaurant Avis et acceder a une demo.
 
@@ -37,7 +37,7 @@
 | **Module** | Landing Page |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que restaurateur, je veux voir clairement les offres et les prix pour comprendre ce que j'obtiens.
 
@@ -60,7 +60,7 @@
 | **Module** | Landing Page |
 | **Priorite** | MOYENNE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que restaurateur, je veux comprendre en un coup d'oeil comment fonctionne le systeme.
 
@@ -80,7 +80,7 @@
 | **Module** | Landing Page |
 | **Priorite** | MOYENNE |
 | **Estimation** | 2 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que visiteur, je veux trouver les informations legales et les moyens de contact.
 

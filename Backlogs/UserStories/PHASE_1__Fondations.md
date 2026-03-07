@@ -14,7 +14,7 @@
 | **Module** | Infrastructure |
 | **Priorite** | HAUTE |
 | **Estimation** | 2 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que developpeur, je veux initialiser le projet Next.js 14 avec TypeScript, Tailwind CSS, App Router et Shadcn/UI pour disposer d'une base de code moderne et maintenable.
 
@@ -37,7 +37,7 @@
 | **Module** | Infrastructure |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que developpeur, je veux configurer un projet Supabase (base de donnees PostgreSQL, cle anon, client JS) pour stocker les donnees de l'application.
 
@@ -59,7 +59,7 @@
 | **Module** | Base de donnees |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que developpeur, je veux creer le schema de base de donnees avec 6 tables et un jeu de donnees de demo pour alimenter le prototype.
 
@@ -84,7 +84,7 @@
 | **Module** | Authentification |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que client du restaurant, je veux me connecter avec mon compte Google pour que mon avis soit authentifie et lie a un vrai compte.
 
@@ -107,7 +107,7 @@
 | **Module** | Authentification |
 | **Priorite** | HAUTE |
 | **Estimation** | 2 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que gerant de restaurant, je veux me connecter a mon dashboard avec email et mot de passe pour gerer mon etablissement en toute securite.
 

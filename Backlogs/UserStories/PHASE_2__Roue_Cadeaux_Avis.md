@@ -15,7 +15,7 @@
 | **Module** | Flow Client |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que client du restaurant, je veux acceder a la page de l'etablissement via un QR code pour decouvrir le restaurant et laisser un avis.
 
@@ -38,7 +38,7 @@
 | **Module** | Flow Client |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que client du restaurant, je veux noter mon experience avec des etoiles et ecrire un commentaire pour partager mon avis.
 
@@ -62,7 +62,7 @@
 | **Module** | Roue Cadeaux |
 | **Priorite** | HAUTE |
 | **Estimation** | 5 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que client du restaurant, je veux tourner une roue de cadeaux animee apres avoir laisse mon avis pour decouvrir mon lot de facon ludique.
 
@@ -89,7 +89,7 @@
 | **Module** | Roue Cadeaux |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que client du restaurant, je veux voir clairement le cadeau que j'ai gagne avec une animation festive pour vivre une experience memorable.
 
@@ -113,7 +113,7 @@
 | **Module** | Securite |
 | **Priorite** | HAUTE |
 | **Estimation** | 2 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que gerant, je veux que chaque client ne puisse participer qu'une seule fois par restaurant pour eviter les abus.
 

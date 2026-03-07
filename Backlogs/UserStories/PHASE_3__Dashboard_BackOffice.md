@@ -14,7 +14,7 @@
 | **Module** | Dashboard |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que gerant, je veux un dashboard avec une navigation claire en sidebar pour acceder rapidement a toutes les sections de gestion.
 
@@ -37,7 +37,7 @@
 | **Module** | Dashboard |
 | **Priorite** | HAUTE |
 | **Estimation** | 5 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que gerant, je veux configurer mes cadeaux (nom, description, probabilite) et voir un apercu de la roue en temps reel.
 
@@ -62,7 +62,7 @@
 | **Module** | Dashboard |
 | **Priorite** | HAUTE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que gerant, je veux consulter tous les avis recus avec des filtres pour suivre la satisfaction de mes clients.
 
@@ -84,7 +84,7 @@
 | **Module** | Dashboard |
 | **Priorite** | MOYENNE |
 | **Estimation** | 3 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que gerant, je veux generer des QR codes pour mes tables qui pointent vers ma page restaurant.
 
@@ -109,7 +109,7 @@
 | **Module** | Dashboard |
 | **Priorite** | MOYENNE |
 | **Estimation** | 4 points |
-| **Statut** | [ ] A faire |
+| **Statut** | [x] Termine |
 
 **Story** : En tant que gerant, je veux voir des statistiques cles pour mesurer l'impact de la roue cadeaux.
 
