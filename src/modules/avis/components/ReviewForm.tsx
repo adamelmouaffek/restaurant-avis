@@ -62,7 +62,7 @@ export function ReviewForm({
 
       if (!response.ok) {
         if (data.alreadyParticipated) {
-          setError("Vous avez deja donne votre avis pour ce restaurant.");
+          setError("Vous avez déjà donné votre avis pour ce restaurant.");
         } else {
           setError(data.error || "Une erreur est survenue.");
         }
@@ -77,7 +77,7 @@ export function ReviewForm({
 
       onSuccess(data.participantId, data.reviewId);
     } catch {
-      setError("Erreur de connexion. Veuillez reessayer.");
+      setError("Erreur de connexion. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
     }
@@ -92,7 +92,7 @@ export function ReviewForm({
               Votre avis compte !
             </h2>
             <p className="text-sm text-gray-500">
-              Comment etait votre experience chez{" "}
+              Comment était votre expérience chez{" "}
               <span className="font-medium text-gray-700">{restaurantName}</span> ?
             </p>
           </div>
@@ -108,10 +108,10 @@ export function ReviewForm({
             />
             {formData.rating > 0 && (
               <span className="text-sm text-gray-500">
-                {formData.rating === 1 && "Decevant"}
+                {formData.rating === 1 && "Décevant"}
                 {formData.rating === 2 && "Moyen"}
                 {formData.rating === 3 && "Correct"}
-                {formData.rating === 4 && "Tres bien"}
+                {formData.rating === 4 && "Très bien"}
                 {formData.rating === 5 && "Excellent !"}
               </span>
             )}
@@ -128,7 +128,7 @@ export function ReviewForm({
             </label>
             <Textarea
               id="comment"
-              placeholder="Partagez votre experience..."
+              placeholder="Partagez votre expérience..."
               value={formData.comment}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, comment: e.target.value }))

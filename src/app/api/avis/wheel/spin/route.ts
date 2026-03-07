@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verifier que le participant n'a pas deja tourne la roue
+    // Vérifier que le participant n'a pas déjà tourné la roue
     const { data: existingParticipation } = await supabaseAdmin
       .from("participations")
       .select("id")
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     if (existingParticipation) {
       return NextResponse.json(
-        { error: "Vous avez deja tourne la roue" },
+        { error: "Vous avez déjà tourné la roue" },
         { status: 409 }
       );
     }

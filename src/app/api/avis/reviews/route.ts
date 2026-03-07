@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verifier si le participant a deja participe
+    // Vérifier si le participant a déjà participé
     const { data: existingParticipant } = await supabaseAdmin
       .from("participants")
       .select("id")
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     if (existingParticipant) {
       return NextResponse.json(
-        { error: "Vous avez deja participe pour ce restaurant", alreadyParticipated: true },
+        { error: "Vous avez déjà participé pour ce restaurant", alreadyParticipated: true },
         { status: 409 }
       );
     }

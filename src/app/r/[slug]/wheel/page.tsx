@@ -23,7 +23,7 @@ export default function WheelPage() {
   // Validate required params
   useEffect(() => {
     if (!participantId || !reviewId) {
-      setError("Parametres manquants. Veuillez recommencer le processus.");
+      setError("Paramètres manquants. Veuillez recommencer le processus.");
       setLoading(false);
     }
   }, [participantId, reviewId]);
@@ -127,7 +127,7 @@ export default function WheelPage() {
             Tentez votre chance !
           </h1>
           <p className="text-sm text-gray-500">
-            Tournez la roue pour decouvrir votre cadeau
+            Tournez la roue pour découvrir votre cadeau
           </p>
         </div>
 

@@ -154,7 +154,7 @@ export default function ReviewPage() {
             {error || "Restaurant introuvable"}
           </h2>
           <p className="text-sm text-gray-500">
-            Verifiez le lien ou scannez a nouveau le QR code.
+            Vérifiez le lien ou scannez à nouveau le QR code.
           </p>
         </div>
       </main>
@@ -187,7 +187,19 @@ export default function ReviewPage() {
     );
   }
 
-  // Google OAuth mode - user must be authenticated
+  // Google OAuth mode - wait for authentication
+  if (authMode === "google" && status !== "authenticated") {
+    return (
+      <main className="min-h-dvh bg-white flex items-center justify-center px-4">
+        <div className="text-center space-y-4">
+          <div className="w-10 h-10 border-4 border-gray-200 border-t-gray-800 rounded-full animate-spin mx-auto" />
+          <p className="text-sm text-gray-500">Redirection vers Google...</p>
+        </div>
+      </main>
+    );
+  }
+
+  // Google OAuth mode - user is authenticated
   return (
     <main className="min-h-dvh bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
       {/* Restaurant header */}

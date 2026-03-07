@@ -62,7 +62,7 @@ export function EmailReviewForm({
 
       if (!response.ok) {
         if (data.alreadyParticipated) {
-          setError("Vous avez deja donne votre avis pour ce restaurant.");
+          setError("Vous avez déjà donné votre avis pour ce restaurant.");
         } else {
           setError(data.error || "Une erreur est survenue.");
         }
@@ -71,7 +71,7 @@ export function EmailReviewForm({
 
       onSuccess(data.participantId, data.reviewId);
     } catch {
-      setError("Erreur de connexion. Veuillez reessayer.");
+      setError("Erreur de connexion. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
     }
@@ -136,10 +136,10 @@ export function EmailReviewForm({
             />
             {formData.rating > 0 && (
               <span className="text-sm text-gray-500">
-                {formData.rating === 1 && "Decevant"}
+                {formData.rating === 1 && "Décevant"}
                 {formData.rating === 2 && "Moyen"}
                 {formData.rating === 3 && "Correct"}
-                {formData.rating === 4 && "Tres bien"}
+                {formData.rating === 4 && "Très bien"}
                 {formData.rating === 5 && "Excellent !"}
               </span>
             )}
@@ -156,7 +156,7 @@ export function EmailReviewForm({
             </label>
             <Textarea
               id="comment"
-              placeholder="Partagez votre experience..."
+              placeholder="Partagez votre expérience..."
               value={formData.comment}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, comment: e.target.value }))

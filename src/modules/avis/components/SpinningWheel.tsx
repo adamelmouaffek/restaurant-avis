@@ -78,7 +78,7 @@ export function SpinningWheel({
         });
       }, 4200);
     } catch {
-      setError("Erreur de connexion. Veuillez reessayer.");
+      setError("Erreur de connexion. Veuillez réessayer.");
       setIsSpinning(false);
     }
   }, [isSpinning, rotation, restaurantId, participantId, reviewId, onPrizeWon]);
