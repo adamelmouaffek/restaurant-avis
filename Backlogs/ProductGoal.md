@@ -11,34 +11,36 @@ la collecte d'avis Google authentifies via une roue de cadeaux gamifiee.
 > Livrer une demo professionnelle du module "Roue Cadeaux + Avis" suffisamment
 > convaincante pour signer les 5 premiers clients restaurateurs.
 
+**Statut : MVP COMPLETE** — Deploye sur https://restaurant-avis.vercel.app
+
 ## OKRs — Sprint MVP
 
 ### Objectif 1 : Demo fonctionnelle end-to-end
 | Key Result | Cible | Actuel |
 |------------|-------|--------|
-| Flow client complet (QR → avis → roue → cadeau) | 100% | 0% |
-| Dashboard gerant operationnel | 100% | 0% |
-| Landing page pro avec pricing | 100% | 0% |
+| Flow client complet (QR → avis → roue → cadeau) | 100% | 100% |
+| Dashboard gerant operationnel | 100% | 100% |
+| Landing page pro avec pricing | 100% | 100% |
 
 ### Objectif 2 : Qualite professionnelle
 | Key Result | Cible | Actuel |
 |------------|-------|--------|
-| Lighthouse mobile score | > 85 | — |
-| Responsive iPhone SE (320px) | OK | — |
-| Temps chargement 4G | < 3s | — |
+| Lighthouse mobile score | > 85 | A mesurer |
+| Responsive iPhone SE (320px) | OK | OK |
+| Temps chargement 4G | < 3s | A mesurer |
 
 ### Objectif 3 : Pret a pitcher
 | Key Result | Cible | Actuel |
 |------------|-------|--------|
-| URL de demo en ligne (Vercel) | 1 | 0 |
-| Restaurant demo avec donnees realistes | 1 | 0 |
-| QR code scannable pointant vers la demo | 1 | 0 |
+| URL de demo en ligne (Vercel) | 1 | 1 |
+| Restaurant demo avec donnees realistes | 1 | 1 |
+| QR code scannable pointant vers la demo | 1 | 1 |
 
 ## Metriques de succes post-lancement
 
 | Metrique | Cible 30 jours | Cible 90 jours |
 |----------|---------------|----------------|
-| Restaurateurs demarchés | 20 | 50 |
+| Restaurateurs demarches | 20 | 50 |
 | Demos presentees | 10 | 30 |
 | Clients signes | 2 | 5 |
 | Avis Google generes (total clients) | 100 | 500 |

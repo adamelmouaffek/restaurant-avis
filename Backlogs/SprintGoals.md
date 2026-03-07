@@ -1,26 +1,8 @@
 # Restaurant Avis — Sprint Goals
 
-## Sprint actif : Sprint 3 — Polish + Deploiement
+## Sprint actif : Aucun (MVP TERMINE)
 
-**Debut** : 2026-03-07
-**Fin prevue** : —
-**Objectif** : Tester le responsive, deployer sur Vercel et valider le flow complet en production
-
-### Taches du sprint
-
-| ID | Tache | Points | Statut |
-|----|-------|--------|--------|
-| US-020 | Test responsive mobile | 2 | [ ] |
-| US-021 | Deploiement Vercel | 3 | [ ] |
-| US-022 | Test flow complet production | 2 | [ ] |
-
-**Total points** : 7
-**Points completes** : 0
-
-### Definition of Done (sprint)
-- [ ] Toutes les pages responsive a 320px minimum
-- [ ] Deploye sur Vercel avec URL publique
-- [ ] Flow client complet teste en production
+Tous les sprints du MVP sont termines. 24/24 user stories completees.
 
 ---
 
@@ -60,3 +42,20 @@
 | US-017 | Section tarifs | 3 | [x] |
 | US-018 | Comment ca marche | 3 | [x] |
 | US-019 | Footer | 2 | [x] |
+
+### Sprint 3 — Polish + Deploiement (TERMINE)
+
+**Debut** : 2026-03-07 | **Fin** : 2026-03-07
+**Velocite** : 14 points
+
+| ID | Tache | Points | Statut |
+|----|-------|--------|--------|
+| US-020 | Test responsive mobile | 2 | [x] |
+| US-021 | Deploiement Vercel | 3 | [x] |
+| US-022 | Test flow complet production | 3 | [x] |
+| US-023 | Mode email + choix authentification | 3 | [x] |
+| US-024 | Polish accents francais + UX | 3 | [x] |
+
+---
+
+## Velocite totale : 72 points | MVP COMPLETE
