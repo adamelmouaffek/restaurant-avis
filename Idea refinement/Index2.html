@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>🚀 Business Plan Futuriste – SaaS Restauration (Adam EL MOUAFFEK)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-alt: #050816;
+      --card: #020617;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #00F5D4;
+      --accent2: #7B2FF7;
+      --accent3: #F72585;
+      --danger: #fb7185;
+      --success: #22c55e;
+      --warning: #facc15;
+      --shadow-soft: 0 18px 45px rgba(15,23,42,0.9);
+      --radius-lg: 14px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #111827 0, #020617 42%, #000000 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(124,58,237,0.15) 0, transparent 40%),
+        radial-gradient(circle at 80% 0%, rgba(34,197,94,0.1) 0, transparent 55%);
+      opacity: 0.9;
+      z-index: -1;
+    }
+    .page {
+      max-width: 980px;
+      margin: 32px auto 48px;
+      padding: 0 18px 48px;
+    }
+    header {
+      padding: 22px 20px 20px;
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.28);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.98) 0, rgba(15,23,42,0.96) 40%, rgba(15,23,42,0.9) 100%);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(0,245,212,0.04), transparent 40%),
+        linear-gradient(-140deg, rgba(124,58,237,0.04), transparent 45%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.9rem;
+      letter-spacing: 0.02em;
+      color: #f9fafb;
+    }
+    .tagline {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .pill-row {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .pill {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: rgba(15,23,42,0.9);
+      backdrop-filter: blur(12px);
+    }
+    main {
+      margin-top: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    section {
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.9) 0, rgba(15,23,42,0.96) 40%, rgba(2,6,23,0.98) 100%);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(30,64,175,0.45);
+      padding: 16px 18px 18px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.85);
+      position: relative;
+      overflow: hidden;
+    }
+    section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0 0, rgba(59,130,246,0.16) 0, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(236,72,153,0.08) 0, transparent 55%);
+      opacity: 0.8;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    section > * {
+      position: relative;
+      z-index: 1;
+    }
+    h2 {
+      font-size: 1.15rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h2 span.label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+    }
+    h3 {
+      margin: 10px 0 4px;
+      font-size: 0.98rem;
+      color: #e5e7eb;
+    }
+    p {
+      margin: 4px 0;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    small {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    ul {
+      margin: 4px 0 4px 1.1rem;
+      padding: 0;
+      font-size: 0.88rem;
+    }
+    li {
+      margin: 2px 0;
+    }
+    strong {
+      color: #f9fafb;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .highlight {
+      color: var(--success);
+      font-weight: 600;
+    }
+    .danger {
+      color: var(--danger);
+      font-weight: 600;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.45);
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: rgba(15,23,42,0.9);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 14px;
+      margin-top: 6px;
+    }
+    @media (max-width: 900px) {
+      .grid-2 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        padding: 18px 16px 16px;
+      }
+      section {
+        padding: 14px 14px 16px;
+      }
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 6px 0;
+      font-size: 0.8rem;
+    }
+    th, td {
+      border: 1px solid rgba(31,41,55,0.9);
+      padding: 5px 6px;
+      text-align: left;
+    }
+    th {
+      background: rgba(15,23,42,0.95);
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+    tr:nth-child(even) td {
+      background: rgba(15,23,42,0.7);
+    }
+    code {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      background: #020617;
+      padding: 2px 4px;
+      border-radius: 4px;
+      border: 1px solid rgba(30,64,175,0.55);
+    }
+    .score-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .score {
+      padding: 4px 9px;
+      border-radius: 10px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.4);
+      font-size: 0.78rem;
+    }
+    .footer {
+      margin-top: 18px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>🚀 Business Plan Futuriste – Suite SaaS 5‑en‑1 pour Restaurants</h1>
+      <p class="tagline">
+        Porteur de projet : <strong>Adam EL MOUAFFEK</strong> · Paris, Île‑de‑France · Demande : <strong>200 $ d’abonnement Claude Code</strong> pour lancer le MVP.
+      </p>
+      <div class="pill-row">
+        <span class="pill">HoReCa · Restaurants / Hôtels / Bars</span>
+        <span class="pill">Suite SaaS 5‑en‑1</span>
+        <span class="pill">QR · Avis · SEO · Maps · Social</span>
+        <span class="pill">One‑shot + Abonnement</span>
+        <span class="pill">Claude Code copilote dev</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- 1. Résumé exécutif -->
+      <section id="resume">
+        <h2>1. 🔍 <span class="label">Résumé exécutif</span></h2>
+        <p>
+          Le secteur HoReCa français (restaurants, cafés, hôtels) représente environ <strong>165&nbsp;Md&nbsp;€</strong> de chiffre d’affaires annuel, avec plus de <strong>220&nbsp;000 restaurants</strong> et des dizaines de milliers de cafés et hôtels.[file:2]
+        </p>
+        <p>
+          En 2025, <strong>36&nbsp;746 établissements CHRD</strong> ont fermé en France, soit environ <strong>100 fermetures par jour</strong>, ce qui crée à la fois une pression énorme et une urgence de digitalisation.[file:2]
+        </p>
+        <p>
+          Parallèlement, la digitalisation s’impose : <strong>75&nbsp;% des restaurants français</strong> utilisent déjà un menu QR (contre 20&nbsp;% avant le COVID), et ces parcours clients permettent d’augmenter la vitesse de service et le panier moyen (+25&nbsp;% dans les solutions comparables).[file:2]
+        </p>
+        <p>
+          Tu proposes une <strong>suite SaaS 5‑en‑1</strong> qui remplace 4 à 5 outils séparés (QR, avis, site, Google Maps, réseaux sociaux) par une seule plateforme intégrée, pensée pour la visibilité Google, la collecte d’avis authentiques et la croissance du chiffre d’affaires.[file:2]
+        </p>
+        <p>
+          Modèle : installation <strong>one‑shot</strong> entre <strong>1&nbsp;490&nbsp;€ et 2&nbsp;990&nbsp;€ HT</strong> par établissement, puis abonnement mensuel entre <strong>49&nbsp;€ et 249&nbsp;€</strong> selon le niveau d’accompagnement, pour une LTV cible d’environ <strong>8&nbsp;300–8&nbsp;500&nbsp;€</strong> sur 3 ans pour un pack complet.[file:2]
+        </p>
+        <p class="muted">
+          Zone de départ : Paris / Île‑de‑France (~20–25&nbsp;% des restaurants français, soit 45&nbsp;000–55&nbsp;000 établissements), avec objectif de <strong>30 clients</strong> la première année, puis montée vers 300 clients en 3–5 ans.[file:2]
+        </p>
+      </section>
+
+      <!-- 2. Analyse business enrichie -->
+      <section id="business">
+        <h2>2. 💶 <span class="label">Analyse business enrichie</span></h2>
+
+        <h3>2.1 Problèmes du marché</h3>
+        <ul>
+          <li>
+            <strong>Fragmentation des outils</strong> : les restaurateurs jonglent entre un prestataire pour le menu QR, un pour les avis, une agence web pour le site, un freelance pour les pubs Google, et souvent personne pour les réseaux sociaux.[file:2]
+          </li>
+          <li>
+            <strong>Dépendance à Google Maps</strong> : plus de 70&nbsp;% des clients regardent Google avant de choisir un restaurant, et une fiche avec moins de 50 avis est quasiment invisible dans les résultats locaux.[file:2]
+          </li>
+          <li>
+            <strong>Pénurie de personnel</strong> : le QR permet de réduire les allers‑retours des serveurs, de concentrer l’équipe sur l’accueil et de fluidifier la prise de commande et le paiement.[file:2]
+          </li>
+        </ul>
+
+        <h3>2.2 Proposition de valeur</h3>
+        <p>
+          La plateforme est conçue comme un <strong>cockpit digital unique</strong> pour le restaurant : une interface pour le menu QR, la commande et le paiement, la roue cadeaux reliée à des avis Google / Trustpilot authentifiés, le site web SEO, la fiche Google Business Profile et les réseaux sociaux automatisés.[file:2]
+        </p>
+        <p>
+          Ton positionnement : fournir à l’indépendant une solution “<strong>5‑en‑1</strong>” qui fait ce qu’une agence web, un outil QR, un outil d’avis et un community manager feraient séparément, mais à un prix bien inférieur et avec beaucoup moins de complexité.[file:1][file:2]
+        </p>
+
+        <div class="grid-2">
+          <div>
+            <h3>2.3 Modèle économique détaillé</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Montant</th>
+                  <th>Détail</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>One‑shot Essentiel</td>
+                  <td>1&nbsp;490&nbsp;€ HT</td>
+                  <td>Menu QR + site simple + collecte d’avis basique.[file:2]</td>
+                </tr>
+                <tr>
+                  <td>One‑shot Tout‑en‑un</td>
+                  <td>2&nbsp;990&nbsp;€ HT</td>
+                  <td>Tous les modules (QR, avis, site, Maps, social).[file:2]</td>
+                </tr>
+                <tr>
+                  <td>Abonnement Maintenance</td>
+                  <td>49&nbsp;€/mois</td>
+                  <td>Hébergement, mises à jour, support.[file:2]</td>
+                </tr>
+                <tr>
+                  <td>Abonnement Growth</td>
+                  <td>149&nbsp;€/mois</td>
+                  <td>Maintenance + réseaux sociaux automatisés.[file:2]</td>
+                </tr>
+                <tr>
+                  <td>Abonnement Full Pilotage</td>
+                  <td>249&nbsp;€/mois</td>
+                  <td>Growth + gestion Google Ads.[file:2]</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="muted">
+              Positionnement : environ 40–50&nbsp;% moins cher qu’un mix agence web + agence marketing + outil d’avis + solution QR équivalents.[file:2]
+            </p>
+          </div>
+          <div>
+            <h3>2.4 LTV & scénarios de revenus</h3>
+            <p>
+              Pour un client “Tout‑en‑un” (2&nbsp;990&nbsp;€ + 149&nbsp;€/mois pendant 36 mois), la LTV se situe autour de <strong>8&nbsp;350&nbsp;€ HT</strong> sur 3 ans.[file:2]
+            </p>
+            <ul>
+              <li>Scénario prudent (10 clients) → ≈ 83&nbsp;k€ de CA cumulés sur 3 ans.</li>
+              <li>Scénario central (30 clients) → ≈ 249&nbsp;k€.</li>
+              <li>Scénario ambitieux (80 clients) → ≈ 664&nbsp;k€.</li>
+            </ul>
+            <p class="muted">
+              Les coûts directs (infra, SMS, emails, API, support standardisé) peuvent rester autour de 10–20&nbsp;% des revenus par client si l’architecture multi‑tenant et les automatisations sont bien conçues.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Clients cibles & pricing -->
+      <section id="clients">
+        <h2>3. 🧑‍🍳 <span class="label">Clients cibles & pricing</span></h2>
+
+        <p>
+          La zone prioritaire est <strong>Paris / Île‑de‑France</strong>, avec environ <strong>45&nbsp;000 à 55&nbsp;000 établissements</strong> (restaurants, cafés, hôtels), dont une grande majorité d’indépendants et de petits groupes sans service marketing interne.[file:2]
+        </p>
+        <p>
+          Ton cœur de cible initial : les établissements pour qui tu deviens le “<strong>service marketing + outil SaaS</strong>” complet, avec une forte dépendance à Google Maps et aux avis.
+        </p>
+
+        <h3>3.1 Segments et grilles de prix indicatives</h3>
+
+        <h3>1) Bistrot de quartier / brasserie</h3>
+        <ul>
+          <li>30–80 couverts, ticket moyen 20–35&nbsp;€, clientèle locale, concurrence immédiate dans la rue.</li>
+          <li>Douleurs : peu d’avis, fiche Google moyenne, site absent ou daté, réseaux sociaux abandonnés.</li>
+          <li>Offre : Pack Essentiel ou Pack Tout‑en‑un light.</li>
+          <li>Prix : 1&nbsp;490 à 2&nbsp;490&nbsp;€ one‑shot, 49–149&nbsp;€/mois.</li>
+        </ul>
+
+        <h3>2) Restaurant gastro / bistronomique</h3>
+        <ul>
+          <li>Image de marque forte, ticket moyen élevé, clientèle qui réserve et lit les avis avant de réserver.</li>
+          <li>Douleurs : cohérence marque / site / Google / Instagram, gestion d’avis premium.</li>
+          <li>Offre : Pack Tout‑en‑un complet + accompagnement contenu.</li>
+          <li>Prix : 2&nbsp;490–2&nbsp;990&nbsp;€ one‑shot, 149–249&nbsp;€/mois.</li>
+        </ul>
+
+        <h3>3) Fast casual / street‑food / dark kitchen</h3>
+        <ul>
+          <li>Forte dépendance au digital, clientèle jeune, volume important, souvent très sensible aux avis.</li>
+          <li>Douleurs : guerre des avis, fidélisation, gamification.</li>
+          <li>Offre : QR + Roue Cadeaux + Google Maps.</li>
+          <li>Prix : 1&nbsp;490–2&nbsp;490&nbsp;€ one‑shot, ≈149&nbsp;€/mois (Growth).</li>
+        </ul>
+
+        <h3>4) Hôtels avec restaurant / room service</h3>
+        <ul>
+          <li>Plusieurs points de vente (bar, resto, room service), clientèle internationale.</li>
+          <li>Douleurs : multi‑langues, coordination entre zones, avis éparpillés.</li>
+          <li>Offre : Tout‑en‑un avec mode hôtel + room service + multi‑langues.</li>
+          <li>Prix : 2&nbsp;990&nbsp;€ et plus selon nombre de points de vente, 249&nbsp;€/mois.</li>
+        </ul>
+
+        <h3>5) Petits groupes (3–10 établissements)</h3>
+        <ul>
+          <li>Groupes locaux / régionaux, direction multi‑sites sans marketing structuré.</li>
+          <li>Douleurs : manque de cohérence de marque, pas de reporting consolidé.</li>
+          <li>Offre : déploiement multi‑tenant avec dashboard groupe.</li>
+          <li>Prix : 1&nbsp;800–2&nbsp;500&nbsp;€/site one‑shot, 99–199&nbsp;€/mois/site ou pack global.</li>
+        </ul>
+      </section>
+
+      <!-- 4. Analyse technique enrichie -->
+      <section id="technique">
+        <h2>4. 🧠 <span class="label">Analyse technique enrichie</span></h2>
+
+        <h3>4.1 Stack & architecture</h3>
+        <ul>
+          <li><strong>Frontend</strong> : Next.js&nbsp;14, TypeScript, Tailwind, design system (Shadcn UI).</li>
+          <li><strong>Backend</strong> : Next.js API Routes / Route Handlers, PostgreSQL (Supabase) en mode multi‑tenant.[file:2]</li>
+          <li><strong>Auth</strong> : NextAuth (email/password + OAuth Google, Trustpilot pour avis authentifiés).[file:2]</li>
+          <li><strong>Paiements</strong> : Stripe (one‑shot + abonnements).[file:2]</li>
+          <li><strong>Automatisations</strong> : n8n self‑hosted (SMS, social, Google Business Profile).[file:2]</li>
+          <li><strong>IA</strong> : Claude Code pour le code, GPT‑4o pour contenus (blog, posts, réponses avis).[file:2]</li>
+        </ul>
+
+        <h3>4.2 Architecture logique</h3>
+        <ul>
+          <li>Monorepo : <code>/app</code> (Next.js), <code>/packages</code> (UI, types, utils), <code>/infra</code> (Docker, migrations).</li>
+          <li>Table <code>restaurants</code> avec <code>id</code>, utilisée comme clé de partition pour toutes les entités (menus, tables, commandes, avis, campagnes).</li>
+          <li>Row Level Security (RLS) activée pour garantir qu’un restaurant ne voit que ses propres données.</li>
+          <li>Espaces : Admin (toi), espace gérant, espace staff, espace client (menu QR + roue) accessible via token sécurisé.</li>
+        </ul>
+
+        <h3>4.3 Sécurité, performance, RGPD</h3>
+        <ul>
+          <li>HTTPS partout, mots de passe hashés (bcrypt/argon2), aucune carte bancaire stockée (Stripe only).</li>
+          <li>Sauvegardes quotidiennes de la base, logs d’audit pour les actions critiques (changement de prix, configuration de la roue cadeaux, etc.).</li>
+          <li>CDN pour les images de plats, pages QR ultra légères optimisées pour mobile, attention aux Core Web Vitals.</li>
+          <li>Hébergement en UE, politique de conservation des données claire, gestion des droits d’accès et suppression sur demande.</li>
+        </ul>
+
+        <h3>4.4 Roadmap MVP → V1</h3>
+        <p><strong>MVP (Phase 0 + 1)</strong> :</p>
+        <ul>
+          <li>Auth multi‑tenant + DB + déploiement.</li>
+          <li>Module QR minimal (menu + prise de commande sans paiement).</li>
+          <li>Roue Cadeaux simple reliée à OAuth Google + dépôt d’avis.</li>
+          <li>Site vitrine auto‑généré basique.</li>
+          <li>1 intégration (Google Business Profile OU Instagram via n8n).</li>
+        </ul>
+        <p><strong>V1 commerciale</strong> :</p>
+        <ul>
+          <li>QR avancé (options, allergènes, multi‑langues, upsell).</li>
+          <li>Paiement en ligne Stripe + pourboire.</li>
+          <li>Roue configurable (probabilités, types de cadeaux, règles de validité).</li>
+          <li>Automatisations n8n robustes (retries, monitoring).</li>
+          <li>Dashboard gérant avec 3–5 KPI clés.</li>
+        </ul>
+      </section>
+
+      <!-- 5. Estimation de charge avec Claude Code -->
+      <section id="charge">
+        <h2>5. ⏱️ <span class="label">Estimation de charge avec Claude Code</span></h2>
+
+        <p>
+          Hypothèse : tu travailles seul, avec Claude Code comme copilote de développement pour générer du code, le refactorer et documenter. Claude Code peut réduire la charge purement technique d’environ <strong>30–40&nbsp;%</strong> par rapport à un développement solo classique.
+        </p>
+
+        <h3>5.1 Charge pour le MVP fonctionnel</h3>
+        <ul>
+          <li>Setup projet & socle (auth, multi‑tenant, DB, déploiement) : <strong>7–10 jours</strong>.</li>
+          <li>Module Menu QR + commande (sans paiement) : <strong>10–15 jours</strong>.</li>
+          <li>Module Roue Cadeaux + OAuth Google + flux avis : <strong>10–15 jours</strong>.</li>
+          <li>Site vitrine auto‑généré (templates + SEO basique) : <strong>7–10 jours</strong>.</li>
+          <li>1 intégration externe prioritaire (Google Business OU Instagram) : <strong>5–7 jours</strong>.</li>
+          <li>UX, tests de base, onboarding de 3–5 restos pilotes, corrections : <strong>10–12 jours</strong>.</li>
+        </ul>
+        <p>
+          <strong>Total brut</strong> : environ <strong>50–70 jours</strong> de travail solo.  
+          <strong>Avec Claude Code</strong> : charge ressentie d’environ <strong>30–45 jours</strong> pour livrer un MVP exploitable.
+        </p>
+
+        <h3>5.2 Charge pour la V1 commerciale</h3>
+        <p>
+          Pour ajouter le paiement en ligne, les options avancées du menu, la roue entièrement configurable, durcir les automatisations n8n et livrer un dashboard propre, il faut prévoir <strong>30–40 jours</strong> supplémentaires.
+        </p>
+        <p class="muted">
+          Horizon réaliste : <strong>3–4 mois</strong> pour passer de 0 à une V1 solide si tu avances régulièrement avec Claude Code comme copilote.
+        </p>
+      </section>
+
+      <!-- 6. Score du business & améliorations -->
+      <section id="score">
+        <h2>6. 📊 <span class="label">Score du business & améliorations</span></h2>
+
+        <h3>6.1 Notation (sur 10)</h3>
+        <div class="score-row">
+          <div class="score">Taille de marché : <span class="highlight">8,5 / 10</span></div>
+          <div class="score">Douleur client : <span class="highlight">9 / 10</span></div>
+          <div class="score">Différenciation produit : <span class="highlight">8 / 10</span></div>
+          <div class="score">Monétisation : <span class="highlight">8 / 10</span></div>
+          <div class="score">Scalabilité technique : <span class="highlight">8 / 10</span></div>
+          <div class="score">Risques marché / exécution : <span class="danger">6,5 / 10</span></div>
+          <div class="score">Fit avec tes skills : <span class="highlight">9 / 10</span></div>
+        </div>
+        <p style="margin-top:6px;">
+          Score global approximatif : <strong class="highlight">8 / 10</strong> – excellent potentiel si tu exécutes bien la partie terrain et le support.
+        </p>
+
+        <h3>6.2 Axes d’amélioration</h3>
+        <ul>
+          <li><strong>Hyper‑focus initial</strong> : attaquer un micro‑segment (ex. bistrots / brasseries dans quelques arrondissements de Paris) pour devenir “la” référence locale.</li>
+          <li><strong>Offre ultra‑simple</strong> : 1 pack principal + 1 option au lieu de multiples combinaisons (ex. « Pack Visibilité Google & Avis » + option « Réseaux Sociaux & Contenus »).</li>
+          <li><strong>Phase gratuite stratégique</strong> : installer gratuitement ou à prix symbolique chez 5–10 restos vitrines, obtenir des chiffres avant / après (avis, Maps, CA) et s’en servir comme preuves massives.[file:2]</li>
+          <li><strong>Partenariats</strong> : experts‑comptables, fournisseurs HoReCa, associations de restaurateurs, avec une commission claire ou un pack partenaire.</li>
+          <li><strong>Onboarding ultra‑rapide</strong> : import de carte depuis photo / PDF + IA pour structurer le menu, templates pré‑remplis pour campagnes et roues cadeaux.</li>
+          <li><strong>Plan anti‑churn</strong> : mini‑formations vidéo, checklist mensuelle, call de suivi après 30 jours, dashboard orienté résultats concrets (avis, réservations, CA).</li>
+        </ul>
+      </section>
+
+      <p class="footer">
+        Document HTML généré pour conversion PDF – Projet SaaS HoReCa · Adam EL MOUAFFEK.
+      </p>
+    </main>
+  </div>
+</body>
+</html>

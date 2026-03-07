@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Suite Digitale HoReCa — Présentation 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Palette 60-30-10 : 
+       - 60% primaire : #020617 (fond global)
+       - 30% secondaire : #111827 / #141414 (cartes, slides)
+       - 10% accent : #6366f1 / #22d3ee (boutons, stats, appels visuels)
+    */
+    :root {
+      --bg: #020617;
+      --bg-alt: #0a0a0a;
+      --card: #141414;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #6366f1;
+      --accent-soft: #818cf8;
+      --accent-cyan: #22d3ee;
+      --danger: #fb7185;
+      --success: #22c55e;
+      --shadow-soft: 0 22px 60px rgba(15, 23, 42, 0.95);
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #111827 0, #020617 40%, #000000 100%);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.16) 0, transparent 45%),
+        radial-gradient(circle at 85% 0, rgba(34, 211, 238, 0.12) 0, transparent 55%);
+      opacity: 0.85;
+      z-index: -1;
+    }
+
+    .slide {
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 80px;
+      position: relative;
+      border-bottom: 1px solid #1a1a1a;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.98));
+    }
+
+    .slide-cover {
+      background: linear-gradient(135deg, #020617 0, #111827 50%, #020617 100%);
+      text-align: center;
+    }
+
+    .slide-cover::before {
+      content: "";
+      position: absolute;
+      width: 620px;
+      height: 620px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.14);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #a5b4fc;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      margin-bottom: 26px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-title {
+      font-size: clamp(44px, 6vw, 76px);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 0, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-sub {
+      font-size: 19px;
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.7;
+      margin-bottom: 38px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-pills {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .slide-content {
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.92), rgba(10, 10, 10, 0.98));
+      align-items: flex-start;
+    }
+
+    .slide-content.center {
+      align-items: center;
+      text-align: center;
+    }
+
+    .slide-header {
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 46px;
+      position: relative;
+    }
+
+    .slide-tag {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .slide-title {
+      font-size: clamp(28px, 3.4vw, 46px);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.15;
+    }
+
+    .slide-title span {
+      color: var(--accent-soft);
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+      border-radius: 999px;
+      margin: 18px 0 26px;
+    }
+
+    .slide-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(34, 34, 42, 0.9);
+      border-radius: 16px;
+      padding: 24px 24px 22px 24px;
+      transition: border-color 0.2s ease-out, transform 0.2s ease-out;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.95);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.18), transparent 55%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease-out;
+    }
+
+    .card:hover {
+      border-color: rgba(99, 102, 241, 0.85);
+      transform: translateY(-2px);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .card-tag {
+      display: inline-block;
+      margin-top: 14px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #a5b4fc;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 22px;
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 180px;
+      background: var(--card);
+      border: 1px solid rgba(34, 34, 42, 0.9);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--accent-soft);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .feature-list {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      background: var(--card);
+      border: 1px solid #1f1f1f;
+      border-radius: 14px;
+      padding: 18px 22px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+      width: 42px;
+      text-align: center;
+    }
+
+    .feature-body {
+      flex: 1;
+    }
+
+    .feature-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.55;
+    }
+
+    .highlight {
+      color: var(--accent-soft);
+      font-weight: 600;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .price-card {
+      background: var(--card);
+      border: 1px solid #222;
+      border-radius: 20px;
+      padding: 30px 30px 26px 30px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+    }
+
+    .price-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #141428 0, #141414 60%, #020617 100%);
+    }
+
+    .price-card.featured::before {
+      content: "RECOMMANDÉ";
+      position: absolute;
+      top: 18px;
+      right: -32px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      padding: 6px 42px;
+      transform: rotate(45deg);
+    }
+
+    .price-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .price-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .price-amount {
+      font-size: 46px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .price-amount span {
+      font-size: 18px;
+      font-weight: 400;
+      color: #6b7280;
+    }
+
+    .price-period {
+      font-size: 13px;
+      color: #4b5563;
+      margin-bottom: 22px;
+    }
+
+    .price-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+      color: #d1d5db;
+    }
+
+    .price-features li::before {
+      content: "•";
+      color: var(--accent);
+      margin-right: 6px;
+      font-weight: 700;
+    }
+
+    .price-features li.disabled {
+      color: #374151;
+    }
+
+    .price-features li.disabled::before {
+      color: #374151;
+    }
+
+    .upsell-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .upsell-card {
+      background: var(--card);
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 24px 22px;
+      text-align: center;
+    }
+
+    .upsell-price {
+      font-size: 38px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .upsell-price span {
+      font-size: 16px;
+      font-weight: 400;
+      color: #6b7280;
+    }
+
+    .upsell-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-bottom: 10px;
+    }
+
+    .upsell-desc {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    /* Diagrammes simples budget/mix */
+    .diagram {
+      margin-top: 12px;
+      border-radius: 14px;
+      background: #020617;
+      border: 1px solid #1f2937;
+      padding: 12px 14px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .diagram-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .diagram-bar-outer {
+      width: 100%;
+      height: 9px;
+      border-radius: 999px;
+      background: #020617;
+      overflow: hidden;
+      border: 1px solid #1f2937;
+    }
+
+    .diagram-bar-inner {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-cyan), #38bdf8);
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.7);
+      width: 0;
+      transition: width 0.9s ease-out;
+    }
+
+    .diagram-bar-inner.secondary {
+      background: linear-gradient(90deg, #4ade80, var(--success));
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.7);
+    }
+
+    .diagram-bar-inner.danger {
+      background: linear-gradient(90deg, #fb7185, #f97316);
+      box-shadow: 0 0 14px rgba(248, 113, 113, 0.7);
+    }
+
+    body.loaded .bar-essentiel {
+      width: 40%;
+    }
+    body.loaded .bar-toutenun {
+      width: 60%;
+    }
+    body.loaded .bar-one-shot {
+      width: 57%;
+    }
+    body.loaded .bar-recurring {
+      width: 43%;
+    }
+
+    .page-num {
+      position: absolute;
+      bottom: 26px;
+      right: 40px;
+      font-size: 12px;
+      color: #374151;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 900px) {
+      .slide {
+        padding: 40px 22px;
+      }
+      .pricing-grid,
+      .upsell-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .slide {
+        padding: 34px 18px;
+      }
+      .stat-row {
+        gap: 14px;
+      }
+    }
+  </style>
+  <script>
+    window.addEventListener("load", () => {
+      document.body.classList.add("loaded");
+    });
+  </script>
+</head>
+<body>
+
+  <!-- SLIDE 1 COVER -->
+  <section class="slide slide-cover">
+    <div class="badge">Présentation commerciale · 2026</div>
+    <h1 class="cover-title">
+      La Suite Digitale<br />
+      pour HoReCa 🚀
+    </h1>
+    <p class="cover-sub">
+      Une seule plateforme pour gérer menus QR, avis authentifiés, site web, Google Maps
+      et réseaux sociaux — pensée pour les restaurants, hôtels, cafés et bars.
+    </p>
+    <div class="cover-pills">
+      <span class="pill">Menu QR & Commande</span>
+      <span class="pill">Roue Cadeaux 🎁</span>
+      <span class="pill">Site Web SEO / SEA</span>
+      <span class="pill">Google Maps</span>
+      <span class="pill">Réseaux Sociaux IA 🤖</span>
+    </div>
+    <span class="page-num">01 / 11</span>
+  </section>
+
+  <!-- SLIDE 2 PROBLÈME -->
+  <section class="slide slide-content">
+    <div class="slide-header">
+      <div class="slide-tag">Le problème</div>
+      <h2 class="slide-title">
+        Les établissements HoReCa perdent des clients<br />
+        <span>par manque de digitalisation</span>
+      </h2>
+      <div class="divider"></div>
+      <p class="slide-sub">
+        Marché sous pression (fermetures, inflation, pénurie de personnel),
+        mais les clients choisissent désormais sur Google Maps et les avis en ligne.
+      </p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">73%</div>
+        <div class="stat-label">des clients consultent Google<br />avant de choisir un restaurant</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">+25%</div>
+        <div class="stat-label">de chiffre d’affaires<br />avec menu QR & upsell</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">x6</div>
+        <div class="stat-label">plus d’avis<br />avec gamification</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">100</div>
+        <div class="stat-label">fermetures par jour<br />dans la restauration CHRD</div>
+      </div>
+    </div>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">🧩</div>
+        <div class="feature-body">
+          <div class="feature-title">Trop d’outils fragmentés</div>
+          <div class="feature-desc">
+            Menu QR chez un prestataire, avis chez un autre, site web chez une agence,
+            pubs Google chez un freelance… Résultat : coûts x3 à x5,
+            et aucune synergie entre les canaux.
+          </div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">⭐</div>
+        <div class="feature-body">
+          <div class="feature-title">Peu d’avis = invisibilité</div>
+          <div class="feature-desc">
+            Un établissement avec moins de 50 avis Google est quasi invisible dans les résultats Maps,
+            même s’il offre une super expérience en salle.
+          </div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">⏱️</div>
+        <div class="feature-body">
+          <div class="feature-title">Pénurie de personnel</div>
+          <div class="feature-desc">
+            Les équipes doivent faire plus avec moins. Sans QR, le personnel passe son temps
+            à prendre commande et encaisser, au lieu de se concentrer sur l’accueil et le conseil.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="page-num">02 / 11</span>
+  </section>
+
+  <!-- SLIDE 3 SOLUTION 5-EN-1 -->
+  <section class="slide slide-content">
+    <div class="slide-header">
+      <div class="slide-tag">Notre solution</div>
+      <h2 class="slide-title">
+        Une suite 5‑en‑1,<br />
+        <span>un seul partenaire</span>
+      </h2>
+      <div class="divider"></div>
+      <p class="slide-sub">
+        Nous remplaçons 4 à 5 outils séparés (QR, avis, site, Maps, social)
+        par une seule plateforme intégrée, pensée pour augmenter vos avis, votre visibilité
+        et votre chiffre d’affaires.
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">📲</div>
+        <div class="card-title">Menu QR & Commande</div>
+        <p class="card-desc">
+          Menu digital interactif par QR code. Le client commande depuis sa table,
+          la cuisine reçoit en temps réel. Paiement Apple Pay / Google Pay intégré.
+        </p>
+        <span class="card-tag">+40% rapidité de service</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎁</div>
+        <div class="card-title">Roue Cadeaux & Avis</div>
+        <p class="card-desc">
+          Après le repas, le client laisse un avis via son compte Google / Trustpilot (OAuth),
+          puis tourne la roue pour gagner un cadeau. Zéro faux avis, conformité DGCCRF.
+        </p>
+        <span class="card-tag">x6 avis en 30 jours</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">Site Web SEO / SEA</div>
+        <p class="card-desc">
+          Site vitrine clé en main, optimisé pour Google (SEO, données structurées Restaurant),
+          blog IA, et configuration de campagnes Google Ads locales.
+        </p>
+        <span class="card-tag">Page 1 locale</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🗺️</div>
+        <div class="card-title">Google Maps & Réseaux</div>
+        <p class="card-desc">
+          Fiche Google Business complète, posts hebdo, réponses IA aux avis, 
+          et automatisation des contenus Instagram / Facebook / TikTok.
+        </p>
+        <span class="card-tag">Visibilité 360°</span>
+      </div>
+    </div>
+
+    <span class="page-num">03 / 11</span>
+  </section>
+
+  <!-- SLIDE 4 MODULE QR DETAIL -->
+  <section class="slide slide-content">
+    <div class="slide-header">
+      <div class="slide-tag">Module 1</div>
+      <h2 class="slide-title">
+        Système de commande<br />
+        <span>QR Code intelligent</span>
+      </h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">📖</div>
+        <div class="feature-body">
+          <div class="feature-title">Menu digital riche</div>
+          <div class="feature-desc">
+            Photos HD, descriptions, allergènes, suggestions de plats.
+            <span class="highlight">Mise à jour en temps réel</span> pour les ruptures ou plats du jour.
+          </div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-body">
+          <div class="feature-title">Commande & paiement rapides</div>
+          <div class="feature-desc">
+            Le client commande et paie depuis son smartphone.
+            <span class="highlight">Moins d’attente</span>, plus de rotations de tables,
+            plus de couverts servis chaque jour.
+          </div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💡</div>
+        <div class="feature-body">
+          <div class="feature-title">Upsell automatique</div>
+          <div class="feature-desc">
+            Questions automatiques : « Accompagnement avec ce plat ? », « Dessert du jour ? ».
+            Objectif : <span class="highlight">+20–25 % de panier moyen</span> sans effort pour le serveur.
+          </div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🌍</div>
+        <div class="feature-body">
+          <div class="feature-title">Multilingue & mode hôtel</div>
+          <div class="feature-desc">
+            Menu auto‑traduit en plusieurs langues, mode room service pour les hôtels
+            (numéro de chambre, facturation centralisée).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="page-num">04 / 11</span>
+  </section>
+
+  <!-- SLIDE 5 PRICING ONE-SHOT -->
+  <section class="slide slide-content center">
+    <div class="slide-header" style="text-align:center;">
+      <div class="slide-tag">Tarification</div>
+      <h2 class="slide-title">
+        Paiement unique,<br />
+        <span>valeur durable</span>
+      </h2>
+      <div class="divider" style="margin:18px auto 24px;"></div>
+      <p class="slide-sub" style="margin:0 auto; max-width:650px;">
+        Deux niveaux de tickets d’entrée pour s’adapter à la taille et à l’ambition de l’établissement,
+        tout en restant sous le seuil psychologique de 3 000 €.
+      </p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-label">Offre</div>
+        <div class="price-name">Essentiel ⚙️</div>
+        <div class="price-amount">
+          1 490 <span>HT</span>
+        </div>
+        <div class="price-period">Paiement unique · Setup inclus</div>
+        <ul class="price-features">
+          <li>Menu QR & commande serveur</li>
+          <li>Paiement Apple Pay / Google Pay</li>
+          <li>Site web SEO 5 pages</li>
+          <li>Collecte d’avis simplifiée</li>
+          <li class="disabled">Roue Cadeaux OAuth</li>
+          <li class="disabled">Réseaux sociaux avancés</li>
+        </ul>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-label">Offre</div>
+        <div class="price-name">Tout‑en‑un 🚀</div>
+        <div class="price-amount">
+          2 990 <span>HT</span>
+        </div>
+        <div class="price-period">Paiement unique · Tout inclus</div>
+        <ul class="price-features">
+          <li>Menu QR & commande complète</li>
+          <li>Paiement Apple Pay / Google Pay</li>
+          <li>Site web SEO avancé</li>
+          <li>Google Maps & GMB optimisés</li>
+          <li>Roue Cadeaux & avis OAuth</li>
+          <li>Setup réseaux sociaux (IG, FB, TikTok)</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="margin-top:24px; font-size:13px; color:#4b5563;">
+      Économie jusqu’à ~50 % vs un mix agence web + agence marketing + solution d’avis + solution QR.
+    </p>
+
+    <span class="page-num">05 / 11</span>
+  </section>
+
+  <!-- SLIDE 6 ABONNEMENTS -->
+  <section class="slide slide-content center">
+    <div class="slide-header" style="text-align:center;">
+      <div class="slide-tag">Après le setup</div>
+      <h2 class="slide-title">
+        Continuez à croître<br />
+        <span>avec nos abonnements</span>
+      </h2>
+      <div class="divider" style="margin:18px auto 24px;"></div>
+      <p class="slide-sub" style="margin:0 auto; max-width:650px;">
+        Des abonnements progressifs, du simple maintien technique à un pilotage complet
+        SEO / SEA / social, avec un panier mensuel moyen autour de 150 €.
+      </p>
+    </div>
+
+    <div class="upsell-grid">
+      <div class="upsell-card">
+        <div class="upsell-price">49 <span>/mois</span></div>
+        <div class="upsell-name">Maintenance 🔧</div>
+        <div class="upsell-desc">
+          Hébergement sécurisé, mises à jour, support technique léger et sauvegardes.
+          Idéal pour les petits restos qui veulent juste rester à jour.
+        </div>
+      </div>
+
+      <div class="upsell-card" style="border-color:var(--accent);">
+        <div class="upsell-price">149 <span>/mois</span></div>
+        <div class="upsell-name">Growth 📈</div>
+        <div class="upsell-desc">
+          Tout Maintenance, plus publication IA sur Instagram / Facebook / TikTok,
+          rapports mensuels et suggestions d’optimisation.
+        </div>
+      </div>
+
+      <div class="upsell-card">
+        <div class="upsell-price">249 <span>/mois</span></div>
+        <div class="upsell-name">Full Pilotage 🧠</div>
+        <div class="upsell-desc">
+          Tout Growth, plus gestion active des campagnes Google Ads locales
+          et revue SEO mensuelle, avec reporting ROI détaillé.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px; background:#141414; border:1px solid #222; border-radius:14px; padding:18px 24px; max-width:720px; text-align:left;">
+      <div style="font-size:13px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:8px;">
+        Garantie résultats
+      </div>
+      <div style="font-size:14px; color:#d1d5db; line-height:1.6;">
+        <strong style="color:#fff;">50 avis Google en 60 jours</strong>
+        après activation de la roue cadeaux, ou nous continuons gratuitement
+        jusqu’à atteindre l’objectif.
+      </div>
+    </div>
+
+    <span class="page-num">06 / 11</span>
+  </section>
+
+  <!-- SLIDE 7 BUSINESS MODEL & BUDGET -->
+  <section class="slide slide-content">
+    <div class="slide-header">
+      <div class="slide-tag">Business model</div>
+      <h2 class="slide-title">
+        Budget & revenus —<br />
+        <span>scénario 30 premiers clients</span>
+      </h2>
+      <div class="divider"></div>
+      <p class="slide-sub">
+        Hypothèse : 30 clients en année 1, avec un mix de 40 % Essentiel et 60 % Tout‑en‑un,
+        et un abonnement moyen d’environ 147 €/mois.
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">💶</div>
+        <div class="card-title">Mix de ventes one‑shot</div>
+        <p class="card-desc">
+          Sur 30 clients : 12 offres Essentiel et 18 offres Tout‑en‑un.
+          Ticket moyen ≈ 2 390 € HT par établissement.
+        </p>
+        <ul style="margin-top:8px; padding-left:18px; font-size:13px; color:#6b7280; list-style:disc;">
+          <li>12 × 1 490 € = 17 880 € HT</li>
+          <li>18 × 2 990 € = 53 820 € HT</li>
+          <li><strong style="color:#fff;">Total one‑shot ≈ 71 700 € HT</strong></li>
+        </ul>
+        <div class="diagram">
+          <div class="diagram-label-row">
+            <span>Répartition Essentiel / Tout‑en‑un</span>
+            <span>40 % / 60 %</span>
+          </div>
+          <div class="diagram-bar-outer">
+            <div class="diagram-bar-inner bar-essentiel"></div>
+          </div>
+          <div class="diagram-label-row">
+            <span>Essentiel</span>
+            <span>Tout‑en‑un</span>
+          </div>
+          <div class="diagram-bar-outer">
+            <div class="diagram-bar-inner secondary bar-toutenun"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🔁</div>
+        <div class="card-title">Récurrent & LTV</div>
+        <p class="card-desc">
+          Abonnement moyen ≈ 147 €/mois (petits restos ~99 €, hôtels / gros clients ~179 €).
+          CA récurrent ≈ 4 410 €/mois si 100 % des 30 clients restent actifs.
+        </p>
+        <ul style="margin-top:8px; padding-left:18px; font-size:13px; color:#6b7280; list-style:disc;">
+          <li>Année 1 : ~53 k€ récurrents (si moyenne 12 mois payés).</li>
+          <li>One‑shot + récurrents ≈ 125 k€ HT.</li>
+          <li>LTV 3 ans pack complet ≈ 8 300–8 500 € HT.</li>
+        </ul>
+        <div class="diagram">
+          <div class="diagram-label-row">
+            <span>CA année 1</span>
+            <span>One‑shot vs récurrent</span>
+          </div>
+          <div class="diagram-bar-outer">
+            <div class="diagram-bar-inner bar-one-shot"></div>
+          </div>
+          <div class="diagram-label-row">
+            <span>One‑shot ≈ 57 %</span>
+            <span>Récurrent ≈ 43 %</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="page-num">07 / 11</span>
+  </section>
+
+  <!-- SLIDE 8 PERSONA 1 PETIT RESTO -->
+  <section class="slide slide-content">
+    <div class="slide-header" style="max-width:1100px">
+      <div class="slide-tag">Persona #1</div>
+      <h2 class="slide-title">
+        Petit restaurant de quartier<br />
+        <span>bistrot / brasserie 🍽️</span>
+      </h2>
+      <div class="divider"></div>
+      <p class="slide-sub">
+        30–80 couverts, ticket moyen 20–35 €, clientèle locale, peu d’avis Google
+        et site web daté ou inexistant. Cible idéale pour démarrer en Île‑de‑France.
+      </p>
+    </div>
+
+    <div class="cards-grid" style="max-width:1100px">
+      <div class="card">
+        <div class="card-icon">👤</div>
+        <div class="card-title">Profil & douleurs</div>
+        <p class="card-desc">
+          Gérant en sous‑effectif, sans service marketing, très dépendant
+          des avis et du bouche‑à‑oreille.
+        </p>
+        <ul style="margin-top:10px; padding-left:18px; font-size:14px; color:#6b7280; list-style:disc;">
+          <li>Moins de 50 avis Google, fiche peu optimisée.</li>
+          <li>Menu papier, aucune data sur le panier moyen.</li>
+          <li>Peu de temps pour gérer site, réseaux, pubs.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🧩</div>
+        <div class="card-title">Offre recommandée</div>
+        <p class="card-desc">
+          <span class="highlight">Pack Essentiel</span> en entrée, avec possibilité de passer
+          au Tout‑en‑un light après 3–6 mois si les résultats sont bons.
+        </p>
+        <ul class="price-features" style="margin-top:10px;">
+          <li>One‑shot : <strong>1 490 € HT</strong> (QR + site simple + avis).</li>
+          <li>Abonnement : <strong>~99 €/mois HT</strong> (Maintenance + un peu de social).</li>
+          <li>Garantie : 50 avis en 60 jours ou prolongation gratuite.</li>
+        </ul>
+        <p style="margin-top:10px; font-size:13px; color:#9ca3af;">
+          Hypothèse : ~40 % de tes 30 premiers clients, soit ~12 établissements en année 1.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📈</div>
+        <div class="card-title">Budget & ROI terrain</div>
+        <p class="card-desc">
+          Pour un bistrot avec 400 k€ de CA/an, investir 1 490 € + 99 €/mois
+          représente bien moins de 1 % du chiffre d’affaires annuel.
+        </p>
+        <ul style="margin-top:10px; padding-left:18px; font-size:14px; color:#6b7280; list-style:disc;">
+          <li>Objectif : +50 avis Google en 2 mois.</li>
+          <li>+1 à +2 couverts par service suffisent à amortir l’abonnement.</li>
+          <li>Montée possible vers 149 €/mois si plus de social media.</li>
+        </ul>
+      </div>
+    </div>
+
+    <span class="page-num">08 / 11</span>
+  </section>
+
+  <!-- SLIDE 9 PERSONA 2 HÔTEL -->
+  <section class="slide slide-content">
+    <div class="slide-header" style="max-width:1100px">
+      <div class="slide-tag">Persona #2</div>
+      <h2 class="slide-title">
+        Hôtel avec restaurant / bar<br />
+        <span>room service & clientèle internationale 🏨</span>
+      </h2>
+      <div class="divider"></div>
+      <p class="slide-sub">
+        Plusieurs points de vente (restaurant, bar, room service),
+        besoin de multilingue, de cohérence de marque et de centralisation des avis.
+      </p>
+    </div>
+
+    <div class="cards-grid" style="max-width:1100px">
+      <div class="card">
+        <div class="card-icon">👤</div>
+        <div class="card-title">Profil & douleurs</div>
+        <p class="card-desc">
+          Direction qui pilote plusieurs services, forte attente sur l’image,
+          mais peu de temps pour gérer la présence digitale de chaque point de vente.
+        </p>
+        <ul style="margin-top:10px; padding-left:18px; font-size:14px; color:#6b7280; list-style:disc;">
+          <li>Menus multiples et multilingues difficiles à maintenir.</li>
+          <li>Avis éparpillés (restaurant, bar, hôtel, OTA).</li>
+          <li>Aucun dashboard consolidé pour suivre le ROI marketing.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🧩</div>
+        <div class="card-title">Offre recommandée</div>
+        <p class="card-desc">
+          <span class="highlight">Pack Tout‑en‑un</span> avec mode hôtel et room service,
+          plus un niveau d’accompagnement élevé (Growth / Full Pilotage).
+        </p>
+        <ul class="price-features" style="margin-top:10px;">
+          <li>One‑shot : <strong>2 990 € HT et +</strong> selon nbre de points de vente.</li>
+          <li>Abonnement : <strong>~179–249 €/mois HT</strong> (Growth ou Full Pilotage).</li>
+          <li>Multilingue + room service + reporting consolidé.</li>
+        </ul>
+        <p style="margin-top:10px; font-size:13px; color:#9ca3af;">
+          Hypothèse : 10–20 % des 30 premiers clients, soit 3 à 6 hôtels sur Paris / IDF.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📈</div>
+        <div class="card-title">Budget & ROI terrain</div>
+        <p class="card-desc">
+          Pour un hôtel avec 1–3 M€ de CA annuel, un pack à 2 990 € + 249 €/mois
+          est un budget marketing faible par rapport au potentiel de visibilité.
+        </p>
+        <ul style="margin-top:10px; padding-left:18px; font-size:14px; color:#6b7280; list-style:disc;">
+          <li>Augmenter le remplissage restaurant / bar via Google Maps.</li>
+          <li>Vendre plus de room service grâce au QR en chambre.</li>
+          <li>Standardiser la présence digitale sur plusieurs langues.</li>
+        </ul>
+      </div>
+    </div>
+
+    <span class="page-num">09 / 11</span>
+  </section>
+
+  <!-- SLIDE 10 PERSONA 3 BAR / CAFÉ -->
+  <section class="slide slide-content">
+    <div class="slide-header" style="max-width:1100px">
+      <div class="slide-tag">Persona #3</div>
+      <h2 class="slide-title">
+        Bar / café à fort volume<br />
+        <span>afterwork, brunch, street‑food 🍹</span>
+      </h2>
+      <div class="divider"></div>
+      <p class="slide-sub">
+        Lieu très fréquenté, clientèle jeune, forte dépendance aux avis et aux réseaux sociaux,
+        sensible aux mécaniques de gamification.
+      </p>
+    </div>
+
+    <div class="cards-grid" style="max-width:1100px">
+      <div class="card">
+        <div class="card-icon">👤</div>
+        <div class="card-title">Profil & douleurs</div>
+        <p class="card-desc">
+          Gros volume sur les soirs et week‑ends, mais fréquentation irrégulière
+          selon la météo, les événements et la concurrence de bars voisins.
+        </p>
+        <ul style="margin-top:10px; padding-left:18px; font-size:14px; color:#6b7280; list-style:disc;">
+          <li>Besoin de lisser la fréquentation hors « heures de pointe ».</li>
+          <li>Beaucoup de passages mais peu d’avis laissés.</li>
+          <li>Réseaux sociaux irréguliers, sans stratégie claire.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🧩</div>
+        <div class="card-title">Offre recommandée</div>
+        <p class="card-desc">
+          <span class="highlight">QR + Roue Cadeaux + Maps</span> comme combo central,
+          avec option réseaux sociaux automatisés pour capitaliser sur les soirs forts.
+        </p>
+        <ul class="price-features" style="margin-top:10px;">
+          <li>One‑shot : <strong>1 490–2 490 € HT</strong> (Essentiel ou Tout‑en‑un light).</li>
+          <li>Abonnement : <strong>~149 €/mois HT</strong> (Growth).</li>
+          <li>Focus : gamification avis, posts réguliers, promos ciblées.</li>
+        </ul>
+        <p style="margin-top:10px; font-size:13px; color:#9ca3af;">
+          Hypothèse : 30–40 % des 30 premiers clients, particulièrement dans les quartiers animés.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📈</div>
+        <div class="card-title">Budget & ROI terrain</div>
+        <p class="card-desc">
+          Avec un ticket moyen plus bas mais beaucoup de volume,
+          quelques tournées supplémentaires par service suffisent à rentabiliser l’abonnement.
+        </p>
+        <ul style="margin-top:10px; padding-left:18px; font-size:14px; color:#6b7280; list-style:disc;">
+          <li>Roue cadeaux orientée « 2ᵉ consommation » pour augmenter le panier.</li>
+          <li>Stories et Reels automatiques sur les soirs forts.</li>
+          <li>Meilleure position sur « bar près de moi » sur Google.</li>
+        </ul>
+      </div>
+    </div>
+
+    <span class="page-num">10 / 11</span>
+  </section>
+
+  <!-- SLIDE 11 CTA FINAL -->
+  <section class="slide slide-cover">
+    <h2 class="cover-title" style="font-size:clamp(38px,5vw,64px);">
+      Prêt à digitaliser<br />
+      votre établissement ?
+    </h2>
+    <p class="cover-sub">
+      Rejoignez les restaurants, hôtels, cafés et bars qui multiplient leurs avis par 6
+      et augmentent leur chiffre d’affaires grâce à une suite digitale unique.
+    </p>
+    <div class="cover-pills">
+      <span class="pill">Offre Essentiel — 1 490 € HT</span>
+      <span class="pill">Offre Tout‑en‑un — 2 990 € HT</span>
+      <span class="pill">Abonnements dès 49 €/mois</span>
+    </div>
+    <p style="margin-top:40px; font-size:13px; color:#6b7280;">
+      Contact : contact@votresociete.fr · +33 6 XX XX XX XX
+    </p>
+    <span class="page-num">11 / 11</span>
+  </section>
+
+</body>
+</html>

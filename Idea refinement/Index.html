@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Business Plan – Suite SaaS Restauration (Adam EL MOUAFFEK)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 64px;
+    }
+    h1, h2, h3 {
+      color: #f9fafb;
+      margin-top: 1.4em;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+    }
+    h2 {
+      font-size: 1.4rem;
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 0.25em;
+    }
+    h3 {
+      font-size: 1.1rem;
+    }
+    p {
+      margin: 0.4em 0;
+    }
+    .tagline {
+      font-size: 0.95rem;
+      color: #9ca3af;
+    }
+    .card {
+      background: #020617;
+      border-radius: 12px;
+      padding: 16px 18px;
+      border: 1px solid #1f2937;
+      margin: 16px 0;
+    }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid #4b5563;
+      color: #9ca3af;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+    ul {
+      margin: 0.4em 0 0.4em 1.2em;
+    }
+    strong {
+      color: #f9fafb;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.6em 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid #1f2937;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #020617;
+    }
+    .highlight {
+      color: #22c55e;
+      font-weight: 600;
+    }
+    .muted {
+      color: #9ca3af;
+      font-size: 0.85rem;
+    }
+    .footer {
+      margin-top: 32px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+    code {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.85rem;
+      background: #020617;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Business Plan – Suite SaaS 5‑en‑1 pour Restaurants</h1>
+    <p class="tagline">
+      Porteur de projet : <strong>Adam EL MOUAFFEK</strong> – Demande de financement : <strong>200&nbsp;$ d’abonnement Claude Code</strong> pour lancer le MVP.
+    </p>
+
+    <!-- 1. Résumé exécutif -->
+    <section>
+      <h2>1. Résumé exécutif</h2>
+      <div class="card">
+        <p>
+          Le secteur de la restauration française est sous pression (fermetures massives, inflation, pénurie de personnel) mais doit se digitaliser rapidement pour survivre et croître.[file:2]
+        </p>
+        <p>
+          Je construis une <strong>suite SaaS 5‑en‑1</strong> pour restaurants, hôtels et bars qui remplace cinq outils séparés (menu QR, collecte d’avis, site web, Google Maps, réseaux sociaux) par une seule plateforme intégrée, pensée pour la visibilité et la croissance du chiffre d’affaires.[file:2]
+        </p>
+        <p>
+          Le MVP sera développé grâce à un <strong>abonnement Claude Code à 200&nbsp;$</strong> qui me permet d’industrialiser le développement (génération de code, refactor rapide, itérations) et de sortir une première version en quelques semaines au lieu de plusieurs mois.
+        </p>
+        <p>
+          Modèle économique : installation <strong>one‑shot entre 1&nbsp;490&nbsp;€ et 2&nbsp;990&nbsp;€ HT</strong> puis abonnement récurrent entre <strong>49&nbsp;€ et 249&nbsp;€ / mois</strong> selon le niveau d’accompagnement.[file:2]
+        </p>
+        <p>
+          Objectif : <strong>30 clients en Île‑de‑France la première année</strong>, puis montée en puissance à 300 clients en trois ans, avec une LTV moyenne d’environ <strong>8&nbsp;500&nbsp;€ par établissement sur 3 ans</strong>.[file:2]
+        </p>
+      </div>
+    </section>
+
+    <!-- 2. Problème et opportunité -->
+    <section>
+      <h2>2. Problème et opportunité marché</h2>
+
+      <div class="card">
+        <h3>2.1. Problèmes clés côté restaurateurs</h3>
+        <ul>
+          <li>
+            <strong>Outils fragmentés</strong> : une solution pour le menu QR, une pour les avis, une agence pour le site, une autre pour les pubs, etc. Résultat : coûts x3 à x5, perte de temps et zéro synergie entre les canaux.[file:2]
+          </li>
+          <li>
+            <strong>Dépendance à Google Maps</strong> : plus de 70 % des clients regardent Google avant de choisir un restaurant, et un établissement avec moins de 50 avis est quasi invisible dans les résultats locaux.[file:2]
+          </li>
+          <li>
+            <strong>Pénurie de personnel</strong> : les équipes en salle doivent faire plus avec moins, ce qui nécessite d’automatiser la prise de commande et le paiement via QR code.[file:2]
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>2.2. Taille du marché</h3>
+        <p>
+          En France, on compte environ <strong>221&nbsp;500 restaurants</strong>, plus de <strong>42&nbsp;000 cafés/bars</strong> et près de <strong>18&nbsp;000 hôtels</strong>, pour un chiffre d’affaires combiné d’environ <strong>165&nbsp;Md&nbsp;€</strong> dans le secteur HoReCa.[file:2]
+        </p>
+        <p>
+          L’Île‑de‑France concentre <strong>environ 20 à 25&nbsp;% des restaurants français</strong>, soit un ordre de grandeur de <strong>45&nbsp;000 à 55&nbsp;000 établissements</strong> dans la zone que je cible pour la phase 1.[file:2]
+        </p>
+        <p>
+          Parmi eux, je vise principalement les <strong>indépendants et petits groupes</strong> (sans service marketing interne), ce qui représente facilement plusieurs milliers de clients potentiels adressables à moyen terme en Île‑de‑France.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3. Solution : Suite SaaS 5-en-1 -->
+    <section>
+      <h2>3. Solution : suite SaaS 5‑en‑1</h2>
+      <p>
+        La plateforme est conçue comme une <strong>suite unique</strong> regroupant 5 modules majeurs dans une interface simple, accessible depuis un navigateur web ou un smartphone.[file:2]
+      </p>
+
+      <div class="card">
+        <h3>Module 1 – Menu QR, commande et paiement</h3>
+        <p>
+          QR code par table, menu digital riche (photos, allergènes, suggestions) et prise de commande en temps réel vers la cuisine ou le bar.[file:2]
+        </p>
+        <ul>
+          <li>Commande depuis le smartphone du client, envoi direct en cuisine (WebSocket temps réel).</li>
+          <li>Paiement intégré (Stripe, Apple Pay, Google Pay) et pourboire optionnel.[file:2]</li>
+          <li>Recommandations automatiques augmentant le panier moyen d’environ 25&nbsp;% dans les solutions comparables.[file:2]</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Module 2 – Roue cadeaux & avis authentifiés (feature différenciante)</h3>
+        <p>
+          Après le repas, le client scanne un QR code pour accéder à une roue de cadeaux (dessert, café, remise, etc.) en échange d’un avis Google ou Trustpilot authentifié.[file:2]
+        </p>
+        <ul>
+          <li>Connexion OAuth obligatoire au compte Google / Trustpilot pour éviter les faux avis et rester conforme à la réglementation.[file:2]</li>
+          <li>Les restaurateurs comparables constatent jusqu’à x6 avis en 30 jours grâce à ce type de mécanique.[file:2]</li>
+          <li>SMS de relance automatique pour les clients qui n’ont pas encore joué.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Module 3 – Site web SEO / SEA automatisé</h3>
+        <ul>
+          <li>Site vitrine généré automatiquement (menu, photos, horaires, réservation).</li>
+          <li>Structure optimisée SEO (balises, données structurées Restaurant, sitemap automatique).[file:2]</li>
+          <li>Blog IA pour publier régulièrement du contenu local optimisé.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Module 4 – Google Maps & fiche établissement</h3>
+        <ul>
+          <li>Connexion à l’API Google Business Profile.</li>
+          <li>Publication automatique de posts hebdomadaires (événements, menus, promos).[file:2]</li>
+          <li>Réponses semi‑automatisées aux avis avec IA, ton contrôlé par le restaurateur.[file:2]</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Module 5 – Réseaux sociaux automatisés</h3>
+        <ul>
+          <li>Connexion Instagram, Facebook, TikTok.</li>
+          <li>Transformation automatique de vidéos courtes en Reels/TikToks avec légendes générées par IA.[file:2]</li>
+          <li>Validation par le restaurateur avant publication, rapports mensuels simples.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4. Modèle économique et revenus -->
+    <section>
+      <h2>4. Modèle économique et potentiel de revenus</h2>
+      <div class="grid-2">
+        <div>
+          <h3>4.1. Offres et tarifs</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Offre</th>
+                <th>Prix one‑shot (HT)</th>
+                <th>Contenu principal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Essentiel</td>
+                <td>1&nbsp;490&nbsp;€</td>
+                <td>Menu QR + site web simple + collecte d’avis de base.[file:2]</td>
+              </tr>
+              <tr>
+                <td>Tout‑en‑un</td>
+                <td>2&nbsp;990&nbsp;€</td>
+                <td>Tous les modules (QR, avis, site, Google Maps, réseaux sociaux) configurés.[file:2]</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Abonnement</th>
+                <th>Prix / mois</th>
+                <th>Valeur ajoutée</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Maintenance</td>
+                <td>49&nbsp;€</td>
+                <td>Hébergement, mises à jour, support léger.[file:2]</td>
+              </tr>
+              <tr>
+                <td>Growth</td>
+                <td>149&nbsp;€</td>
+                <td>Maintenance + automatisation réseaux sociaux.[file:2]</td>
+              </tr>
+              <tr>
+                <td>Full Pilotage</td>
+                <td>249&nbsp;€</td>
+                <td>Growth + gestion active des campagnes Google Ads.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3>4.2. Économie unitaire (exemple pack Tout‑en‑un)</h3>
+          <ul>
+            <li>Recette initiale : 2&nbsp;990&nbsp;€ HT dès la signature.[file:2]</li>
+            <li>Recette récurrente moyenne visée : 149&nbsp;€ / mois sur 36 mois ≈ 5&nbsp;364&nbsp;€ HT.[file:2]</li>
+            <li>Revenu total moyen par client sur 3 ans ≈ 8&nbsp;350&nbsp;€ HT (LTV).[file:2]</li>
+          </ul>
+          <p class="muted">
+            À titre indicatif : avec 30 clients en 3 ans, cela représente environ 250&nbsp;k€ de chiffre d’affaires cumulé, avec un coût marginal par client faible (SaaS multi‑tenant, automatisations).[file:2]
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>4.3. Hypothèses de marge et prix de revient</h3>
+        <p>
+          Prix de revient estimé (coût direct par restaurant) : hébergement, SMS, emails, licences API et temps d’onboarding automatisé représentent typiquement <strong>10 à 20&nbsp;% du revenu</strong> sur la durée de vie du client, grâce à une architecture multi‑tenant et des automatisations intensives.
+        </p>
+        <p>
+          Le reste couvre le temps commercial, le support, la R&amp;D produit et la rémunération du fondateur, en laissant une marge nette potentielle élevée à partir d’une base de quelques dizaines de clients.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>4.4. Retour sur investissement du ticket de 200&nbsp;$</h3>
+        <ul>
+          <li>Les 200&nbsp;$ financent l’abonnement Claude Code sur plusieurs mois, accélérant fortement le développement du MVP.</li>
+          <li>Un seul client pack Tout‑en‑un (2&nbsp;990&nbsp;€ + 149&nbsp;€/mois) couvre déjà plus de <strong>10 fois</strong> l’investissement initial du ticket.</li>
+          <li>Avec un objectif raisonnable de <strong>5 à 10 clients la première année</strong>, le ROI pour ce ticket se compte en dizaines de fois.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Stratégie Go-To-Market (incluant phase gratuite) -->
+    <section>
+      <h2>5. Stratégie de déploiement (Go‑to‑Market)</h2>
+
+      <div class="card">
+        <h3>Phase 0 – Installation gratuite ciblée (effet vitrine)</h3>
+        <p>
+          Pour maximiser la crédibilité et la visibilité, je prévois d’installer la solution <strong>gratuitement</strong> chez un petit nombre de restaurants stratégiques, y compris certains concurrents directs des établissements que je vise ensuite.
+        </p>
+        <ul>
+          <li>Installation gratuite ou à prix symbolique chez 5 à 10 restaurants bien situés (quartiers à fort trafic en Île‑de‑France).</li>
+          <li>En échange : autorisation d’utiliser les résultats comme <strong>cas clients détaillés</strong> (avant/après avis Google, avant/après chiffre d’affaires moyen par couvert).</li>
+          <li>Objectif : créer un effet de démonstration visible pour les restaurants concurrents dans la même rue ou le même quartier et susciter la demande.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Phase 1 – Paris / Île‑de‑France</h3>
+        <ul>
+          <li>Ciblage de 30 premiers clients dans l’année, en priorité restaurants indépendants, cuisines à ticket moyen 20–50&nbsp;€, et hôtels avec room service.[file:2]</li>
+          <li>Prospection terrain (porte-à‑porte avec démo sur tablette), appels sortants et emailing ciblé.</li>
+          <li>Usage intensif des cas clients de la phase 0 comme “preuve sociale”.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Phase 2 – Extension nationale</h3>
+        <ul>
+          <li>Partenariats avec experts‑comptables, groupements de restaurateurs, fournisseurs HoReCa.[file:2]</li>
+          <li>Réplication du playbook ville par ville (Lyon, Marseille, Bordeaux…).[file:2]</li>
+          <li>Renforcement produit grâce aux retours des premiers clients (modèle SaaS itératif).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6. Technologie et sécurité -->
+    <section>
+      <h2>6. Architecture technique, sécurité et scalabilité</h2>
+
+      <div class="card">
+        <h3>6.1. Stack technique envisagée</h3>
+        <ul>
+          <li>Frontend : Next.js 14, TypeScript, Tailwind CSS, composants UI modernes (Shadcn).</li>
+          <li>Backend : API routes Next.js, base de données PostgreSQL (Supabase) en mode multi‑tenant sécurisé (RLS).[file:2]</li>
+          <li>Auth : NextAuth (OAuth Google, Trustpilot) pour gérer les avis authentifiés.[file:2]</li>
+          <li>Paiements : Stripe (one‑shot + abonnements, futur terminal physique).</li>
+          <li>Automatisations : n8n auto‑hébergé pour SMS, réseaux sociaux, Google Business Profile.[file:2]</li>
+          <li>IA : Claude Code pour la production de code, GPT‑4o pour les contenus (blog, réponses aux avis, textes réseaux sociaux).[file:2]</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>6.2. Principes de sécurité et de simplicité</h3>
+        <ul>
+          <li>Architecture simple (monorepo Next.js + base unique multi‑tenant) pour limiter la complexité et les coûts d’infrastructure.</li>
+          <li>Séparation stricte des données par établissement (Row Level Security), chiffrement en transit (HTTPS) et sauvegardes régulières.</li>
+          <li>Interface légère, responsive, optimisée Core Web Vitals pour tourner confortablement sur les ordinateurs comme sur les smartphones.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. Risques et plan de mitigation -->
+    <section>
+      <h2>7. Principaux risques et mitigation</h2>
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Risque</th>
+              <th>Mitigation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fermetures massives de restaurants</td>
+              <td>Cibler des établissements résilients, positionnés qualité / expérience, et diversifier vers hôtels et bars.[file:2]</td>
+            </tr>
+            <tr>
+              <td>Évolution des CGU Google / plateformes d’avis</td>
+              <td>Multi‑plateforme (Google, Trustpilot…), veille juridique et conformité stricte sur les incitations aux avis.[file:2]</td>
+            </tr>
+            <tr>
+              <td>Concurrence (Sunday, HeyPongo, agences web)</td>
+              <td>Positionnement unique “5‑en‑1” + automatisation IA + tarification agressive.</td>
+            </tr>
+            <tr>
+              <td>Temps de support trop important</td>
+              <td>Onboarding guidé, tutoriels vidéo, automatisations maximales sur les tâches répétitives.[file:2]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 8. Demande de financement -->
+    <section>
+      <h2>8. Demande de financement et usage des 200&nbsp;$</h2>
+      <div class="card">
+        <p>
+          Je sollicite un investissement de <strong>200&nbsp;$</strong> spécifiquement pour financer l’abonnement <strong>Claude Code</strong>, qui sera utilisé comme “copilote développeur” pour :
+        </p>
+        <ul>
+          <li>Structurer l’architecture multi‑tenant sécurisée (schémas de base, API, tests).</li>
+          <li>Accélérer le développement des modules clés (QR, roue cadeaux, intégrations Google / réseaux sociaux).</li>
+          <li>Réduire drastiquement le temps nécessaire pour livrer un MVP commercialisable.</li>
+        </ul>
+        <p>
+          En contrepartie, l’investisseur bénéficie d’un effet de levier considérable : un ticket limité finance la création d’un actif SaaS pouvant générer <strong>plusieurs centaines de milliers d’euros</strong> de chiffre d’affaires sur les prochaines années, avec une première preuve de traction dès les <strong>30 premiers clients</strong> en Île‑de‑France.[file:2]
+        </p>
+      </div>
+    </section>
+
+    <p class="footer">
+      Contact : Adam EL MOUAFFEK – Paris, Île‑de‑France – Projet SaaS HoReCa.
+    </p>
+  </div>
+</body>
+</html>

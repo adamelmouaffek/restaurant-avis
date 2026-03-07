@@ -1,0 +1,322 @@
+╔══════════════════════════════════════════════════════════════════╗
+║           RESTAURANT_AVIS — PLAN COMPLET DE LANCEMENT           ║
+║         Suite Digitale SaaS HoReCa — Adam EL MOUAFFEK           ║
+║                        Paris, Mars 2026                          ║
+╚══════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NOTE À CLAUDE — AVANT DE COMMENCER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Avant de proposer une stack technique, discute avec moi pour
+comprendre mes contraintes, mes préférences, mon niveau technique
+et l'environnement dans lequel je travaille. Pose-moi les questions
+nécessaires pour faire les meilleurs choix ensemble.
+
+Questions à me poser en priorité :
+  → Quel est mon environnement de développement actuel ?
+  → Quelles technologies je connais déjà ?
+  → Est-ce que je veux du no-code, du low-code ou du full-code ?
+  → Quelle est mon infrastructure actuelle (serveur, cloud...) ?
+  → Quel est mon budget infra mensuel estimé ?
+  → Est-ce que je veux héberger moi-même ou déléguer ?
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NOTE À CLAUDE — AGENT TEAMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Utilise Claude Code Agent Teams pour ce projet.
+Crée et orchestre les agents suivants, chacun avec un rôle précis :
+
+  [AGENT 1] — PRODUCT OWNER
+    Rôle : Comprendre le besoin métier, rédiger les User Stories,
+    prioriser le backlog, s'assurer que chaque feature apporte
+    de la valeur au gérant de restaurant/hôtel/bar/café.
+
+  [AGENT 2] — ARCHITECTE TECHNIQUE
+    Rôle : Proposer et discuter la stack technique avec Adam,
+    concevoir l'architecture globale, définir les modèles de
+    données, garantir la scalabilité et la sécurité.
+
+  [AGENT 3] — DÉVELOPPEUR FULLSTACK
+    Rôle : Implémenter les fonctionnalités, écrire le code
+    propre et testé, intégrer les APIs (Stripe, Google,
+    Trustpilot, n8n), construire les interfaces utilisateur.
+
+  [AGENT 4] — DÉVELOPPEUR AUTOMATISATION / IA
+    Rôle : Concevoir et implémenter les workflows n8n,
+    les pipelines IA (GPT-4o, génération contenu), les SMS
+    automatiques, la publication social media, les réponses
+    aux avis, le pipeline vidéo → Reel.
+
+  [AGENT 5] — QA / TESTEUR
+    Rôle : Écrire les tests unitaires et d'intégration,
+    valider la conformité mobile-first, vérifier la sécurité
+    multi-tenant, s'assurer du respect du RGPD et de la DGCCRF.
+
+  [AGENT 6] — DEVOPS / DÉPLOIEMENT
+    Rôle : Configurer l'environnement de développement,
+    gérer le déploiement en production, les variables
+    d'environnement, les pipelines CI/CD et la surveillance.
+
+Instructions à Claude :
+  → Coordonne ces agents de façon autonome
+  → Chaque agent doit commenter ses décisions
+  → En cas de désaccord entre agents, soumets le choix à Adam
+  → Commence toujours par le Product Owner pour cadrer la tâche
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NOTE À CLAUDE — BACKLOG & ROADMAP MVP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Crée un dossier nommé : BackLog_User_Stories/
+
+Dans ce dossier, génère une liste de fichiers de tâches communes
+au format User Stories, organisés par module et par priorité.
+
+Structure attendue du dossier :
+  BackLog_User_Stories/
+  ├── PHASE_1__Fondations.md
+  ├── PHASE_2__QR_Commande_Paiement.md
+  ├── PHASE_3__Roue_Cadeaux_Avis.md
+  ├── PHASE_4__Site_Web_GMB.md
+  └── PHASE_5__Reseaux_Sociaux_Facturation.md
+
+Format de chaque User Story :
+  ID      : US-001
+  Phase   : 1
+  Module  : Authentification
+  Titre   : Connexion gérant via email et mot de passe
+  Story   : En tant que gérant, je veux me connecter à mon
+            dashboard pour gérer mon établissement.
+  Critères d'acceptation :
+    → Je peux saisir mon email et mon mot de passe
+    → Je suis redirigé vers mon dashboard après connexion
+    → Un message d'erreur s'affiche si les identifiants sont faux
+    → Ma session est maintenue pendant 7 jours
+  Priorité   : HAUTE
+  Estimation : 3 points
+  Statut     : [ ] À faire
+
+Les agents Product Owner et Développeur Fullstack doivent
+collaborer pour rédiger ces User Stories avant tout développement.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. VISION DU PROJET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Restaurant_avis est une suite digitale tout-en-un destinée aux
+restaurants, hôtels, cafés et bars (secteur HoReCa). Elle remplace
+5 outils séparés par une seule plateforme cohérente, vendue en
+paiement unique + abonnement.
+
+Problème résolu :
+  → Les restaurateurs utilisent 5+ outils fragmentés (menu QR,
+    avis, site web, Google Ads, réseaux sociaux), coûteux
+    et incohérents.
+  → 73% des clients consultent Google avant de choisir.
+  → Les établissements avec peu d'avis sont invisibles sur Maps.
+  → Pénurie de serveurs = besoin d'automatiser les commandes.
+
+Proposition de valeur :
+  → 1 seul partenaire pour tout digitaliser
+  → Résultats rapides : +50 avis Google en 60 jours
+  → Prix unique accessible : 1 490€ ou 2 990€ HT
+  → Automatisation IA pour les tâches répétitives
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. MARCHÉ CIBLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Secteur HoReCa France :
+  → 221 521 restaurants
+  → 42 000 cafés / bars
+  → 18 000 hôtels avec restauration
+  → CA total : ~165 milliards €/an
+
+ICP (client idéal) :
+  → Restaurant indépendant, brasserie, bar, café, petit hôtel
+  → 1 à 5 établissements
+  → Ticket moyen client : 20–40 €
+  → Zone urbaine : Île-de-France, PACA, Rhône-Alpes
+  → Sensible au digital, sans équipe marketing dédiée
+
+TAM → 840 M€  (France HoReCa)
+SAM →  56 M€  (20% indépendants urbains)
+SOM → 560 K€  (1% première année)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. LES 5 MODULES DU PRODUIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MODULE 1 — MENU QR CODE + COMMANDE + PAIEMENT
+-----------------------------------------------
+  → QR code unique par table généré automatiquement
+  → Menu digital : catégories, photos HD, allergènes,
+    disponibilité temps réel, multilingue (10 langues)
+  → Commande directe depuis le téléphone du client
+  → Envoi commande au serveur/cuisine (temps réel)
+  → Interface KDS (Kitchen Display System) pour la cuisine
+  → Paiement Apple Pay, Google Pay, carte
+  → Upsell automatique : +25% panier moyen
+  → Mode Hôtel : numéro de chambre + room service
+  → Statistiques par table (panier moyen, heures de pointe)
+
+MODULE 2 — ROUE CADEAUX & AVIS AUTHENTIFIÉS (KILLER FEATURE)
+--------------------------------------------------------------
+  → Après le repas : QR sur table/ticket → accès à la roue
+  → Connexion OAuth obligatoire (vrai compte Google ou Trustpilot)
+  → L'avis est posté sur la vraie plateforme = zéro faux avis
+  → Animation roue avec lots configurables par le gérant
+  → Cadeaux paramétrables : réduction, café, dessert, boisson
+  → Probabilités par lot réglables dans le back-office
+  → Anti-abus : 1 participation / numéro de téléphone
+  → SMS automatique de rappel (2h après visite)
+  → Résultat : x6 avis en 30 jours (données terrain)
+  → Conformité DGCCRF : cadeau non conditionné à une note positive
+
+MODULE 3 — SITE WEB SEO + SEA
+-------------------------------
+  → Site vitrine généré depuis le profil de l'établissement
+  → Pages : Accueil, Menu, Réservation, Galerie, Avis, Contact, Blog
+  → SEO technique complet (Schema.org, meta, sitemap, robots.txt)
+  → Blog IA automatisé : recettes, actus, événements
+  → Domaine personnalisé ou sous-domaine par client
+  → Campagnes Google Ads locales configurées (ciblage géo)
+  → Remarketing sur visiteurs du menu QR
+
+MODULE 4 — GOOGLE MAPS & GMB
+------------------------------
+  → Connexion API Google My Business (GMB)
+  → Fiche complète à 100% : horaires, photos, description
+  → Posts automatiques hebdomadaires
+  → Réponses automatiques aux avis (IA, ton configurable)
+  → Lien direct vers le menu QR depuis la fiche GMB
+  → Suivi du classement local Google Maps
+  → Rapport de visibilité mensuel
+
+MODULE 5 — RÉSEAUX SOCIAUX
+----------------------------
+  → Connexion Instagram (Graph API), Facebook, TikTok
+  → Templates de posts et Reels configurables
+  → Pipeline automatisé :
+      Input  : vidéo ou photo d'un plat
+      Output : Reel vertical + Story + Post avec caption IA
+  → Validation manuelle optionnelle (webhook Telegram)
+  → Rapport mensuel : reach, likes, nouveaux abonnés
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. MODÈLE COMMERCIAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OFFRES ONE-SHOT (paiement unique)
+----------------------------------
+  [ESSENTIEL]  1 490 € HT
+    → Menu QR + Commande + Paiement Apple/Google Pay
+    → Site web SEO (5 pages)
+    → Google Maps GMB optimisé
+    → Formation gérant 1h (Zoom)
+
+  [TOUT-EN-UN] 2 990 € HT  ★ RECOMMANDÉ
+    → Tout l'Essentiel +
+    → Roue Cadeaux (OAuth Google + Trustpilot)
+    → Setup campagnes Google Ads (SEA)
+    → Réseaux Sociaux (Instagram, Facebook, TikTok)
+    → Maintenance 3 mois incluse
+    → Site SEO 10 pages
+
+ABONNEMENTS MENSUELS (récurrence)
+-----------------------------------
+  [MAINTENANCE]    49 €/mois
+    → Hébergement, mises à jour menu, support prioritaire
+
+  [GROWTH]        149 €/mois
+    → Tout Maintenance +
+    → Publication automatisée IA (Reels, Stories, Posts)
+    → Rapport mensuel engagement social
+
+  [FULL PILOTAGE] 249 €/mois
+    → Tout Growth +
+    → Gestion active Google Ads
+    → Optimisation SEO mensuelle
+    → Rapport ROI complet + recommandations
+
+PROJECTIONS FINANCIÈRES
+-------------------------
+  An 1 (2026) : 30 clients   → CA  140 000 €
+  An 2 (2027) : 120 clients  → CA  610 000 €
+  An 3 (2028) : 300 clients  → CA 1 650 000 €
+
+  CAC cible : ~400 €/client
+  LTV 3 ans  : ~8 500 €/client
+  Point mort : ~15–20 clients Tout-en-un + abonnés
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. ANALYSE SWOT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FORCES
+  → Suite 5-en-1 : aucun concurrent ne propose tout ça
+  → Automatisation IA = coûts opérationnels très bas
+  → Avis OAuth = différenciateur éthique et légal fort
+  → Revenus récurrents via abonnements
+
+FAIBLESSES
+  → Concurrents établis (Sunday, HeyPongo, Fydl)
+  → Résistance des gérants "old school"
+  → SAV chronophage en phase de lancement
+  → Dépendance aux API Google / Trustpilot
+
+OPPORTUNITÉS
+  → 200 000+ restaurants en France sous-digitalisés
+  → 36 746 fermetures en 2025 = urgence de digitaliser
+  → Tourisme Paris = besoin multilingue fort
+  → Pénurie main-d'oeuvre = QR code = solution naturelle
+
+RISQUES
+  → Changement CGU Google sur avis incentivés
+  → Churn élevé si onboarding mal géré
+  → Coût acquisition client B2B élevé
+  → Maintenance technique multi-clients complexe
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. CONFORMITÉ & LÉGAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [ ] RGPD : consentement cookies, politique vie privée,
+             suppression données sur demande
+  [ ] DGCCRF : cadeau non conditionné à une note positive
+  [ ] Mentions légales sur chaque site client
+  [ ] CGU roue cadeaux (transparence lots + probabilités)
+  [ ] Paiements conformes PCI-DSS
+  [ ] Données hébergées en Europe (UE)
+  [ ] Conformité CGU Google (OAuth officiel uniquement)
+  [ ] Conformité Trustpilot Invitation API
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. DEFINITION OF DONE (par feature)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [ ] Tests unitaires passent
+  [ ] Mobile responsive validé (iPhone SE minimum)
+  [ ] Chargement < 3s sur 4G
+  [ ] Données isolées par tenant (multi-tenant vérifié)
+  [ ] Gestion d'erreur utilisateur (messages clairs)
+  [ ] Documenté
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Restaurant_avis — Adam EL MOUAFFEK — Paris, Mars 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

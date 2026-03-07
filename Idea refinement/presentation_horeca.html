@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Présentation Business — SaaS HoReCa</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  .slide {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    position: relative;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  /* ── SLIDE 1 – COVER ── */
+  .slide-cover {
+    background: linear-gradient(135deg, #0a0a0a 0%, #111827 50%, #0a0a0a 100%);
+    text-align: center;
+  }
+  .slide-cover::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.4);
+    color: #a5b4fc;
+    padding: 6px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .cover-title {
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .cover-sub {
+    font-size: 20px;
+    color: #9ca3af;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+  .cover-pills {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px;
+    padding: 10px 22px;
+    font-size: 14px;
+    color: #d1d5db;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .slide-section {
+    background: linear-gradient(135deg, #0f172a 0%, #0a0a0a 100%);
+    text-align: center;
+  }
+  .section-num {
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.08);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+  .section-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6366f1;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  /* ── CONTENT SLIDES ── */
+  .slide-content {
+    background: #0d0d0d;
+    align-items: flex-start;
+  }
+  .slide-content.center { align-items: center; text-align: center; }
+
+  .slide-header {
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 48px;
+  }
+  .slide-tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6366f1;
+    margin-bottom: 12px;
+  }
+  .slide-title {
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+  }
+  .slide-title span {
+    color: #818cf8;
+  }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+  }
+  .card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #6366f1; }
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .card-desc {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+  .card-tag {
+    display: inline-block;
+    margin-top: 14px;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.25);
+    color: #a5b4fc;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* ── FEATURE ROWS ── */
+  .feature-list {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background: #141414;
+    border: 1px solid #1f1f1f;
+    border-radius: 14px;
+    padding: 22px 26px;
+  }
+  .feature-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    width: 48px;
+    text-align: center;
+  }
+  .feature-body { flex: 1; }
+  .feature-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .feature-desc {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.55;
+  }
+  .highlight {
+    color: #a5b4fc;
+    font-weight: 600;
+  }
+
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    max-width: 900px;
+  }
+  .price-card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 20px;
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .price-card.featured {
+    border-color: #6366f1;
+    background: linear-gradient(135deg, #141428 0%, #141414 100%);
+  }
+  .price-card.featured::before {
+    content: 'RECOMMANDÉ';
+    position: absolute;
+    top: 18px; right: -28px;
+    background: #6366f1;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    padding: 6px 40px;
+    transform: rotate(45deg);
+  }
+  .price-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6366f1;
+    margin-bottom: 10px;
+  }
+  .price-name {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .price-amount {
+    font-size: 52px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .price-amount span {
+    font-size: 20px;
+    font-weight: 400;
+    color: #6b7280;
+  }
+  .price-period {
+    font-size: 13px;
+    color: #4b5563;
+    margin-bottom: 28px;
+  }
+  .price-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .price-features li {
+    font-size: 14px;
+    color: #d1d5db;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .price-features li::before { content: '✓'; color: #6366f1; font-weight: 700; }
+  .price-features li.disabled { color: #374151; }
+  .price-features li.disabled::before { content: '✕'; color: #374151; }
+
+  /* ── UPSELL / ABONNEMENTS ── */
+  .upsell-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+  }
+  .upsell-card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+  }
+  .upsell-price {
+    font-size: 42px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .upsell-price span { font-size: 18px; font-weight: 400; color: #6b7280; }
+  .upsell-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #a5b4fc;
+    margin-bottom: 16px;
+  }
+  .upsell-desc {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+
+  /* ── ROADMAP ── */
+  .roadmap {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .roadmap-item {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-left: 2px solid #1f1f1f;
+    margin-left: 20px;
+    padding-left: 36px;
+    position: relative;
+  }
+  .roadmap-item::before {
+    content: '';
+    position: absolute;
+    left: -8px; top: 26px;
+    width: 14px; height: 14px;
+    background: #6366f1;
+    border-radius: 50%;
+    border: 3px solid #0d0d0d;
+  }
+  .roadmap-period {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6366f1;
+    min-width: 110px;
+    padding-top: 2px;
+  }
+  .roadmap-body {}
+  .roadmap-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .roadmap-desc {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.55;
+  }
+
+  /* ── SWOT / TABLE ── */
+  .swot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+  }
+  .swot-card {
+    background: #141414;
+    border: 1px solid #1f1f1f;
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .swot-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .swot-card.s h3 { color: #34d399; }
+  .swot-card.w h3 { color: #f87171; }
+  .swot-card.o h3 { color: #60a5fa; }
+  .swot-card.t h3 { color: #fbbf24; }
+  .swot-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .swot-card ul li {
+    font-size: 14px;
+    color: #9ca3af;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .swot-card ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #4b5563;
+  }
+
+  /* ── CTA SLIDE ── */
+  .slide-cta {
+    background: linear-gradient(135deg, #0f0c29, #141428, #0f0c29);
+    text-align: center;
+  }
+  .cta-title {
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .cta-sub {
+    font-size: 18px;
+    color: #6b7280;
+    max-width: 540px;
+    line-height: 1.65;
+    margin-bottom: 44px;
+  }
+  .cta-boxes {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 14px;
+    padding: 20px 32px;
+    text-align: left;
+  }
+  .cta-box-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #6366f1; text-transform: uppercase; margin-bottom: 8px; }
+  .cta-box-value { font-size: 22px; font-weight: 800; color: #fff; }
+
+  /* ── PAGE NUMBER ── */
+  .page-num {
+    position: absolute;
+    bottom: 28px; right: 40px;
+    font-size: 12px;
+    color: #2d2d2d;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #818cf8);
+    border-radius: 2px;
+    margin: 20px 0 32px;
+  }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 44px;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    flex: 1;
+    min-width: 180px;
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 38px;
+    font-weight: 900;
+    color: #818cf8;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    .slide { padding: 40px 24px; }
+    .pricing-grid, .upsell-grid, .swot-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 1 – COVER
+══════════════════════════════════════════ -->
+<section class="slide slide-cover">
+  <div class="badge">🚀 Présentation Commerciale 2026</div>
+  <h1 class="cover-title">La Suite Digitale<br>pour HoReCa</h1>
+  <p class="cover-sub">Un seul partenaire pour digitaliser, fidéliser et faire grandir votre restaurant, hôtel, café ou bar.</p>
+  <div class="cover-pills">
+    <span class="pill">📱 Menu QR + Commande</span>
+    <span class="pill">🎡 Roue Cadeaux</span>
+    <span class="pill">🌐 Site Web SEO/SEA</span>
+    <span class="pill">📍 Google Maps</span>
+    <span class="pill">📲 Réseaux Sociaux</span>
+  </div>
+  <span class="page-num">01 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 2 – PROBLÈME
+══════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="slide-header" style="max-width:1100px">
+    <div class="slide-tag">Le problème</div>
+    <h2 class="slide-title">Les restaurants perdent des clients<br><span>par manque de digital</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="stat-num">73%</div>
+      <div class="stat-label">des clients consultent<br>Google avant de choisir</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">+40%</div>
+      <div class="stat-label">de commandes<br>plus rapides avec QR</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">+25%</div>
+      <div class="stat-label">de CA avec<br>menu digital upsell</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">x6</div>
+      <div class="stat-label">plus d'avis avec<br>gamification</div>
+    </div>
+  </div>
+  <div class="feature-list" style="max-width:1100px">
+    <div class="feature-item">
+      <div class="feature-icon">😩</div>
+      <div class="feature-body">
+        <div class="feature-title">Trop d'outils fragmentés</div>
+        <div class="feature-desc">Menu QR chez un prestataire, site web chez un autre, Google Ads chez une agence — résultat : cher, incohérent, difficile à piloter.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">⭐</div>
+      <div class="feature-body">
+        <div class="feature-title">Peu d'avis en ligne = invisibilité</div>
+        <div class="feature-desc">Un restaurant avec moins de 50 avis Google n'apparaît pas en tête des résultats. Les clients passent à côté sans le savoir.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">💸</div>
+      <div class="feature-body">
+        <div class="feature-title">Manque à gagner sur chaque table</div>
+        <div class="feature-desc">Sans suggestion automatique de plats complémentaires ou de desserts, le panier moyen reste sous-exploité à chaque service.</div>
+      </div>
+    </div>
+  </div>
+  <span class="page-num">02 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 3 – SOLUTION
+══════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="slide-header">
+    <div class="slide-tag">Notre solution</div>
+    <h2 class="slide-title">Une suite complète,<br><span>un seul partenaire</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="cards-grid" style="max-width:1100px">
+    <div class="card">
+      <div class="card-icon">📱</div>
+      <div class="card-title">Menu QR + Commande</div>
+      <div class="card-desc">Menu digital interactif sur QR code. Le client commande depuis sa table, le serveur reçoit la commande en temps réel. Paiement Apple Pay / Google Pay intégré.</div>
+      <span class="card-tag">⚡ +40% rapidité service</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎡</div>
+      <div class="card-title">Roue Cadeaux & Avis</div>
+      <div class="card-desc">Après sa visite, le client laisse un avis Google ou Trustpilot via son vrai compte (OAuth natif), puis tourne la roue pour gagner un cadeau. Zéro faux avis.</div>
+      <span class="card-tag">⭐ x6 avis en 30 jours</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <div class="card-title">Site Web SEO + SEA</div>
+      <div class="card-desc">Site vitrine clé en main, optimisé Core Web Vitals, Schema.org Restaurant, blog automatisé, et campagnes Google Ads locales configurées dès le départ.</div>
+      <span class="card-tag">🔍 Page 1 Google</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">📍</div>
+      <div class="card-title">Google Maps Pro</div>
+      <div class="card-desc">Fiche Google My Business complète à 100% : photos, horaires, posts hebdomadaires, réponses aux avis. Lien direct vers votre menu QR depuis la fiche.</div>
+      <span class="card-tag">📌 Top résultats locaux</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">📲</div>
+      <div class="card-title">Réseaux Sociaux</div>
+      <div class="card-desc">Setup complet Instagram, Facebook, TikTok. Création de templates, stratégie de contenu, et option publication automatisée IA (Reels, Stories, Posts).</div>
+      <span class="card-tag">🤖 Automatisation IA</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Dashboard Unifié</div>
+      <div class="card-desc">Un seul tableau de bord pour suivre commandes, avis collectés, trafic web, performance Google Ads, et engagement social — en temps réel.</div>
+      <span class="card-tag">👁️ Vue 360°</span>
+    </div>
+  </div>
+  <span class="page-num">03 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 4 – QR CODE EN DÉTAIL
+══════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="slide-header">
+    <div class="slide-tag">Module 1</div>
+    <h2 class="slide-title">Système de commande<br><span>QR Code intelligent</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="feature-list">
+    <div class="feature-item">
+      <div class="feature-icon">🍽️</div>
+      <div class="feature-body">
+        <div class="feature-title">Menu digital riche</div>
+        <div class="feature-desc">Photos HD, vidéos de plats, descriptions, allergènes, filtres (végétarien, sans gluten…). <span class="highlight">Mise à jour en temps réel</span> pour les ruptures ou plats du jour.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🔔</div>
+      <div class="feature-body">
+        <div class="feature-title">Commande directe au serveur / cuisine</div>
+        <div class="feature-desc">Le client commande depuis son téléphone. La commande arrive instantanément sur le KDS (Kitchen Display System) ou la tablette du serveur. <span class="highlight">Zéro erreur de prise de commande.</span></div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">💳</div>
+      <div class="feature-body">
+        <div class="feature-title">Paiement Apple Pay & Google Pay</div>
+        <div class="feature-desc">Le client paie directement depuis la table, sans attendre. <span class="highlight">Rotation des tables accélérée</span> = plus de couverts par service.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📈</div>
+      <div class="feature-body">
+        <div class="feature-title">Upsell automatique</div>
+        <div class="feature-desc">Suggestions intelligentes : "Accompagnements avec ce plat ?", "Dessert du jour ?" — <span class="highlight">+20% de panier moyen</span> sans effort du serveur.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-body">
+        <div class="feature-title">Multilingue & Mode Hôtel</div>
+        <div class="feature-desc">Menu auto-traduit en 10 langues. Mode "room service" pour les hôtels avec saisie du numéro de chambre et facturation centralisée.</div>
+      </div>
+    </div>
+  </div>
+  <span class="page-num">04 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 5 – ROUE CADEAUX
+══════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="slide-header">
+    <div class="slide-tag">Module 2</div>
+    <h2 class="slide-title">Roue Cadeaux<br><span>& Avis Authentifiés</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="feature-list">
+    <div class="feature-item">
+      <div class="feature-icon">🔐</div>
+      <div class="feature-body">
+        <div class="feature-title">OAuth natif Google & Trustpilot</div>
+        <div class="feature-desc">Le client se connecte avec son vrai compte Google ou Trustpilot pour laisser l'avis. <span class="highlight">100% d'avis authentiques</span>, conformité DGCCRF, zéro risque de suppression par Google.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-body">
+        <div class="feature-title">Parcours gamifié</div>
+        <div class="feature-desc">1. Fin de repas → QR sur table / ticket → 2. Laisser un avis → 3. Tourner la roue → 4. Gagner (café offert, dessert, réduction 10%…) → 5. Revenir chercher le cadeau = <span class="highlight">fidélisation automatique</span>.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📱</div>
+      <div class="feature-body">
+        <div class="feature-title">SMS de rappel automatisé</div>
+        <div class="feature-desc">Si le client n'a pas encore laissé d'avis, il reçoit un SMS automatique 2h après sa visite avec le lien direct. <span class="highlight">Taux de conversion : +35%</span> vs sans relance.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🛡️</div>
+      <div class="feature-body">
+        <div class="feature-title">Anti-abus intégré</div>
+        <div class="feature-desc">Un seul avis par numéro de téléphone, délai minimum entre participations. Le cadeau n'est <span class="highlight">pas conditionné à une note positive</span> — conformité légale totale.</div>
+      </div>
+    </div>
+  </div>
+  <span class="page-num">05 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 6 – SEO / SEA / MAPS
+══════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="slide-header">
+    <div class="slide-tag">Modules 3 & 4</div>
+    <h2 class="slide-title">Visibilité Google :<br><span>SEO, SEA & Maps</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="cards-grid" style="max-width:1100px; grid-template-columns: 1fr 1fr 1fr">
+    <div class="card">
+      <div class="card-icon">🔍</div>
+      <div class="card-title">SEO On-Page</div>
+      <div class="card-desc">Schema.org Restaurant, balises title/meta optimisées, Core Web Vitals, pages locales ("restaurant [ville]"), blog automatisé avec recettes & actus.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💰</div>
+      <div class="card-title">SEA Google Ads</div>
+      <div class="card-desc">Campagnes locales ciblées par rayon géographique, remarketing sur visiteurs du menu QR, extensions avec réservation et horaires.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📍</div>
+      <div class="card-title">Google My Business</div>
+      <div class="card-desc">Fiche GMB 100% complète, photos, posts hebdo, réponse aux avis (IA), lien menu QR intégré. Les fiches actives = meilleur classement Maps.</div>
+    </div>
+  </div>
+  <div class="feature-list" style="margin-top:24px">
+    <div class="feature-item">
+      <div class="feature-icon">🔗</div>
+      <div class="feature-body">
+        <div class="feature-title">Synergie QR ↔ Maps ↔ Avis</div>
+        <div class="feature-desc">Chaque avis collecté via la roue améliore le classement Google Maps → plus de visibilité → plus de clients → plus d'avis. <span class="highlight">Un cercle vertueux automatisé.</span></div>
+      </div>
+    </div>
+  </div>
+  <span class="page-num">06 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 7 – PRICING ONE-SHOT
+══════════════════════════════════════════ -->
+<section class="slide slide-content center">
+  <div class="slide-header" style="text-align:center">
+    <div class="slide-tag">Tarification</div>
+    <h2 class="slide-title">Paiement unique,<br><span>valeur durable</span></h2>
+    <div class="divider" style="margin:20px auto 32px"></div>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-label">Offre</div>
+      <div class="price-name">Essentiel</div>
+      <div class="price-amount">1 490 <span>€ HT</span></div>
+      <div class="price-period">Paiement unique · Setup inclus</div>
+      <ul class="price-features">
+        <li>Menu QR + Commande serveur</li>
+        <li>Paiement Apple Pay / Google Pay</li>
+        <li>Site web SEO (5 pages)</li>
+        <li>Google Maps GMB optimisé</li>
+        <li>Formation 1h (Zoom)</li>
+        <li class="disabled">Roue Cadeaux OAuth</li>
+        <li class="disabled">Setup SEA Google Ads</li>
+        <li class="disabled">Réseaux Sociaux setup</li>
+        <li class="disabled">Maintenance 3 mois</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <div class="price-label">Offre</div>
+      <div class="price-name">Tout-en-un</div>
+      <div class="price-amount">2 990 <span>€ HT</span></div>
+      <div class="price-period">Paiement unique · Tout inclus</div>
+      <ul class="price-features">
+        <li>Menu QR + Commande serveur</li>
+        <li>Paiement Apple Pay / Google Pay</li>
+        <li>Site web SEO (10 pages)</li>
+        <li>Google Maps GMB optimisé</li>
+        <li>Formation 1h (Zoom)</li>
+        <li>Roue Cadeaux OAuth Google + Trustpilot</li>
+        <li>Setup SEA Google Ads</li>
+        <li>Réseaux Sociaux (Instagram, FB, TikTok)</li>
+        <li>Maintenance 3 mois incluse</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:24px; font-size:13px; color:#4b5563;">💡 Économisez jusqu'à 50% vs agences web traditionnelles · Décision sans comptable sous 3 000€</p>
+  <span class="page-num">07 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 8 – UPSELL ABONNEMENTS
+══════════════════════════════════════════ -->
+<section class="slide slide-content center">
+  <div class="slide-header" style="text-align:center">
+    <div class="slide-tag">Après le setup</div>
+    <h2 class="slide-title">Continuez à croître<br><span>avec nos abonnements</span></h2>
+    <div class="divider" style="margin:20px auto 32px"></div>
+  </div>
+  <div class="upsell-grid">
+    <div class="upsell-card">
+      <div class="upsell-price">49 <span>€/mois</span></div>
+      <div class="upsell-name">Maintenance</div>
+      <div class="upsell-desc">Hébergement sécurisé, mises à jour menu illimitées, support technique prioritaire, sauvegardes hebdomadaires.</div>
+    </div>
+    <div class="upsell-card" style="border-color:#6366f1">
+      <div class="upsell-price">149 <span>€/mois</span></div>
+      <div class="upsell-name">Growth</div>
+      <div class="upsell-desc">Tout Maintenance + Publication automatisée IA sur Instagram, Facebook & TikTok (Reels, Stories, Posts). Rapport mensuel engagement.</div>
+    </div>
+    <div class="upsell-card">
+      <div class="upsell-price">249 <span>€/mois</span></div>
+      <div class="upsell-name">Full Pilotage</div>
+      <div class="upsell-desc">Tout Growth + Gestion active des campagnes Google Ads, optimisation SEO mensuelle, rapport ROI complet avec recommandations.</div>
+    </div>
+  </div>
+  <div style="margin-top:36px; background:#141414; border:1px solid #222; border-radius:14px; padding:24px 36px; max-width:700px; text-align:left">
+    <div style="font-size:13px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#6366f1; margin-bottom:10px">🎯 Garantie résultats</div>
+    <div style="font-size:15px; color:#d1d5db; line-height:1.6"><strong style="color:#fff">50 avis Google en 60 jours</strong> après activation de la roue cadeaux — ou on continue gratuitement jusqu'à l'objectif atteint.</div>
+  </div>
+  <span class="page-num">08 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 9 – SWOT
+══════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="slide-header">
+    <div class="slide-tag">Analyse</div>
+    <h2 class="slide-title">Forces, faiblesses,<br><span>opportunités & risques</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="swot-grid">
+    <div class="swot-card s">
+      <h3>✅ Forces</h3>
+      <ul>
+        <li>Suite 5-en-1 : aucun concurrent ne propose tout ça</li>
+        <li>Automatisation IA = coûts opérationnels très bas</li>
+        <li>Avis OAuth = différenciateur éthique fort</li>
+        <li>Revenus récurrents via abonnements</li>
+      </ul>
+    </div>
+    <div class="swot-card w">
+      <h3>⚠️ Faiblesses</h3>
+      <ul>
+        <li>Concurrents établis (Sunday, HeyPongo, Fydl)</li>
+        <li>Résistance des gérants "old school"</li>
+        <li>SAV chronophage en phase de lancement</li>
+        <li>Dépendance API Google / Trustpilot</li>
+      </ul>
+    </div>
+    <div class="swot-card o">
+      <h3>🔵 Opportunités</h3>
+      <ul>
+        <li>200 000+ restaurants en France sous-digitalisés</li>
+        <li>Tourisme à Paris = besoin multilingue fort</li>
+        <li>Marché hôtelier (room service digital)</li>
+        <li>Réplication facile : bars, cafés, traiteurs</li>
+      </ul>
+    </div>
+    <div class="swot-card t">
+      <h3>🟡 Risques</h3>
+      <ul>
+        <li>Changement CGU Google sur les avis incentivés</li>
+        <li>Churn élevé si onboarding mal géré</li>
+        <li>Coût acquisition client B2B élevé</li>
+        <li>Maintenance technique multi-clients</li>
+      </ul>
+    </div>
+  </div>
+  <span class="page-num">09 / 10</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 10 – CTA FINAL
+══════════════════════════════════════════ -->
+<section class="slide slide-cta">
+  <h2 class="cta-title">Prêt à digitaliser<br>votre établissement ?</h2>
+  <p class="cta-sub">Rejoignez les restaurants qui ont multiplié leurs avis par 6 et augmenté leur CA de 25% grâce à notre suite digitale complète.</p>
+  <div class="cta-boxes">
+    <div class="cta-box">
+      <div class="cta-box-label">Offre Essentiel</div>
+      <div class="cta-box-value">1 490€ HT</div>
+    </div>
+    <div class="cta-box" style="border-color:rgba(99,102,241,0.6)">
+      <div class="cta-box-label">Offre Tout-en-un</div>
+      <div class="cta-box-value">2 990€ HT</div>
+    </div>
+    <div class="cta-box">
+      <div class="cta-box-label">Abonnements dès</div>
+      <div class="cta-box-value">49€ / mois</div>
+    </div>
+  </div>
+  <p style="margin-top:44px; font-size:13px; color:#374151;">✉️ contact@votresociete.fr &nbsp;·&nbsp; 🌐 www.votresociete.fr &nbsp;·&nbsp; 📞 +33 6 XX XX XX XX</p>
+  <span class="page-num">10 / 10</span>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Suite HoReCa — Budget & Business Model Futuriste</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --color-primary: #050816;   /* ~60% : fond global */
+      --color-secondary: #111827; /* ~30% : cartes, sections */
+      --color-accent: #22d3ee;    /* ~10% : néons, call-to-action */
+      --color-text-main: #e5e7eb;
+      --color-text-muted: #9ca3af;
+      --color-danger: #f97373;
+      --color-success: #22c55e;
+      --radius-card: 18px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.9);
+      --gradient-hero: radial-gradient(circle at top left, #22d3ee33, transparent 55%),
+                       radial-gradient(circle at bottom right, #a855f733, transparent 55%),
+                       linear-gradient(135deg, #020617, #020617);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--gradient-hero);
+      color: var(--color-text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      line-height: 1.6;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1200px;
+      border-radius: 28px;
+      background: radial-gradient(circle at top, #1f2937dd, #020617f2);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+      position: relative;
+      padding-bottom: 32px;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 5% 0, #22d3ee22, transparent 50%),
+                  radial-gradient(circle at 95% 100%, #a855f722, transparent 55%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    header {
+      position: relative;
+      padding: 32px 32px 24px 32px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1;
+    }
+
+    .logo-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 10% 0, #22d3ee55, transparent 70%);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      backdrop-filter: blur(12px);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.9);
+    }
+
+    .hero-main {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 640px;
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 4vw, 34px);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-title span.accent {
+      color: var(--color-accent);
+      text-shadow: 0 0 16px rgba(34, 211, 238, 0.7);
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      max-width: 520px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .hero-badge {
+      font-size: 12px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--color-text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .glow-pill {
+      position: relative;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0f172a, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.46);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      min-width: 220px;
+    }
+
+    .glow-pill::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      border: 1px solid rgba(34, 211, 238, 0.45);
+      opacity: 0.4;
+      filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .glow-pill-label {
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 10px;
+    }
+
+    .glow-pill-value {
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .glow-pill-value span.main {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 24px 24px 8px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        padding: 24px 18px 18px 18px;
+      }
+      main {
+        padding: 18px;
+      }
+      body {
+        padding: 12px;
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top, #111827, #020617);
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 16px 16px 14px 16px;
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      opacity: 0;
+      transition: opacity 0.25s ease-out;
+      pointer-events: none;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title span.icon {
+      font-size: 18px;
+    }
+
+    .card-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-text-muted);
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: var(--color-text-muted);
+    }
+
+    .pill-accent {
+      border-color: rgba(34, 211, 238, 0.8);
+      color: var(--color-accent);
+    }
+
+    .pill-success {
+      border-color: rgba(34, 197, 94, 0.8);
+      color: var(--color-success);
+    }
+
+    .pill-danger {
+      border-color: rgba(248, 113, 113, 0.9);
+      color: var(--color-danger);
+    }
+
+    /* Pricing tiles */
+    .pricing-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .pricing-tile {
+      background: linear-gradient(145deg, #020617, #020617);
+      border-radius: 14px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      padding: 10px 10px 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-tile.featured {
+      border-color: rgba(34, 211, 238, 0.9);
+      box-shadow: 0 0 22px rgba(34, 211, 238, 0.35);
+    }
+
+    .pricing-name {
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pricing-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    .pricing-price span.small {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      margin-left: 4px;
+    }
+
+    .pricing-note {
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    ul.mini {
+      list-style: none;
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    ul.mini li::before {
+      content: "•";
+      color: var(--color-accent);
+      margin-right: 4px;
+    }
+
+    /* Diagrammes simples */
+    .diagram {
+      margin-top: 4px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      padding: 8px 10px;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .diagram-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--color-text-muted);
+    }
+
+    .diagram-bar-outer {
+      width: 100%;
+      height: 9px;
+      border-radius: 999px;
+      background: #020617;
+      overflow: hidden;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .diagram-bar-inner {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22d3ee, #38bdf8);
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.7);
+      width: 0;
+      transition: width 0.9s ease-out;
+    }
+
+    .diagram-bar-inner.secondary {
+      background: linear-gradient(90deg, #4ade80, #22c55e);
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.7);
+    }
+
+    .diagram-bar-inner.danger {
+      background: linear-gradient(90deg, #fb7185, #f97316);
+      box-shadow: 0 0 14px rgba(248, 113, 113, 0.7);
+    }
+
+    /* Bars filled on load */
+    body.loaded .bar-one-shot {
+      width: 57%;
+    }
+    body.loaded .bar-recurring {
+      width: 43%;
+    }
+    body.loaded .bar-cible {
+      width: 35%;
+    }
+    body.loaded .bar-objectif {
+      width: 1%;
+    }
+
+    /* Color 60-30-10 visual */
+    .color-diagram {
+      display: flex;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      height: 12px;
+      margin-top: 4px;
+    }
+
+    .color-swatch-primary {
+      flex: 6;
+      background: var(--color-primary);
+    }
+    .color-swatch-secondary {
+      flex: 3;
+      background: var(--color-secondary);
+    }
+    .color-swatch-accent {
+      flex: 1;
+      background: var(--color-accent);
+    }
+
+    .footer-note {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .kpi-chip {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      padding: 6px 8px;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .kpi-label {
+      color: var(--color-text-muted);
+    }
+
+    .kpi-value {
+      font-weight: 600;
+      color: var(--color-accent);
+      font-size: 13px;
+    }
+
+    .badge-inline {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-text-muted);
+    }
+  </style>
+  <script>
+    // Juste pour animer les barres après chargement
+    window.addEventListener("load", () => {
+      document.body.classList.add("loaded");
+    });
+  </script>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="hero-main">
+        <div class="logo-chip">
+          <span class="logo-dot"></span>
+          <span>Suite HoReCa · v1.1 Budget</span>
+        </div>
+        <h1 class="hero-title">
+          🚀 Suite digitale&nbsp;<span class="accent">HoReCa 5‑en‑1</span>
+        </h1>
+        <p class="hero-sub">
+          Modèle économique futuriste pensé pour les restaurateurs : prix one‑shot accessible,
+          abonnement léger, et trajectoire vers 30 clients en année 1 puis 300 clients en trois ans.
+        </p>
+        <div class="hero-badges">
+          <div class="hero-badge">
+            📊 <span>Augmenter le CA, simplifier les outils</span>
+          </div>
+          <div class="hero-badge">
+            🤖 <span>Automatisation IA &amp; n8n</span>
+          </div>
+          <div class="hero-badge">
+            🌐 <span>TAM HoReCa France &gt; 250k établissements</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glow-pill">
+        <div class="glow-pill-label">Trajectoire cible</div>
+        <div class="glow-pill-value">
+          <span class="main">30 → 300 clients</span>
+          <span>en 3 ans</span>
+        </div>
+        <div class="diagram">
+          <div class="diagram-label-row">
+            <span>Année 1</span>
+            <span>Année 3</span>
+          </div>
+          <div class="diagram-bar-outer">
+            <div class="diagram-bar-inner secondary bar-cible"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Bloc 1 : Structure des offres & prix -->
+      <section class="grid">
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">💰</span>
+              <span>Architecture des offres &amp; prix</span>
+            </h2>
+            <span class="card-tag">One‑shot + Récurrent</span>
+          </div>
+          <div class="card-body">
+            <p>
+              La suite est structurée autour d’un <strong>ticket d’entrée</strong> unique pour le déploiement,
+              complété par un abonnement mensuel léger pour la maintenance et la croissance continue.
+            </p>
+
+            <div class="pricing-row">
+              <div class="pricing-tile">
+                <div class="pricing-name">Starter Essentiel ⚙️</div>
+                <div class="pricing-price">
+                  1&nbsp;490&nbsp;€<span class="small">HT · one‑shot</span>
+                </div>
+                <p class="pricing-note">
+                  Pour les petits restos qui veulent un menu QR moderne + site vitrine simple mais efficace.
+                </p>
+                <ul class="mini">
+                  <li>Menu QR, commande table, paiement</li>
+                  <li>Site vitrine SEO de base</li>
+                  <li>Collecte d’avis simplifiée</li>
+                </ul>
+              </div>
+
+              <div class="pricing-tile featured">
+                <div class="pricing-name">Tout‑en‑un Ambitieux 🚀</div>
+                <div class="pricing-price">
+                  2&nbsp;990&nbsp;€<span class="small">HT · one‑shot</span>
+                </div>
+                <p class="pricing-note">
+                  Pour les établissements qui veulent directement QR, avis, site, Google Maps et social media automatisé.
+                </p>
+                <ul class="mini">
+                  <li>QR + commande + paiement complet</li>
+                  <li>Roue cadeaux &amp; avis authentifiés</li>
+                  <li>Site SEO/SEA + GMB + réseaux sociaux</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="pricing-row">
+              <div class="pricing-tile">
+                <div class="pricing-name">Maintenance 🔧</div>
+                <div class="pricing-price">
+                  49&nbsp;€<span class="small">/mois HT</span>
+                </div>
+                <p class="pricing-note">
+                  Pour les clients qui veulent garder la plateforme à jour sans production marketing continue.
+                </p>
+              </div>
+              <div class="pricing-tile">
+                <div class="pricing-name">Growth 📈</div>
+                <div class="pricing-price">
+                  149&nbsp;€<span class="small">/mois HT</span>
+                </div>
+                <p class="pricing-note">
+                  Plan central du modèle : social media automatisé, contenus IA, reporting et optimisation continue.
+                </p>
+              </div>
+              <div class="pricing-tile">
+                <div class="pricing-name">Full Pilotage 🧠</div>
+                <div class="pricing-price">
+                  249&nbsp;€<span class="small">/mois HT</span>
+                </div>
+                <p class="pricing-note">
+                  Ajout du pilotage actif des campagnes Google Ads pour les clients les plus ambitieux.
+                </p>
+              </div>
+            </div>
+
+            <div class="diagram">
+              <div class="diagram-label-row">
+                <span>Mix cible one‑shot</span>
+                <span>60&nbsp;% Tout‑en‑un · 40&nbsp;% Essentiel</span>
+              </div>
+              <div class="diagram-bar-outer">
+                <div class="diagram-bar-inner bar-one-shot"></div>
+              </div>
+              <p>
+                Objectif : pousser naturellement vers le pack Tout‑en‑un pour maximiser la valeur par client,
+                tout en gardant l’Essentiel comme porte d’entrée attractive.
+              </p>
+            </div>
+
+            <div class="pill-row">
+              <span class="pill pill-accent">Ticket d’entrée accessible</span>
+              <span class="pill pill-success">Montée en gamme progressive</span>
+              <span class="pill">Garantie 50 avis/60 jours</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Taille de marché & capacité à payer -->
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">🧮</span>
+              <span>Capacité des clients à payer</span>
+            </h2>
+            <span class="card-tag">TAM · Cible · Objectif</span>
+          </div>
+          <div class="card-body">
+            <p>
+              Le marché HoReCa français compte plus de 280&nbsp;000 établissements (restaurants, cafés/bars, hôtels),
+              pour environ 165&nbsp;Md€ de chiffre d’affaires annuel.
+            </p>
+            <p>
+              En ciblant en priorité les indépendants urbains solides (environ 30&nbsp;% du total),
+              on obtient un cœur de cible d’environ 80&nbsp;000 à 90&nbsp;000 établissements capables
+              d’absorber un investissement de 2&nbsp;990&nbsp;€ + 149&nbsp;€/mois.
+            </p>
+
+            <div class="diagram">
+              <div class="diagram-label-row">
+                <span>Cœur de cible estimé</span>
+                <span>~85&nbsp;000 établissements</span>
+              </div>
+              <div class="diagram-bar-outer">
+                <div class="diagram-bar-inner secondary bar-cible"></div>
+              </div>
+              <div class="diagram-label-row">
+                <span>Objectif 3 ans</span>
+                <span>300 clients (≈0,35&nbsp;% de la cible)</span>
+              </div>
+              <div class="diagram-bar-outer">
+                <div class="diagram-bar-inner danger bar-objectif"></div>
+              </div>
+              <p>
+                Obtenir 300 clients sur ce segment représente moins d’1&nbsp;% de pénétration,
+                ce qui laisse une marge de croissance très confortable.
+              </p>
+            </div>
+
+            <div class="kpi-row">
+              <div class="kpi-chip">
+                <span class="kpi-label">Budget moyen client</span>
+                <span class="kpi-value">3&nbsp;000–5&nbsp;000&nbsp;€/an</span>
+                <span class="kpi-label">Opex marketing &amp; digital</span>
+              </div>
+              <div class="kpi-chip">
+                <span class="kpi-label">Poids de la suite</span>
+                <span class="kpi-value">&lt;1&nbsp;% du CA</span>
+                <span class="kpi-label">pour un resto &gt;400&nbsp;k€</span>
+              </div>
+            </div>
+
+            <p class="footer-note">
+              Positionnement : un investissement faible à l’échelle du restaurant,
+              avec un retour potentiellement rapide via l’augmentation des avis et de la visibilité Google Maps.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <!-- Bloc 2 : Budget & projections année 1 -->
+      <section class="grid">
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">📈</span>
+              <span>Budget &amp; revenus — Scénario Année&nbsp;1</span>
+            </h2>
+            <span class="card-tag">30 clients</span>
+          </div>
+          <div class="card-body">
+            <p>
+              Ce scénario part de ton objectif de 30 clients la première année, avec un mix de 60&nbsp;% d’offres Tout‑en‑un
+              et 40&nbsp;% d’offres Essentiel, et un abonnement moyen de 149&nbsp;€/mois.
+            </p>
+
+            <div class="kpi-row">
+              <div class="kpi-chip">
+                <span class="kpi-label">Clients année 1</span>
+                <span class="kpi-value">30</span>
+                <span class="kpi-label">Paris / Île‑de‑France</span>
+              </div>
+              <div class="kpi-chip">
+                <span class="kpi-label">CA one‑shot estimé</span>
+                <span class="kpi-value">≈71&nbsp;k€</span>
+                <span class="kpi-label">déploiement initial</span>
+              </div>
+              <div class="kpi-chip">
+                <span class="kpi-label">CA récurrent année 1</span>
+                <span class="kpi-value">≈54&nbsp;k€</span>
+                <span class="kpi-label">à 149&nbsp;€/mois</span>
+              </div>
+              <div class="kpi-chip">
+                <span class="kpi-label">CA total année 1</span>
+                <span class="kpi-value">≈125&nbsp;k€</span>
+                <span class="kpi-label">hors upsell additionnel</span>
+              </div>
+            </div>
+
+            <div class="diagram">
+              <div class="diagram-label-row">
+                <span>Répartition CA année 1</span>
+                <span>One‑shot vs récurrent</span>
+              </div>
+              <div class="diagram-bar-outer">
+                <div class="diagram-bar-inner bar-one-shot"></div>
+              </div>
+              <div class="diagram-label-row">
+                <span>One‑shot ≈57&nbsp;%</span>
+                <span>Récurrent ≈43&nbsp;%</span>
+              </div>
+              <p>
+                Le one‑shot finance le développement et la trésorerie, tandis que la récurrence construit la valeur long terme
+                et sécurise la rentabilité.
+              </p>
+            </div>
+
+            <p>
+              Avec un CAC cible de 400&nbsp;€ par client, le budget acquisition année 1 se situe autour de 12&nbsp;k€,
+              ce qui reste très raisonnable au regard des revenus projetés.
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">📊</span>
+              <span>Vision 3 ans &amp; LTV</span>
+            </h2>
+            <span class="card-tag">LTV · Marges</span>
+          </div>
+          <div class="card-body">
+            <p>
+              Sur une offre type à 2&nbsp;990&nbsp;€ + 149&nbsp;€/mois,
+              la LTV 3 ans d’un client tourne autour de 8&nbsp;500&nbsp;€, pour un CAC cible de 400&nbsp;€.
+            </p>
+            <p>
+              Même en intégrant des coûts de dev, support et infra,
+              la marge brute par client sur 3 ans reste très confortable,
+              surtout grâce à l’automatisation IA et n8n qui limite le temps humain par compte.
+            </p>
+
+            <div class="diagram">
+              <div class="diagram-label-row">
+                <span>Ratio LTV / CAC cible</span>
+                <span>&gt;20x</span>
+              </div>
+              <div class="diagram-bar-outer">
+                <div class="diagram-bar-inner secondary" style="width: 85%;"></div>
+              </div>
+              <p>
+                Objectif : conserver un ratio LTV/CAC &gt;10x, même avec une montée progressive des coûts commerciaux
+                à mesure que tu sors de ta zone locale.
+              </p>
+            </div>
+
+            <div class="pill-row">
+              <span class="pill pill-success">Rentabilité unitaire dès la 1ʳᵉ année</span>
+              <span class="pill">Upsell possible vers Full Pilotage</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Bloc 3 : Design & couleurs 60-30-10 -->
+      <section class="grid">
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">🎨</span>
+              <span>Palette futuriste 60‑30‑10</span>
+            </h2>
+            <span class="card-tag">UI Design</span>
+          </div>
+          <div class="card-body">
+            <p>
+              L’interface adopte un design dark futuriste, avec un fond profond, des cartes légèrement éclairées
+              et une touche néon pour guider le regard sur les éléments clés.
+            </p>
+            <div class="color-diagram">
+              <div class="color-swatch-primary"></div>
+              <div class="color-swatch-secondary"></div>
+              <div class="color-swatch-accent"></div>
+            </div>
+            <p>
+              La répartition vise 60&nbsp;% de couleur primaire (fond), 30&nbsp;% de secondaire (cartes, sections)
+              et 10&nbsp;% d’accent (boutons, valeurs, KPIs), pour rester lisible tout en restant très visuel.
+            </p>
+            <div class="pill-row">
+              <span class="pill pill-accent">Néon cyan pour l’action</span>
+              <span class="pill">Fond galaxie HoReCa</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">🧭</span>
+              <span>Lecture ultra‑rapide pour investisseurs &amp; clients</span>
+            </h2>
+            <span class="card-tag">Pitch‑ready</span>
+          </div>
+          <div class="card-body">
+            <p>
+              Ce dashboard peut être utilisé tel quel en support visuel de pitch,
+              que ce soit pour un investisseur ou un gérant de restaurant.
+            </p>
+            <p>
+              Les chiffres clés (prix, CA année 1, capacité de paiement, cible 3 ans)
+              sont mis en avant via des chips et diagrammes simples,
+              pour une compréhension instantanée.
+            </p>
+            <div class="pill-row">
+              <span class="pill pill-success">Lisible sur mobile</span>
+              <span class="pill pill-accent">Orienté décision</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section>
+        <div style="margin-top: 10px; text-align: center; font-size: 11px; color: #6b7280;">
+          <span class="badge-inline">Next step</span>
+          <span style="margin-left: 6px;">
+            Adapter les hypothèses (mix Essentiel / Tout‑en‑un, prix moyen abo) à ton terrain réel et ajouter
+            une slide spécifique par persona (petit resto, hôtel, bar).
+          </span>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
