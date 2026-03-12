@@ -1,22 +1,28 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import type { Restaurant } from "@/shared/types";
 import type { Metadata } from "next";
 import MenuPage from "@/modules/menu/components/MenuPage";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: { slug: string };
   searchParams: { table?: string };
 }
 
-async function getRestaurant(slug: string): Promise<Restaurant | null> {
-  const { data } = await supabaseAdmin
+const getRestaurant = cache(async (slug: string): Promise<Restaurant | null> => {
+  const { data, error } = await supabaseAdmin
     .from("restaurants")
     .select("*")
     .eq("slug", slug)
     .single();
+  if (error) {
+    console.error("getRestaurant error:", error.message, "slug:", slug);
+  }
   return data;
-}
+});
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const restaurant = await getRestaurant(params.slug);
