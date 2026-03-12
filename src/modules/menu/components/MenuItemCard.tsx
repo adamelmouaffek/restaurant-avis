@@ -6,19 +6,27 @@ interface MenuItemCardProps {
   quantity: number;
   onAdd: () => void;
   onRemove: () => void;
+  isAvailable?: boolean;
 }
 
-export default function MenuItemCard({ item, quantity, onAdd, onRemove }: MenuItemCardProps) {
+export default function MenuItemCard({ item, quantity, onAdd, onRemove, isAvailable = true }: MenuItemCardProps) {
   const priceFormatted = item.price.toFixed(2).replace(".", ",");
 
   return (
-    <article className="bg-white rounded-xl shadow-sm p-4 flex gap-3 transition-shadow duration-200 hover:shadow-md">
+    <article className={`bg-white rounded-xl shadow-sm p-4 flex gap-3 transition-shadow duration-200 ${isAvailable ? "hover:shadow-md" : "opacity-50 grayscale"}`}>
       {/* Infos textuelles */}
       <div className="flex-1 min-w-0 flex flex-col gap-1">
-        {/* Nom */}
-        <h3 className="font-semibold text-gray-900 text-sm sm:text-base leading-tight">
-          {item.name}
-        </h3>
+        {/* Nom + badge Epuise */}
+        <div className="flex items-center gap-2">
+          <h3 className="font-semibold text-gray-900 text-sm sm:text-base leading-tight">
+            {item.name}
+          </h3>
+          {!isAvailable && (
+            <span className="text-[10px] font-bold uppercase px-2 py-0.5 bg-red-100 text-red-600 rounded-full whitespace-nowrap">
+              Epuise
+            </span>
+          )}
+        </div>
 
         {/* Description (2 lignes max) */}
         {item.description && (
@@ -67,7 +75,10 @@ export default function MenuItemCard({ item, quantity, onAdd, onRemove }: MenuIt
         </div>
 
         {/* Controles +/- */}
-        {quantity === 0 ? (
+        {!isAvailable ? (
+          // Item indisponible : pas de bouton
+          <div className="h-8" />
+        ) : quantity === 0 ? (
           // Etat vide : un seul bouton +
           <button
             onClick={onAdd}

@@ -58,8 +58,8 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
         const res = await fetch(`/api/menu/items?restaurant_id=${restaurant.id}`);
         if (!res.ok) throw new Error("Impossible de charger le menu");
         const data: MenuItemWithCategory[] = await res.json();
-        // Filtre les items inactifs ou indisponibles
-        setItems(data.filter((i) => i.is_active && i.is_available));
+        // Filtre les items inactifs (mais garde les indisponibles pour afficher "Epuise")
+        setItems(data.filter((i) => i.is_active));
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erreur inconnue");
       } finally {
@@ -71,7 +71,8 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
   }, [restaurant.id]);
 
   // --- Fonctions panier ---
-  const addToCart = useCallback((item: MenuItem) => {
+  const addToCart = useCallback((item: MenuItem & { is_available?: boolean }) => {
+    if (item.is_available === false) return;
     setCart((prev) => {
       const existing = prev.find((c) => c.menuItemId === item.id);
       if (existing) {
@@ -231,6 +232,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
                     quantity={getQuantity(item.id)}
                     onAdd={() => addToCart(item)}
                     onRemove={() => removeFromCart(item.id)}
+                    isAvailable={item.is_available !== false}
                   />
                 ))}
               </div>

@@ -25,10 +25,48 @@ export function MenuItemForm({
   const [categoryId, setCategoryId] = useState(item?.category_id ?? (categories[0]?.id ?? ""));
   const [price, setPrice] = useState(item?.price?.toString() ?? "");
   const [imageUrl, setImageUrl] = useState(item?.image_url ?? "");
+  const [imagePreview, setImagePreview] = useState<string | null>(item?.image_url ?? null);
+  const [isUploading, setIsUploading] = useState(false);
   const [allergens, setAllergens] = useState<string[]>(item?.allergens ?? []);
   const [isAvailable, setIsAvailable] = useState(item?.is_available ?? true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Apercu local immediat
+    const reader = new FileReader();
+    reader.onload = () => setImagePreview(reader.result as string);
+    reader.readAsDataURL(file);
+
+    // Upload vers Supabase Storage
+    setIsUploading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/menu/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error ?? "Erreur lors de l'upload");
+      }
+
+      const { url } = await res.json();
+      setImageUrl(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur upload");
+      setImagePreview(item?.image_url ?? null);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const toggleAllergen = (allergen: string) => {
     setAllergens((prev) =>
@@ -175,19 +213,56 @@ export function MenuItemForm({
           />
         </div>
 
-        {/* URL Image */}
+        {/* Photo */}
         <div className="space-y-1">
-          <label className="block text-sm font-medium text-foreground" htmlFor="item-img">
-            URL Image <span className="text-muted-foreground text-xs">(optionnelle)</span>
+          <label className="block text-sm font-medium text-foreground">
+            Photo <span className="text-muted-foreground text-xs">(JPG, PNG, WebP — max 5 Mo)</span>
           </label>
-          <input
-            id="item-img"
-            type="url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="https://..."
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
+          <div className="flex items-center gap-3">
+            {/* Apercu */}
+            <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex items-center justify-center shrink-0 border border-input">
+              {imagePreview ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={imagePreview} alt="Apercu" className="w-full h-full object-cover" />
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-6 h-6 text-muted-foreground">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+              )}
+            </div>
+            <div className="flex-1 space-y-1">
+              <label
+                htmlFor="item-photo"
+                className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-input text-sm cursor-pointer transition-colors hover:bg-muted/50 ${isUploading ? "opacity-50 pointer-events-none" : ""}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                {isUploading ? "Upload en cours..." : "Choisir une photo"}
+              </label>
+              <input
+                id="item-photo"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={handleFileUpload}
+                className="sr-only"
+                disabled={isUploading}
+              />
+              {imagePreview && !isUploading && (
+                <button
+                  type="button"
+                  onClick={() => { setImageUrl(""); setImagePreview(null); }}
+                  className="text-xs text-destructive hover:underline"
+                >
+                  Supprimer la photo
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -263,7 +338,7 @@ export function MenuItemForm({
 
       {/* Actions */}
       <div className="flex items-center gap-3 pt-2 border-t">
-        <Button type="submit" disabled={loading || categories.length === 0}>
+        <Button type="submit" disabled={loading || isUploading || categories.length === 0}>
           {loading ? "Sauvegarde..." : item ? "Mettre a jour" : "Creer l'article"}
         </Button>
         <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>

@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Session Sprint</title>
+<style>
+  /* ═══════════════════════════════════════════
+     RESET & BASE
+     ═══════════════════════════════════════════ */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0e27;
+    color: #e0e6f0;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: -1;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(0,217,255,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(168,85,247,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(0,217,255,0.02) 0%, transparent 70%);
+  }
+
+  /* ═══════════════════════════════════════════
+     SCROLLBAR
+     ═══════════════════════════════════════════ */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #0a0e27; }
+  ::-webkit-scrollbar-thumb { background: #1e2a5e; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2a3a7e; }
+
+  /* ═══════════════════════════════════════════
+     TYPOGRAPHY
+     ═══════════════════════════════════════════ */
+  h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #e0e6f0, #00d9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: #e0e6f0; }
+  h3 { font-size: 1rem; font-weight: 600; }
+  a { color: #00d9ff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ═══════════════════════════════════════════
+     STICKY NAV
+     ═══════════════════════════════════════════ */
+  .sticky-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,39,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid #1e2a5e;
+    padding: 0.5rem 1.5rem;
+    display: flex; align-items: center; gap: 0.25rem;
+    overflow-x: auto; white-space: nowrap;
+  }
+  .sticky-nav::-webkit-scrollbar { height: 3px; }
+  .sticky-nav a {
+    padding: 0.4rem 0.75rem; border-radius: 6px;
+    font-size: 0.78rem; color: #8892b0; transition: all 0.25s;
+    flex-shrink: 0;
+  }
+  .sticky-nav a:hover, .sticky-nav a.active {
+    color: #00d9ff; background: rgba(0,217,255,0.08); text-decoration: none;
+  }
+  .sticky-nav a.active {
+    border-bottom: 2px solid #00d9ff;
+  }
+
+  /* ═══════════════════════════════════════════
+     LAYOUT
+     ═══════════════════════════════════════════ */
+  .container { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) {
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* ═══════════════════════════════════════════
+     CARDS
+     ═══════════════════════════════════════════ */
+  .card {
+    background: #111633;
+    border: 1px solid #1e2a5e;
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    border-color: rgba(0,217,255,0.25);
+    box-shadow: 0 0 24px rgba(0,217,255,0.05), 0 0 48px rgba(168,85,247,0.03);
+  }
+  section { margin-bottom: 2.5rem; scroll-margin-top: 70px; }
+  .section-title {
+    display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;
+    padding-bottom: 0.5rem; border-bottom: 1px solid #1e2a5e20;
+  }
+  .section-title h2 { margin-bottom: 0; }
+
+  /* ═══════════════════════════════════════════
+     HEADER
+     ═══════════════════════════════════════════ */
+  .header { padding: 2rem 0 1.5rem; }
+  .header-top { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .sprint-badge {
+    background: linear-gradient(135deg, #00d9ff15, #a855f715);
+    border: 1px solid #a855f740;
+    padding: 0.3rem 0.85rem; border-radius: 20px;
+    font-size: 0.8rem; color: #a855f7; font-weight: 500;
+  }
+  .header-desc { color: #8892b0; font-size: 0.9rem; margin-bottom: 0.5rem; }
+  .stack-tag { color: #5e6a8a; font-size: 0.78rem; margin-bottom: 1.25rem; }
+  .kpi-row {
+    display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem;
+  }
+  .kpi-pill {
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.45rem 0.9rem; border-radius: 20px;
+    font-size: 0.82rem; font-weight: 500;
+    background: #111633; border: 1px solid #1e2a5e;
+    transition: border-color 0.2s;
+  }
+  .kpi-pill:hover { border-color: #1e2a5e80; }
+  .kpi-pill .kpi-val { font-size: 1.1rem; font-weight: 700; }
+  .kpi-pill .kpi-label { color: #8892b0; font-size: 0.78rem; }
+  .kpi-pill.green .kpi-val { color: #22c55e; }
+  .kpi-pill.cyan .kpi-val { color: #00d9ff; }
+  .kpi-pill.gray .kpi-val { color: #8892b0; }
+  .kpi-pill.gradient .kpi-val {
+    background: linear-gradient(90deg,#00d9ff,#a855f7);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .kpi-pill.purple .kpi-val { color: #a855f7; }
+
+  .progress-bar-wrap {
+    width: 100%; height: 10px; background: #1e2a5e; border-radius: 10px;
+    overflow: hidden; position: relative;
+  }
+  .progress-bar-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, #00d9ff, #a855f7);
+    position: relative; transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+    animation: shimmer 2.5s infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+  .progress-label {
+    font-size: 0.78rem; color: #5e6a8a; margin-top: 0.4rem;
+  }
+
+  /* ═══════════════════════════════════════════
+     ACTIVITY FEED
+     ═══════════════════════════════════════════ */
+  .feed-list { display: flex; flex-direction: column; gap: 0.35rem; }
+  .feed-item {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 0.55rem 0.75rem; border-radius: 8px;
+    background: rgba(13,17,41,0.5); border: 1px solid transparent;
+    font-size: 0.84rem; transition: all 0.2s;
+  }
+  .feed-item:hover {
+    background: rgba(30,42,94,0.2);
+    border-color: #1e2a5e30;
+  }
+  .feed-time {
+    color: #5e6a8a; font-size: 0.73rem; min-width: 120px;
+    font-variant-numeric: tabular-nums; padding-top: 0.1rem;
+  }
+  .feed-emoji { font-size: 1rem; line-height: 1.4; }
+  .feed-msg { flex: 1; }
+  .feed-agent { font-weight: 600; }
+  .feed-type-task-done .feed-agent { color: #22c55e; }
+  .feed-type-agent-activated .feed-agent { color: #00d9ff; }
+  .feed-type-skill-used .feed-agent { color: #a855f7; }
+  .feed-type-session-start .feed-msg { color: #4ade80; }
+  .feed-type-decision .feed-agent { color: #f59e0b; }
+  .feed-type-report .feed-agent { color: #3b82f6; }
+  .feed-type-sprint-created .feed-agent { color: #eab308; }
+  .feed-type-blocked .feed-agent { color: #ef4444; }
+
+  .btn-link {
+    background: none; border: none; color: #00d9ff; cursor: pointer;
+    font-size: 0.82rem; padding: 0.6rem 0 0.2rem; display: inline-block;
+    transition: opacity 0.2s;
+  }
+  .btn-link:hover { text-decoration: underline; opacity: 0.85; }
+
+  /* ═══════════════════════════════════════════
+     FILTER BUTTONS
+     ═══════════════════════════════════════════ */
+  .filters-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; align-items: center; }
+  .filter-group-label {
+    font-size: 0.72rem; color: #5e6a8a; margin-right: 0.15rem;
+    text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500;
+  }
+  .filter-btn {
+    padding: 0.3rem 0.65rem; border-radius: 6px; border: 1px solid #1e2a5e;
+    background: transparent; color: #8892b0; font-size: 0.75rem; cursor: pointer;
+    transition: all 0.2s; font-family: inherit;
+  }
+  .filter-btn:hover { border-color: #00d9ff40; color: #00d9ff; }
+  .filter-btn.active {
+    background: rgba(0,217,255,0.1); border-color: #00d9ff80; color: #00d9ff;
+    font-weight: 500;
+  }
+
+  /* ═══════════════════════════════════════════
+     KANBAN
+     ═══════════════════════════════════════════ */
+  .kanban-board { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 768px) { .kanban-board { grid-template-columns: repeat(3, 1fr); } }
+  .kanban-col { min-height: 180px; }
+  .kanban-col-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 0.75rem; padding-bottom: 0.5rem;
+    border-bottom: 2px solid #1e2a5e;
+    font-size: 0.9rem;
+  }
+  .kanban-col-header .col-label { font-weight: 600; }
+  .kanban-count {
+    background: #1e2a5e; padding: 0.15rem 0.55rem; border-radius: 10px;
+    font-size: 0.73rem; font-weight: 600; color: #8892b0;
+  }
+  .kanban-card {
+    background: #0d1129; border: 1px solid #1e2a5e; border-radius: 8px;
+    padding: 0.75rem; margin-bottom: 0.5rem;
+    transition: border-color 0.25s, transform 0.2s;
+  }
+  .kanban-card:hover {
+    border-color: rgba(0,217,255,0.3);
+    transform: translateY(-1px);
+  }
+  .kanban-card-title { font-size: 0.85rem; font-weight: 500; margin-bottom: 0.4rem; }
+  .kanban-card-meta {
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+    font-size: 0.75rem; color: #5e6a8a;
+  }
+  .kanban-card-completed {
+    font-size: 0.72rem; color: #5e6a8a; margin-top: 0.35rem;
+    padding-top: 0.3rem; border-top: 1px solid #1e2a5e30;
+  }
+
+  .priority-badge {
+    display: inline-block;
+    padding: 0.1rem 0.4rem; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.02em;
+  }
+  .priority-P0 { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+  .priority-P1 { background: rgba(0,217,255,0.12); color: #00d9ff; border: 1px solid rgba(0,217,255,0.2); }
+  .priority-P2 { background: rgba(136,146,176,0.12); color: #8892b0; border: 1px solid rgba(136,146,176,0.2); }
+
+  /* ═══════════════════════════════════════════
+     BURNDOWN
+     ═══════════════════════════════════════════ */
+  .burndown-wrap { position: relative; overflow: hidden; }
+  .burndown-svg { width: 100%; height: 300px; display: block; }
+  .burndown-tooltip {
+    position: absolute; display: none;
+    background: #0d1129ee; border: 1px solid #1e2a5e; border-radius: 8px;
+    padding: 0.6rem 0.85rem; font-size: 0.78rem; pointer-events: none;
+    z-index: 10; white-space: nowrap; backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .burndown-tooltip .tt-session { color: #00d9ff; font-weight: 700; font-size: 0.85rem; }
+  .burndown-tooltip .tt-date { color: #5e6a8a; margin-bottom: 0.3rem; }
+  .burndown-tooltip .tt-remaining { color: #e0e6f0; }
+  .burndown-tooltip .tt-delta { font-weight: 600; margin-top: 0.15rem; }
+  .tt-delta.ahead { color: #22c55e; }
+  .tt-delta.behind { color: #ef4444; }
+
+  /* ═══════════════════════════════════════════
+     TABLES
+     ═══════════════════════════════════════════ */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  th {
+    text-align: left; padding: 0.65rem 0.75rem; color: #5e6a8a;
+    border-bottom: 1px solid #1e2a5e; font-weight: 500; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  td { padding: 0.65rem 0.75rem; border-bottom: 1px solid rgba(30,42,94,0.2); }
+  tr { transition: background 0.15s; }
+  tr:hover td { background: rgba(30,42,94,0.12); }
+
+  .status-badge {
+    display: inline-block; padding: 0.18rem 0.6rem; border-radius: 10px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.01em;
+  }
+  .status-done { background: rgba(34,197,94,0.12); color: #22c55e; }
+  .status-in-progress { background: rgba(0,217,255,0.12); color: #00d9ff; }
+  .status-todo { background: rgba(136,146,176,0.12); color: #8892b0; }
+  .status-blocked { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .status-accepted { background: rgba(34,197,94,0.12); color: #22c55e; }
+  .status-proposed { background: rgba(245,158,11,0.12); color: #f59e0b; }
+  .status-rejected { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .impact-high { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .impact-medium { background: rgba(245,158,11,0.12); color: #f59e0b; }
+  .impact-low { background: rgba(34,197,94,0.12); color: #22c55e; }
+
+  /* ═══════════════════════════════════════════
+     TIMELINE
+     ═══════════════════════════════════════════ */
+  .timeline { position: relative; padding-left: 2.75rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 1rem; top: 0.5rem; bottom: 0.5rem;
+    width: 2px;
+    background: linear-gradient(180deg, #00d9ff, #a855f7, #00d9ff50);
+  }
+  .timeline-item { position: relative; margin-bottom: 1.5rem; }
+  .timeline-dot {
+    position: absolute; left: -2.15rem; top: 0.35rem;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: linear-gradient(135deg, #00d9ff, #a855f7);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 700; color: #0a0e27;
+    box-shadow: 0 0 10px rgba(0,217,255,0.3);
+  }
+  .timeline-card {
+    background: #0d1129; border: 1px solid #1e2a5e; border-radius: 10px;
+    padding: 0.9rem 1.1rem; transition: border-color 0.25s;
+  }
+  .timeline-card:hover { border-color: rgba(0,217,255,0.25); }
+  .timeline-date { font-size: 0.75rem; color: #5e6a8a; margin-bottom: 0.3rem; }
+  .timeline-summary { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem; }
+  .timeline-meta {
+    font-size: 0.78rem; color: #8892b0;
+    display: flex; flex-wrap: wrap; gap: 1rem;
+  }
+
+  /* ═══════════════════════════════════════════
+     AGENT CARDS
+     ═══════════════════════════════════════════ */
+  .agent-card { text-align: center; padding: 1.35rem 1rem; position: relative; overflow: hidden; }
+  .agent-card::before {
+    content: ''; position: absolute; inset: 0; opacity: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0,217,255,0.06), transparent 70%);
+    transition: opacity 0.3s;
+  }
+  .agent-card:hover::before { opacity: 1; }
+  .agent-card.active { border-color: rgba(0,217,255,0.25); }
+  .agent-card.active:hover { box-shadow: 0 0 20px rgba(0,217,255,0.08); }
+  .agent-card.inactive { border-color: #1e2a5e; opacity: 0.55; }
+  .agent-emoji { font-size: 2.4rem; margin-bottom: 0.5rem; position: relative; }
+  .agent-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.35rem; position: relative; }
+  .agent-status-row { margin-bottom: 0.5rem; position: relative; }
+  .agent-status-dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.3rem;
+    vertical-align: middle;
+  }
+  .agent-status-dot.on { background: #00d9ff; box-shadow: 0 0 8px #00d9ff80; }
+  .agent-status-dot.off { background: #5e6a8a; }
+  .agent-status-label { font-size: 0.75rem; color: #8892b0; vertical-align: middle; }
+  .agent-progress { margin: 0.5rem auto; width: 80%; position: relative; }
+  .agent-progress-bar {
+    height: 5px; background: #1e2a5e; border-radius: 5px; overflow: hidden;
+  }
+  .agent-progress-fill {
+    height: 100%; border-radius: 5px;
+    background: linear-gradient(90deg,#00d9ff,#a855f7);
+    transition: width 0.5s;
+  }
+  .agent-progress-label { font-size: 0.72rem; color: #5e6a8a; margin-top: 0.25rem; }
+  .agent-last { font-size: 0.78rem; color: #8892b0; margin: 0.35rem 0; position: relative; }
+  .agent-skills {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem;
+    margin-top: 0.5rem; position: relative;
+  }
+  .skill-tag {
+    padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.68rem;
+    background: rgba(168,85,247,0.08); color: #a855f7;
+    border: 1px solid rgba(168,85,247,0.2);
+  }
+  .agent-reporter-indicator {
+    font-size: 0.75rem; margin-top: 0.4rem; position: relative;
+    font-weight: 500;
+  }
+
+  /* ═══════════════════════════════════════════
+     SKILLS SECTION
+     ═══════════════════════════════════════════ */
+  .skill-card { padding: 1.1rem; transition: border-color 0.25s; }
+  .skill-card:hover { border-color: rgba(168,85,247,0.3); }
+  .skill-card-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;
+  }
+  .skill-card-name { font-weight: 600; font-size: 0.9rem; color: #a855f7; }
+  .skill-card-count {
+    background: rgba(168,85,247,0.12); color: #a855f7;
+    padding: 0.15rem 0.55rem; border-radius: 10px;
+    font-size: 0.72rem; font-weight: 700;
+  }
+  .skill-card-desc { font-size: 0.82rem; color: #8892b0; margin-bottom: 0.5rem; }
+  .skill-card-agents { font-size: 0.78rem; color: #8892b0; }
+  .skill-card-date { font-size: 0.72rem; color: #5e6a8a; margin-top: 0.35rem; }
+
+  /* ═══════════════════════════════════════════
+     BACKLOG BARS
+     ═══════════════════════════════════════════ */
+  .backlog-bars { display: flex; flex-direction: column; gap: 0.85rem; }
+  .backlog-row { display: flex; align-items: center; gap: 0.75rem; }
+  .backlog-label {
+    min-width: 55px; font-size: 0.82rem; font-weight: 600; text-align: right;
+  }
+  .backlog-bar-track {
+    flex: 1; height: 28px; background: rgba(30,42,94,0.2);
+    border-radius: 6px; overflow: hidden; position: relative;
+  }
+  .backlog-bar-fill {
+    height: 100%; border-radius: 6px;
+    display: flex; align-items: center; padding-left: 0.6rem;
+    font-size: 0.75rem; font-weight: 600; transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    min-width: 30px;
+  }
+  .backlog-bar-fill.p0 { background: rgba(239,68,68,0.2); color: #ef4444; }
+  .backlog-bar-fill.p1 { background: rgba(0,217,255,0.15); color: #00d9ff; }
+  .backlog-bar-fill.p2 { background: rgba(136,146,176,0.15); color: #8892b0; }
+  .backlog-bar-fill.icebox { background: rgba(168,85,247,0.12); color: #a855f7; }
+  .backlog-pct { min-width: 42px; text-align: right; font-size: 0.78rem; color: #5e6a8a; }
+  .backlog-total {
+    font-size: 0.88rem; color: #8892b0; margin-top: 0.75rem; text-align: right;
+    font-weight: 500;
+  }
+
+  /* ═══════════════════════════════════════════
+     ANIMATIONS
+     ═══════════════════════════════════════════ */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(0,217,255,0.2); }
+    50% { box-shadow: 0 0 16px rgba(0,217,255,0.4); }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .fade-in { animation: fadeInUp 0.4s ease-out forwards; }
+  .agent-card.active .agent-status-dot.on {
+    animation: pulseGlow 2s infinite;
+  }
+  .feed-item { animation: slideIn 0.3s ease-out forwards; }
+  .feed-item:nth-child(1) { animation-delay: 0s; }
+  .feed-item:nth-child(2) { animation-delay: 0.04s; }
+  .feed-item:nth-child(3) { animation-delay: 0.08s; }
+  .feed-item:nth-child(4) { animation-delay: 0.12s; }
+  .feed-item:nth-child(5) { animation-delay: 0.16s; }
+
+  /* ═══════════════════════════════════════════
+     KANBAN COLUMN ACCENTS
+     ═══════════════════════════════════════════ */
+  .kanban-col:first-child .kanban-col-header { border-bottom-color: #8892b040; }
+  .kanban-col:nth-child(2) .kanban-col-header { border-bottom-color: #00d9ff40; }
+  .kanban-col:last-child .kanban-col-header { border-bottom-color: #22c55e40; }
+  .kanban-col:first-child .kanban-count { background: #8892b020; color: #8892b0; }
+  .kanban-col:nth-child(2) .kanban-count { background: #00d9ff15; color: #00d9ff; }
+  .kanban-col:last-child .kanban-count { background: #22c55e15; color: #22c55e; }
+
+  /* ═══════════════════════════════════════════
+     SECTION DIVIDERS
+     ═══════════════════════════════════════════ */
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #1e2a5e, transparent);
+    margin-left: 1rem;
+  }
+
+  /* ═══════════════════════════════════════════
+     TABLE ROW BORDERS (SUBTLE)
+     ═══════════════════════════════════════════ */
+  tbody tr:last-child td { border-bottom: none; }
+  thead th:first-child { border-radius: 6px 0 0 0; }
+  thead th:last-child { border-radius: 0 6px 0 0; }
+
+  /* ═══════════════════════════════════════════
+     BURNDOWN CHART POINT HOVER
+     ═══════════════════════════════════════════ */
+  .burn-point:hover {
+    r: 7;
+    filter: drop-shadow(0 0 6px rgba(0,217,255,0.5));
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE TWEAKS
+     ═══════════════════════════════════════════ */
+  @media (max-width: 480px) {
+    h1 { font-size: 1.4rem; }
+    .container { padding: 1rem; }
+    .kpi-row { gap: 0.5rem; }
+    .kpi-pill { padding: 0.35rem 0.65rem; font-size: 0.75rem; }
+    .kpi-pill .kpi-val { font-size: 0.95rem; }
+    .feed-time { min-width: 90px; font-size: 0.68rem; }
+    .sticky-nav { padding: 0.4rem 0.75rem; }
+    .sticky-nav a { padding: 0.35rem 0.55rem; font-size: 0.72rem; }
+    .timeline { padding-left: 2.25rem; }
+    .timeline-dot { width: 20px; height: 20px; font-size: 0.58rem; left: -1.85rem; }
+    .agent-emoji { font-size: 2rem; }
+    .kanban-card { padding: 0.6rem; }
+    table { font-size: 0.78rem; }
+    th, td { padding: 0.5rem; }
+  }
+  @media (min-width: 481px) and (max-width: 767px) {
+    .kpi-pill { padding: 0.4rem 0.75rem; }
+    .agent-card { padding: 1rem 0.75rem; }
+  }
+
+  /* ═══════════════════════════════════════════
+     UTILITY
+     ═══════════════════════════════════════════ */
+  .hidden { display: none !important; }
+  .mt-1 { margin-top: 0.5rem; }
+  .text-muted { color: #5e6a8a; }
+
+  /* ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ */
+  .footer {
+    text-align: center; padding: 2.5rem 1.5rem 2rem;
+    color: #5e6a8a; font-size: 0.75rem;
+    border-top: 1px solid #1e2a5e20;
+    margin-top: 1rem;
+  }
+  .footer span { color: #00d9ff; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+     ═══════════════════════════════════════════ -->
+<nav class="sticky-nav" id="stickyNav">
+  <a href="#header" data-nav="header">Accueil</a>
+  <a href="#activity" data-nav="activity">Activite</a>
+  <a href="#kanban" data-nav="kanban">Kanban</a>
+  <a href="#burndown" data-nav="burndown">Burndown</a>
+  <a href="#stories" data-nav="stories">Stories</a>
+  <a href="#timeline" data-nav="timeline">Timeline</a>
+  <a href="#agents" data-nav="agents">Agents</a>
+  <a href="#skills" data-nav="skills">Skills</a>
+  <a href="#backlog" data-nav="backlog">Backlog</a>
+  <a href="#decisions" data-nav="decisions">Decisions</a>
+</nav>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════
+       SECTION 1: HEADER
+       ═══════════════════════════════════════ -->
+  <header class="header" id="header">
+    <div class="header-top">
+      <h1 id="projectName"></h1>
+      <span class="sprint-badge" id="sprintBadge"></span>
+    </div>
+    <p class="header-desc" id="projectDesc"></p>
+    <p class="stack-tag" id="projectStack"></p>
+    <div class="kpi-row" id="kpiRow"></div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="sprintProgressBar" style="width:0%"></div>
+    </div>
+    <p class="progress-label" id="sprintProgressLabel"></p>
+  </header>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 2: ACTIVITY FEED
+       ═══════════════════════════════════════ -->
+  <section id="activity">
+    <div class="section-title"><h2>Activity Feed</h2></div>
+    <div class="card">
+      <div class="feed-list" id="feedList"></div>
+      <button class="btn-link hidden" id="feedToggle" onclick="toggleFeed()">Voir tout</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 3: KANBAN BOARD
+       ═══════════════════════════════════════ -->
+  <section id="kanban">
+    <div class="section-title"><h2>Kanban Board</h2></div>
+    <div class="filters-row" id="kanbanFilters"></div>
+    <div class="kanban-board" id="kanbanBoard"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 4: BURNDOWN CHART
+       ═══════════════════════════════════════ -->
+  <section id="burndown">
+    <div class="section-title"><h2>Burndown Chart</h2></div>
+    <div class="card burndown-wrap" id="burndownWrap">
+      <svg class="burndown-svg" id="burndownSvg" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="burndown-tooltip" id="burndownTooltip"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 5: USER STORIES
+       ═══════════════════════════════════════ -->
+  <section id="stories">
+    <div class="section-title"><h2>User Stories</h2></div>
+    <div class="filters-row" id="storyFilters"></div>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr>
+          <th>ID</th><th>Story</th><th>Priorite</th><th>Statut</th><th>Agent</th><th>Sprint</th>
+        </tr></thead>
+        <tbody id="storiesBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 6: TIMELINE SESSIONS
+       ═══════════════════════════════════════ -->
+  <section id="timeline">
+    <div class="section-title"><h2>Timeline Sessions</h2></div>
+    <div class="timeline" id="timelineList"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 7: AGENT TEAM
+       ═══════════════════════════════════════ -->
+  <section id="agents">
+    <div class="section-title"><h2>Agent Team</h2></div>
+    <div id="agentsGrid"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 8: SKILLS UTILISES
+       ═══════════════════════════════════════ -->
+  <section id="skills">
+    <div class="section-title"><h2>Skills Utilises</h2></div>
+    <div class="filters-row" id="skillFilters"></div>
+    <div class="grid-2" id="skillsGrid"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 9: BACKLOG OVERVIEW
+       ═══════════════════════════════════════ -->
+  <section id="backlog">
+    <div class="section-title"><h2>Backlog Overview</h2></div>
+    <div class="card">
+      <div class="backlog-bars" id="backlogBars"></div>
+      <p class="backlog-total" id="backlogTotal"></p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 10: DECISIONS (ADR)
+       ═══════════════════════════════════════ -->
+  <section id="decisions">
+    <div class="section-title"><h2>Decisions (ADR)</h2></div>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr>
+          <th>ID</th><th>Titre</th><th>Date</th><th>Statut</th><th>Impact</th><th>Agent</th>
+        </tr></thead>
+        <tbody id="decisionsBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  Dashboard Session Sprint &mdash; Genere depuis <span>PROJECT_DATA</span> &mdash; Zero dependances externes
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   PROJECT DATA
+   Edit this JSON to update the entire dashboard.
+   ═══════════════════════════════════════════════════════════ */
+const PROJECT_DATA = {
+  project: {
+    name: "Restaurant Avis",
+    description: "Suite digitale SaaS HoReCa — Modules Avis + Menu + KDS",
+    stack: "Next.js 14 + Tailwind + Shadcn/UI + Supabase + Vercel"
+  },
+  sprint: {
+    name: "Module 1 \u2014 Menu QR + Commande + KDS",
+    goal: "Menu digital fonctionnel avec commande depuis table et ecran cuisine temps reel",
+    startDate: "2026-03-11",
+    progress: 83
+  },
+  kpis: {
+    totalTasks: 12,
+    done: 10,
+    inProgress: 0,
+    todo: 2,
+    backlogTotal: 100,
+    sprintsCompleted: 4,
+    sessionsTotal: 6
+  },
+  agents: [
+    { name: "Strategist", emoji: "\ud83c\udfaf", active: false, tasksAssigned: 0, tasksCompleted: 0, lastActivity: "Sprint MVP planning", skills: ["writing-plans"] },
+    { name: "Architect", emoji: "\ud83d\udcd0", active: true, tasksAssigned: 2, tasksCompleted: 2, lastActivity: "ADR-001 Stack technique", skills: ["brainstorming", "writing-plans"] },
+    { name: "Builder", emoji: "\ud83d\udd28", active: true, tasksAssigned: 9, tasksCompleted: 8, lastActivity: "Module Menu complet (35 fichiers)", skills: ["test-driven-development", "executing-plans", "dispatching-parallel-agents"] },
+    { name: "Operator", emoji: "\ud83d\ude80", active: true, tasksAssigned: 2, tasksCompleted: 2, lastActivity: "Deploy Vercel prod", skills: ["verification-before-completion"] },
+    { name: "Investigator", emoji: "\ud83d\udd0d", active: true, tasksAssigned: 3, tasksCompleted: 2, lastActivity: "Fix KDS PATCH auth", skills: ["systematic-debugging"] },
+    { name: "Reporter", emoji: "\ud83d\udcca", active: true, tasksAssigned: 0, tasksCompleted: 1, lastActivity: "Setup Session-Sprint v2", skills: ["verification-before-completion"] }
+  ],
+  tasks: [
+    { id: "T-M01", title: "Schema DB 5 tables menu", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M01", completedAt: "2026-03-11", session: "S5" },
+    { id: "T-M02", title: "Types TypeScript (8 nouveaux)", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M01", completedAt: "2026-03-11", session: "S5" },
+    { id: "T-M03", title: "Seed donnees demo (14 articles)", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M01", completedAt: "2026-03-11", session: "S5" },
+    { id: "T-M04", title: "Pages publiques menu /m/[slug]", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M02", completedAt: "2026-03-11", session: "S5" },
+    { id: "T-M05", title: "API commandes (POST securise)", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M02", completedAt: "2026-03-11", session: "S5" },
+    { id: "T-M06", title: "KDS Supabase Realtime", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M03", completedAt: "2026-03-11", session: "S5" },
+    { id: "T-M07", title: "Dashboard menu + orders manager", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M04", completedAt: "2026-03-11", session: "S5" },
+    { id: "T-M08", title: "Sidebar Menu + Commandes", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M05", completedAt: "2026-03-11", session: "S5" },
+    { id: "T-M09", title: "Fix KDS PATCH (slug auth)", status: "done", priority: "P0", agent: "Investigator", sprint: "Module 1", story: "US-M03", completedAt: "2026-03-12", session: "S6" },
+    { id: "T-M10", title: "Build + deploy Vercel", status: "done", priority: "P0", agent: "Operator", sprint: "Module 1", story: "US-M05", completedAt: "2026-03-12", session: "S6" },
+    { id: "T-M11", title: "Verification end-to-end prod", status: "todo", priority: "P0", agent: "Investigator", sprint: "Module 1", story: "US-M05", completedAt: null, session: null },
+    { id: "T-M12", title: "Generation QR codes tables", status: "todo", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M01", completedAt: null, session: null }
+  ],
+  stories: [
+    // Module 1 : Menu QR + Commande + Paiement
+    { id: "US-001", story: "Scanner QR code table → menu digital", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
+    { id: "US-002", story: "Consulter categories et plats du menu", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
+    { id: "US-003", story: "Menu en plusieurs langues (FR/EN/AR)", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-004", story: "Ajouter plats au panier + quantites", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
+    { id: "US-005", story: "Passer commande depuis telephone", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
+    { id: "US-006", story: "Commandes temps reel KDS cuisine", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
+    { id: "US-007", story: "Gerer statut commandes sur KDS", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
+    { id: "US-008", story: "Suivre statut commande en temps reel", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-009", story: "Payer par carte/Apple Pay/Google Pay (Stripe)", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-010", story: "Option payer plus tard avec serveur", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-011", story: "Suggestions upselling automatiques", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-012", story: "Mode hotel (room service)", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-013", story: "Statistiques par table", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-014", story: "Vue multi-tables serveur", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-015", story: "Marquer plat indisponible (86)", priority: "P0", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-016", story: "CRUD categories et plats dashboard", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
+    { id: "US-017", story: "Voir et gerer commandes dashboard", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
+    { id: "US-018", story: "Generer QR codes par table", priority: "P0", status: "in-progress", agent: "Builder", sprint: "Module 1" },
+    { id: "US-019", story: "Uploader photos plats menu", priority: "P0", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    { id: "US-020", story: "Notifications sonores KDS", priority: "P0", status: "backlog", agent: "Builder", sprint: "Module 1" },
+    // Module 2 : Roue Cadeaux + Avis
+    { id: "US-021", story: "Acceder parcours avis via QR code", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-022", story: "Auth Google OAuth pour avis verifie", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-023", story: "Integration auth Trustpilot", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 2" },
+    { id: "US-024", story: "Note etoilee + commentaire", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-025", story: "Roue cadeaux animee", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-026", story: "Configurer cadeaux roue", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-027", story: "Anti-abus 1 spin/compte/restaurant", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-028", story: "Rappel SMS 2h apres visite", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 2" },
+    { id: "US-029", story: "Animation confetti cadeau gagne", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-030", story: "Bon cadeau a presenter au serveur", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-031", story: "Gerer cadeaux et probabilites dashboard", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-032", story: "Consulter avis recus dashboard", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-033", story: "Analytics spins roue", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 2" },
+    { id: "US-034", story: "Exporter avis en CSV", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 2" },
+    { id: "US-035", story: "Redirection Google Maps pour avis", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-036", story: "Poster avis Trustpilot via API", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 2" },
+    { id: "US-037", story: "Conformite DGCCRF (cadeau inconditionnel)", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-038", story: "Notification email nouvel avis", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 2" },
+    { id: "US-039", story: "Analyse sentiment avis", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 2" },
+    { id: "US-040", story: "Suivi clients recurrents", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 2" },
+    // Module 3 : Site Web + SEO
+    { id: "US-041", story: "Generation automatique site web", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-042", story: "Page accueil hero + CTA", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-043", story: "Page menu auto-alimentee module QR", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-044", story: "Page reservation Calendly", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-045", story: "Page galerie photos", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-046", story: "Page avis agreges Google+Trustpilot", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-047", story: "Page contact + Google Maps", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-048", story: "Blog articles generes par IA", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-049", story: "Planification publication blog", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-050", story: "Schema.org Restaurant JSON-LD", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-051", story: "Meta titles et descriptions dynamiques", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-052", story: "Sitemap.xml automatique", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-053", story: "Optimisation Core Web Vitals", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-054", story: "Balises Open Graph partage social", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-055", story: "Support domaine personnalise", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-056", story: "Design responsive mobile-first", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-057", story: "Integration Google Ads geo-cible", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-058", story: "Pixel remarketing visiteurs QR", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-059", story: "Suivi positionnement SEO mots-cles", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    { id: "US-060", story: "Rapport mensuel performance SEO", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 3" },
+    // Module 4 : Google Maps & GMB
+    { id: "US-061", story: "Connexion API Google My Business", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-062", story: "Completude 100% profil GMB", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-063", story: "Publications GMB hebdo via n8n", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-064", story: "Templates contenu saisonnier", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-065", story: "Reponses automatiques avis par IA", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-066", story: "Pre-approbation reponses IA", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-067", story: "Templates reponses par type avis", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-068", story: "Analyse sentiment avis Google", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-069", story: "Suivi positionnement local mots-cles", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-070", story: "Analyse concurrentielle restaurants", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-071", story: "Rapport mensuel visibilite Google", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-072", story: "Optimisation photos Google Maps", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-073", story: "Campagnes Google Ads locales", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-074", story: "Lien reservation depuis Google Maps", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    { id: "US-075", story: "Suivi temps reponse avis (SLA)", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 4" },
+    // Module 5 : Social Media Automation
+    { id: "US-076", story: "Connexion Instagram Graph API", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-077", story: "Connexion page Facebook", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-078", story: "Integration TikTok Business", priority: "P3", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-079", story: "Pipeline video → Reel vertical", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-080", story: "Generation legendes IA + hashtags", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-081", story: "Ton communication configurable", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-082", story: "Templates publications", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-083", story: "Validation avant publication Telegram", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-084", story: "Planification publications par lot", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-085", story: "Rapport mensuel engagement", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-086", story: "Analyse contenus performants", priority: "P3", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-087", story: "Calendrier de contenu", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-088", story: "Suggestions hashtags populaires", priority: "P3", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-089", story: "Benchmark concurrentiel reseaux", priority: "P3", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    { id: "US-090", story: "Mediatheque photos et videos", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    // Transverse : Billing, Admin, Compliance
+    { id: "US-091", story: "Abonnements Stripe (4 plans)", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-092", story: "Portail client facturation", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-093", story: "Dashboard super-admin multi-restaurants", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-094", story: "Architecture multi-tenant RLS", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-095", story: "Onboarding self-service restaurant", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-096", story: "Conformite RGPD", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-097", story: "Conformite DGCCRF", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-098", story: "Monitoring performance", priority: "P3", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-099", story: "Support client par tickets", priority: "P3", status: "backlog", agent: "Builder", sprint: "Transverse" },
+    { id: "US-100", story: "Option white-label", priority: "P3", status: "backlog", agent: "Builder", sprint: "Transverse" }
+  ],
+  burndown: [
+    { session: "S1", date: "2026-03-07", remaining: 24, ideal: 24 },
+    { session: "S2", date: "2026-03-07", remaining: 15, ideal: 20 },
+    { session: "S3", date: "2026-03-07", remaining: 0, ideal: 16 },
+    { session: "S4", date: "2026-03-09", remaining: 12, ideal: 12 },
+    { session: "S5", date: "2026-03-11", remaining: 4, ideal: 8 },
+    { session: "S6", date: "2026-03-12", remaining: 2, ideal: 4 }
+  ],
+  decisions: [
+    { id: "ADR-001", title: "Stack: Next.js 14 + Supabase + Vercel", date: "2026-03-07", status: "accepted", impact: "high", agent: "Architect" },
+    { id: "ADR-002", title: "Auth client Google OAuth via NextAuth.js v4", date: "2026-03-07", status: "accepted", impact: "high", agent: "Architect" },
+    { id: "ADR-003", title: "Architecture modulaire src/modules/", date: "2026-03-07", status: "accepted", impact: "high", agent: "Architect" },
+    { id: "ADR-004", title: "KDS auth par slug (pas session)", date: "2026-03-12", status: "accepted", impact: "medium", agent: "Investigator" }
+  ],
+  sessions: [
+    { date: "2026-03-07", summary: "MVP Roue Cadeaux + Avis complet (72 points, 3 sprints)", tasksCompleted: 24, agents: ["Strategist", "Architect", "Builder", "Operator"] },
+    { date: "2026-03-08", summary: "Fix Google OAuth 404 (pages.signIn)", tasksCompleted: 1, agents: ["Investigator"] },
+    { date: "2026-03-09", summary: "Fix OAuth + git credentials + Google app production", tasksCompleted: 3, agents: ["Investigator", "Operator"] },
+    { date: "2026-03-11", summary: "Module 1 complet: 35 fichiers, menu + commande + KDS", tasksCompleted: 8, agents: ["Builder", "Architect"] },
+    { date: "2026-03-12", summary: "Fix KDS PATCH + setup Session-Sprint v2", tasksCompleted: 3, agents: ["Investigator", "Operator", "Reporter"] }
+  ],
+  backlog: { p0: 4, p1: 24, p2: 42, icebox: 7 },
+  skills: [
+    { name: "writing-plans", usedBy: ["Strategist", "Architect"], usedCount: 4, lastUsed: "2026-03-12", description: "Planification structuree avant implementation" },
+    { name: "dispatching-parallel-agents", usedBy: ["Builder"], usedCount: 2, lastUsed: "2026-03-11", description: "4 agents paralleles pour 35 fichiers" },
+    { name: "systematic-debugging", usedBy: ["Investigator"], usedCount: 4, lastUsed: "2026-03-12", description: "Fix OAuth, KDS PATCH, git credentials" },
+    { name: "verification-before-completion", usedBy: ["Reporter", "Operator"], usedCount: 5, lastUsed: "2026-03-12", description: "Build + deploy + verification prod" },
+    { name: "executing-plans", usedBy: ["Builder"], usedCount: 3, lastUsed: "2026-03-11", description: "Execution du plan Module 1" }
+  ],
+  activityFeed: [
+    { time: "2026-03-12 17:00", type: "report", agent: "Reporter", emoji: "\ud83d\udcca", message: "Setup Session-Sprint v2 complet" },
+    { time: "2026-03-12 16:30", type: "task-done", agent: "Operator", emoji: "\u2705", message: "T-M10 Deploy Vercel prod" },
+    { time: "2026-03-12 16:00", type: "task-done", agent: "Investigator", emoji: "\u2705", message: "T-M09 Fix KDS PATCH auth par slug" },
+    { time: "2026-03-12 15:00", type: "session-start", agent: "\u2014", emoji: "\ud83d\udfe2", message: "Session S6 demarree" },
+    { time: "2026-03-11 22:00", type: "task-done", agent: "Builder", emoji: "\u2705", message: "Module 1 complet: 35 fichiers deployes" },
+    { time: "2026-03-11 18:00", type: "agent-activated", agent: "Builder", emoji: "\ud83d\udd28", message: "4 agents paralleles lances (API, Menu, KDS, Dashboard)" },
+    { time: "2026-03-11 14:00", type: "sprint-created", agent: "Strategist", emoji: "\ud83c\udfaf", message: "Sprint Module 1 cree" },
+    { time: "2026-03-09 16:00", type: "task-done", agent: "Investigator", emoji: "\u2705", message: "Google OAuth fix complet (3 causes)" },
+    { time: "2026-03-07 23:00", type: "task-done", agent: "Builder", emoji: "\u2705", message: "MVP Roue Cadeaux + Avis termine (72 points)" },
+    { time: "2026-03-07 14:00", type: "decision", agent: "Architect", emoji: "\ud83c\udfdb\ufe0f", message: "ADR-001: Stack Next.js 14 + Supabase + Vercel" }
+  ]
+};
+
+/* ═══════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════ */
+const D = PROJECT_DATA;
+const $ = function(sel) { return document.querySelector(sel); };
+const $$ = function(sel) { return document.querySelectorAll(sel); };
+
+function getAgentEmoji(name) {
+  var a = D.agents.find(function(ag) { return ag.name === name; });
+  return a ? a.emoji : '';
+}
+
+function statusClass(s) {
+  return 'status-' + s;
+}
+
+function capitalize(s) {
+  if (!s) return '';
+  if (s === 'in-progress') return 'In Progress';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 1: HEADER
+   ═══════════════════════════════════════════ */
+function renderHeader() {
+  $('#projectName').textContent = D.project.name;
+  $('#sprintBadge').textContent = D.sprint.name;
+  $('#projectDesc').textContent = D.project.description + ' \u2014 ' + D.sprint.goal;
+  $('#projectStack').textContent = 'Stack: ' + D.project.stack;
+
+  var kpis = [
+    { label: 'Done', val: D.kpis.done, cls: 'green' },
+    { label: 'In Progress', val: D.kpis.inProgress, cls: 'cyan' },
+    { label: 'Todo', val: D.kpis.todo, cls: 'gray' },
+    { label: 'Sprint', val: D.sprint.progress + '%', cls: 'gradient' },
+    { label: 'Sessions', val: D.kpis.sessionsTotal, cls: 'purple' }
+  ];
+
+  $('#kpiRow').innerHTML = kpis.map(function(k) {
+    return '<div class="kpi-pill ' + k.cls + '">' +
+      '<span class="kpi-val">' + k.val + '</span>' +
+      '<span class="kpi-label">' + k.label + '</span>' +
+    '</div>';
+  }).join('');
+
+  $('#sprintProgressBar').style.width = D.sprint.progress + '%';
+  $('#sprintProgressLabel').textContent =
+    'Sprint: ' + D.sprint.progress + '% \u2014 ' +
+    D.kpis.done + '/' + D.kpis.totalTasks + ' taches terminees';
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 2: ACTIVITY FEED
+   ═══════════════════════════════════════════ */
+var feedExpanded = false;
+var FEED_LIMIT = 5;
+
+function renderFeed() {
+  var items = D.activityFeed;
+  var limit = feedExpanded ? items.length : Math.min(FEED_LIMIT, items.length);
+  var html = '';
+
+  for (var i = 0; i < limit; i++) {
+    var f = items[i];
+    var agentEmoji = getAgentEmoji(f.agent);
+    html += '<div class="feed-item feed-type-' + f.type + '">' +
+      '<span class="feed-time">' + f.time + '</span>' +
+      '<span class="feed-emoji">' + f.emoji + '</span>' +
+      '<span class="feed-msg">' +
+        '<span class="feed-agent">' + agentEmoji + ' ' + f.agent + '</span> ' +
+        f.message +
+      '</span>' +
+    '</div>';
+  }
+
+  $('#feedList').innerHTML = html;
+  var btn = $('#feedToggle');
+  if (items.length <= FEED_LIMIT) {
+    btn.classList.add('hidden');
+  } else {
+    btn.classList.remove('hidden');
+    btn.textContent = feedExpanded ? 'Reduire' : 'Voir tout (' + items.length + ')';
+  }
+}
+
+function toggleFeed() {
+  feedExpanded = !feedExpanded;
+  renderFeed();
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 3: KANBAN BOARD
+   ═══════════════════════════════════════════ */
+var kanbanAgentFilter = null;
+var kanbanPriorityFilter = null;
+
+function renderKanbanFilters() {
+  var agents = [];
+  var priorities = [];
+  D.tasks.forEach(function(t) {
+    if (agents.indexOf(t.agent) === -1) agents.push(t.agent);
+    if (priorities.indexOf(t.priority) === -1) priorities.push(t.priority);
+  });
+  priorities.sort();
+
+  var html = '<span class="filter-group-label">Agent:</span>';
+  html += '<button class="filter-btn' + (!kanbanAgentFilter ? ' active' : '') + '" data-kanban-agent="">Tous</button>';
+  agents.forEach(function(a) {
+    html += '<button class="filter-btn' + (kanbanAgentFilter === a ? ' active' : '') +
+      '" data-kanban-agent="' + a + '">' + getAgentEmoji(a) + ' ' + a + '</button>';
+  });
+
+  html += '<span class="filter-group-label" style="margin-left:0.75rem">Priorite:</span>';
+  html += '<button class="filter-btn' + (!kanbanPriorityFilter ? ' active' : '') + '" data-kanban-priority="">Tous</button>';
+  priorities.forEach(function(p) {
+    html += '<button class="filter-btn' + (kanbanPriorityFilter === p ? ' active' : '') +
+      '" data-kanban-priority="' + p + '">' + p + '</button>';
+  });
+
+  $('#kanbanFilters').innerHTML = html;
+  bindKanbanFilterEvents();
+}
+
+function bindKanbanFilterEvents() {
+  $$('[data-kanban-agent]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      kanbanAgentFilter = btn.dataset.kanbanAgent || null;
+      renderKanbanFilters();
+      renderKanban();
+    });
+  });
+  $$('[data-kanban-priority]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      kanbanPriorityFilter = btn.dataset.kanbanPriority || null;
+      renderKanbanFilters();
+      renderKanban();
+    });
+  });
+}
+
+function renderKanban() {
+  var filtered = D.tasks.filter(function(t) {
+    if (kanbanAgentFilter && t.agent !== kanbanAgentFilter) return false;
+    if (kanbanPriorityFilter && t.priority !== kanbanPriorityFilter) return false;
+    return true;
+  });
+
+  var cols = [
+    { key: 'todo', label: 'Todo', icon: '\ud83d\udccb', items: filtered.filter(function(t) { return t.status === 'todo'; }) },
+    { key: 'in-progress', label: 'In Progress', icon: '\ud83d\udd04', items: filtered.filter(function(t) { return t.status === 'in-progress'; }) },
+    { key: 'done', label: 'Done', icon: '\u2705', items: filtered.filter(function(t) { return t.status === 'done'; }) }
+  ];
+
+  var html = '';
+  cols.forEach(function(col) {
+    html += '<div class="kanban-col">';
+    html += '<div class="kanban-col-header">' +
+      '<span class="col-label">' + col.icon + ' ' + col.label + '</span>' +
+      '<span class="kanban-count">' + col.items.length + '</span>' +
+    '</div>';
+
+    col.items.forEach(function(t, cardIdx) {
+      var agEmoji = getAgentEmoji(t.agent);
+      var extra = '';
+      if (t.status === 'done' && t.completedAt) {
+        extra = '<div class="kanban-card-completed">' +
+          '\u2713 ' + t.completedAt + ' \u2014 Session ' + (t.session || '') +
+        '</div>';
+      }
+      var sessionTag = '';
+      if (t.session && t.status !== 'done') {
+        sessionTag = '<span style="color:#a855f7;font-size:0.7rem">' + t.session + '</span>';
+      }
+      html += '<div class="kanban-card" style="animation-delay:' + (cardIdx * 0.05) + 's">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+          '<div class="kanban-card-title">' + t.title + '</div>' +
+          '<span style="color:#5e6a8a;font-size:0.7rem;flex-shrink:0">' + t.id + '</span>' +
+        '</div>' +
+        '<div class="kanban-card-meta">' +
+          '<span class="priority-badge priority-' + t.priority + '">' + t.priority + '</span>' +
+          '<span>' + agEmoji + ' ' + t.agent + '</span>' +
+          '<span style="color:#5e6a8a">' + (t.story || '') + '</span>' +
+          sessionTag +
+        '</div>' +
+        extra +
+      '</div>';
+    });
+    html += '</div>';
+  });
+
+  $('#kanbanBoard').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 4: BURNDOWN CHART (SVG)
+   ═══════════════════════════════════════════ */
+function renderBurndown() {
+  var data = D.burndown;
+  if (!data.length) return;
+
+  var svg = $('#burndownSvg');
+  var wrap = $('#burndownWrap');
+  var tooltip = $('#burndownTooltip');
+
+  var rect = svg.getBoundingClientRect();
+  var W = Math.max(rect.width, 400);
+  var H = 300;
+  var pad = { top: 35, right: 35, bottom: 50, left: 50 };
+  var chartW = W - pad.left - pad.right;
+  var chartH = H - pad.top - pad.bottom;
+
+  var maxY = 0;
+  data.forEach(function(d) {
+    var m = Math.max(d.remaining, d.ideal);
+    if (m > maxY) maxY = m;
+  });
+  maxY += 2;
+  var n = data.length;
+
+  function xPos(i) { return pad.left + (n > 1 ? (i / (n - 1)) * chartW : chartW / 2); }
+  function yPos(v) { return pad.top + chartH - (v / maxY) * chartH; }
+
+  // Grid lines
+  var gridLines = '';
+  var gridSteps = 5;
+  for (var g = 0; g <= gridSteps; g++) {
+    var val = Math.round((maxY / gridSteps) * g);
+    var gy = yPos(val);
+    gridLines += '<line x1="' + pad.left + '" y1="' + gy + '" x2="' + (W - pad.right) + '" y2="' + gy + '" stroke="#1e2a5e" stroke-width="0.5"/>';
+    gridLines += '<text x="' + (pad.left - 10) + '" y="' + (gy + 4) + '" fill="#5e6a8a" font-size="11" text-anchor="end" font-family="Inter, sans-serif">' + val + '</text>';
+  }
+
+  // X axis labels
+  var xLabels = '';
+  data.forEach(function(d, i) {
+    xLabels += '<text x="' + xPos(i) + '" y="' + (H - 12) + '" fill="#5e6a8a" font-size="11" text-anchor="middle" font-family="Inter, sans-serif">' + d.session + '</text>';
+    xLabels += '<text x="' + xPos(i) + '" y="' + (H - 0) + '" fill="#5e6a8a40" font-size="9" text-anchor="middle" font-family="Inter, sans-serif">' + d.date + '</text>';
+  });
+
+  // Ideal line
+  var idealPath = 'M' + xPos(0) + ',' + yPos(data[0].ideal);
+  for (var i = 1; i < n; i++) idealPath += ' L' + xPos(i) + ',' + yPos(data[i].ideal);
+
+  // Actual line
+  var actualPath = 'M' + xPos(0) + ',' + yPos(data[0].remaining);
+  for (var i = 1; i < n; i++) actualPath += ' L' + xPos(i) + ',' + yPos(data[i].remaining);
+
+  // Area fill between lines
+  var areaPath = 'M' + xPos(0) + ',' + yPos(data[0].ideal);
+  for (var i = 1; i < n; i++) areaPath += ' L' + xPos(i) + ',' + yPos(data[i].ideal);
+  for (var i = n - 1; i >= 0; i--) areaPath += ' L' + xPos(i) + ',' + yPos(data[i].remaining);
+  areaPath += ' Z';
+
+  var lastActual = data[n - 1].remaining;
+  var lastIdeal = data[n - 1].ideal;
+  var areaColor = lastActual <= lastIdeal ? 'rgba(34,197,94,0.08)' : 'rgba(239,68,68,0.08)';
+
+  // Points with glow
+  var points = '';
+  data.forEach(function(d, i) {
+    var cx = xPos(i);
+    var cy = yPos(d.remaining);
+    points += '<circle cx="' + cx + '" cy="' + cy + '" r="8" fill="#00d9ff" opacity="0.15"/>';
+    points += '<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="#00d9ff" stroke="#0a0e27" stroke-width="2" class="burn-point" data-idx="' + i + '" style="cursor:pointer;transition:r 0.2s"/>';
+  });
+
+  // Axes
+  var axes = '';
+  axes += '<line x1="' + pad.left + '" y1="' + pad.top + '" x2="' + pad.left + '" y2="' + (H - pad.bottom) + '" stroke="#1e2a5e" stroke-width="1"/>';
+  axes += '<line x1="' + pad.left + '" y1="' + (H - pad.bottom) + '" x2="' + (W - pad.right) + '" y2="' + (H - pad.bottom) + '" stroke="#1e2a5e" stroke-width="1"/>';
+
+  // Legend
+  var legend = '';
+  legend += '<line x1="' + (W - pad.right - 160) + '" y1="' + (pad.top - 12) + '" x2="' + (W - pad.right - 130) + '" y2="' + (pad.top - 12) + '" stroke="#5e6a8a" stroke-width="2" stroke-dasharray="5,3"/>';
+  legend += '<text x="' + (W - pad.right - 125) + '" y="' + (pad.top - 8) + '" fill="#5e6a8a" font-size="10" font-family="Inter, sans-serif">Ideal</text>';
+  legend += '<line x1="' + (W - pad.right - 80) + '" y1="' + (pad.top - 12) + '" x2="' + (W - pad.right - 50) + '" y2="' + (pad.top - 12) + '" stroke="#00d9ff" stroke-width="3"/>';
+  legend += '<text x="' + (W - pad.right - 45) + '" y="' + (pad.top - 8) + '" fill="#00d9ff" font-size="10" font-family="Inter, sans-serif">Actual</text>';
+
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  svg.innerHTML = axes + gridLines + xLabels +
+    '<path d="' + areaPath + '" fill="' + areaColor + '"/>' +
+    '<path d="' + idealPath + '" stroke="#5e6a8a" stroke-width="2" stroke-dasharray="6,4" fill="none"/>' +
+    '<path d="' + actualPath + '" stroke="#00d9ff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
+    points + legend;
+
+  // Tooltip events
+  svg.querySelectorAll('.burn-point').forEach(function(circle) {
+    circle.addEventListener('mouseenter', function(e) {
+      var idx = parseInt(circle.dataset.idx);
+      var d = data[idx];
+      var delta = d.remaining - d.ideal;
+      var deltaStr, deltaClass;
+      if (delta > 0) { deltaStr = '+' + delta + ' (retard)'; deltaClass = 'behind'; }
+      else if (delta < 0) { deltaStr = delta + ' (avance)'; deltaClass = 'ahead'; }
+      else { deltaStr = '0 (ideal)'; deltaClass = ''; }
+
+      tooltip.innerHTML =
+        '<div class="tt-session">' + d.session + '</div>' +
+        '<div class="tt-date">' + d.date + '</div>' +
+        '<div class="tt-remaining">Restant: ' + d.remaining + ' taches</div>' +
+        '<div class="tt-delta ' + deltaClass + '">Delta: ' + deltaStr + '</div>';
+      tooltip.style.display = 'block';
+
+      var svgRect = svg.getBoundingClientRect();
+      var cx = parseFloat(circle.getAttribute('cx'));
+      var cy = parseFloat(circle.getAttribute('cy'));
+      var scaleX = svgRect.width / W;
+      var scaleY = svgRect.height / H;
+      var posX = cx * scaleX + 15;
+      var posY = cy * scaleY - 20;
+
+      // Prevent tooltip overflow right
+      if (posX + 180 > svgRect.width) posX = cx * scaleX - 180;
+      tooltip.style.left = posX + 'px';
+      tooltip.style.top = posY + 'px';
+    });
+
+    circle.addEventListener('mouseleave', function() {
+      tooltip.style.display = 'none';
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 5: USER STORIES
+   ═══════════════════════════════════════════ */
+var storyStatusFilter = null;
+
+function renderStoryFilters() {
+  var statuses = ['done', 'in-progress', 'todo', 'blocked'];
+  var html = '<span class="filter-group-label">Statut:</span>';
+  html += '<button class="filter-btn' + (!storyStatusFilter ? ' active' : '') + '" data-story-status="">Tous</button>';
+  statuses.forEach(function(s) {
+    html += '<button class="filter-btn' + (storyStatusFilter === s ? ' active' : '') +
+      '" data-story-status="' + s + '">' + capitalize(s) + '</button>';
+  });
+  $('#storyFilters').innerHTML = html;
+  bindStoryFilterEvents();
+}
+
+function bindStoryFilterEvents() {
+  $$('[data-story-status]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      storyStatusFilter = btn.dataset.storyStatus || null;
+      renderStoryFilters();
+      renderStories();
+    });
+  });
+}
+
+function renderStories() {
+  var filtered = D.stories.filter(function(s) {
+    if (storyStatusFilter && s.status !== storyStatusFilter) return false;
+    return true;
+  });
+
+  var html = '';
+  filtered.forEach(function(s) {
+    html += '<tr>' +
+      '<td style="font-weight:600;color:#00d9ff">' + s.id + '</td>' +
+      '<td>' + s.story + '</td>' +
+      '<td><span class="priority-badge priority-' + s.priority + '">' + s.priority + '</span></td>' +
+      '<td><span class="status-badge ' + statusClass(s.status) + '">' + capitalize(s.status) + '</span></td>' +
+      '<td>' + getAgentEmoji(s.agent) + ' ' + s.agent + '</td>' +
+      '<td>' + s.sprint + '</td>' +
+    '</tr>';
+  });
+  $('#storiesBody').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 6: TIMELINE SESSIONS
+   ═══════════════════════════════════════════ */
+function renderTimeline() {
+  var html = '';
+  D.sessions.forEach(function(s, i) {
+    var agentsList = s.agents.map(function(a) {
+      return getAgentEmoji(a) + ' ' + a;
+    }).join(', ');
+
+    // Find skills used by agents in this session
+    var sessionSkills = [];
+    s.agents.forEach(function(agentName) {
+      var agent = D.agents.find(function(ag) { return ag.name === agentName; });
+      if (agent && agent.skills) {
+        agent.skills.forEach(function(sk) {
+          if (sessionSkills.indexOf(sk) === -1) sessionSkills.push(sk);
+        });
+      }
+    });
+    var skillsTags = sessionSkills.map(function(sk) {
+      return '<span class="skill-tag">' + sk + '</span>';
+    }).join(' ');
+
+    html += '<div class="timeline-item" style="animation: fadeInUp 0.4s ease-out forwards; animation-delay:' + (i * 0.1) + 's; opacity:0">' +
+      '<div class="timeline-dot">S' + (i + 1) + '</div>' +
+      '<div class="timeline-card">' +
+        '<div class="timeline-date">' + s.date + '</div>' +
+        '<div class="timeline-summary">' + s.summary + '</div>' +
+        '<div class="timeline-meta">' +
+          '<span>\ud83d\udc65 ' + agentsList + '</span>' +
+          '<span>\u2705 ' + s.tasksCompleted + ' taches completees</span>' +
+        '</div>' +
+        (skillsTags ? '<div style="margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:0.3rem">' + skillsTags + '</div>' : '') +
+      '</div>' +
+    '</div>';
+  });
+  $('#timelineList').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 7: AGENT TEAM
+   ═══════════════════════════════════════════ */
+function renderAgents() {
+  // Compute team summary stats
+  var totalActive = D.agents.filter(function(a) { return a.active; }).length;
+  var totalInactive = D.agents.length - totalActive;
+  var totalAssigned = 0;
+  var totalCompleted = 0;
+  D.agents.forEach(function(a) {
+    totalAssigned += a.tasksAssigned;
+    totalCompleted += a.tasksCompleted;
+  });
+  var teamPct = totalAssigned > 0 ? Math.round((totalCompleted / totalAssigned) * 100) : 0;
+
+  var summaryHtml = '<div class="card" style="margin-bottom:1.25rem;padding:0.85rem 1.25rem;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;font-size:0.85rem">' +
+    '<span style="color:#8892b0">Equipe:</span>' +
+    '<span><span style="color:#00d9ff;font-weight:600">' + totalActive + '</span> actifs</span>' +
+    '<span><span style="color:#5e6a8a;font-weight:600">' + totalInactive + '</span> inactifs</span>' +
+    '<span>Progression: <span style="color:#a855f7;font-weight:600">' + totalCompleted + '/' + totalAssigned + '</span> (' + teamPct + '%)</span>' +
+  '</div>';
+
+  var html = summaryHtml;
+  html += '<div class="grid-3">';
+  D.agents.forEach(function(a) {
+    var pct = a.tasksAssigned > 0
+      ? Math.round((a.tasksCompleted / a.tasksAssigned) * 100)
+      : (a.tasksCompleted > 0 ? 100 : 0);
+
+    var cardCls = a.active ? 'active' : 'inactive';
+    var dotCls = a.active ? 'on' : 'off';
+    var statusText = a.active ? 'Actif' : 'Inactif';
+
+    var reporterIndicator = '';
+    if (a.name === 'Reporter') {
+      if (a.active) {
+        reporterIndicator = '<div class="agent-reporter-indicator" style="color:#22c55e">Docs a jour \u2705</div>';
+      } else {
+        reporterIndicator = '<div class="agent-reporter-indicator" style="color:#f59e0b">Mise a jour en attente \u26a0\ufe0f</div>';
+      }
+    }
+
+    var skillsHtml = a.skills.map(function(s) {
+      return '<span class="skill-tag">' + s + '</span>';
+    }).join('');
+
+    html += '<div class="card agent-card ' + cardCls + '">' +
+      '<div class="agent-emoji">' + a.emoji + '</div>' +
+      '<div class="agent-name">' + a.name + '</div>' +
+      '<div class="agent-status-row">' +
+        '<span class="agent-status-dot ' + dotCls + '"></span>' +
+        '<span class="agent-status-label">' + statusText + '</span>' +
+      '</div>' +
+      '<div class="agent-progress">' +
+        '<div class="agent-progress-bar">' +
+          '<div class="agent-progress-fill" style="width:' + pct + '%"></div>' +
+        '</div>' +
+        '<div class="agent-progress-label">' + a.tasksCompleted + '/' + a.tasksAssigned + ' taches (' + pct + '%)</div>' +
+      '</div>' +
+      '<div class="agent-last">Derniere activite: ' + a.lastActivity + '</div>' +
+      reporterIndicator +
+      '<div class="agent-skills">' + skillsHtml + '</div>' +
+    '</div>';
+  });
+  html += '</div>'; // close grid-3
+  $('#agentsGrid').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 8: SKILLS UTILISES
+   ═══════════════════════════════════════════ */
+var skillAgentFilter = null;
+
+function renderSkillFilters() {
+  var allAgents = [];
+  D.skills.forEach(function(s) {
+    s.usedBy.forEach(function(a) {
+      if (allAgents.indexOf(a) === -1) allAgents.push(a);
+    });
+  });
+
+  var html = '<span class="filter-group-label">Agent:</span>';
+  html += '<button class="filter-btn' + (!skillAgentFilter ? ' active' : '') + '" data-skill-agent="">Tous</button>';
+  allAgents.forEach(function(a) {
+    html += '<button class="filter-btn' + (skillAgentFilter === a ? ' active' : '') +
+      '" data-skill-agent="' + a + '">' + getAgentEmoji(a) + ' ' + a + '</button>';
+  });
+  $('#skillFilters').innerHTML = html;
+  bindSkillFilterEvents();
+}
+
+function bindSkillFilterEvents() {
+  $$('[data-skill-agent]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      skillAgentFilter = btn.dataset.skillAgent || null;
+      renderSkillFilters();
+      renderSkills();
+    });
+  });
+}
+
+function renderSkills() {
+  var sorted = D.skills.slice()
+    .filter(function(s) {
+      if (!skillAgentFilter) return true;
+      return s.usedBy.indexOf(skillAgentFilter) !== -1;
+    })
+    .sort(function(a, b) { return b.usedCount - a.usedCount; });
+
+  var html = '';
+  sorted.forEach(function(s) {
+    var agentEmojis = s.usedBy.map(function(a) { return getAgentEmoji(a) + ' ' + a; }).join(', ');
+    html += '<div class="card skill-card">' +
+      '<div class="skill-card-header">' +
+        '<span class="skill-card-name">' + s.name + '</span>' +
+        '<span class="skill-card-count">' + s.usedCount + 'x</span>' +
+      '</div>' +
+      '<div class="skill-card-desc">' + s.description + '</div>' +
+      '<div class="skill-card-agents">\ud83d\udc65 ' + agentEmojis + '</div>' +
+      '<div class="skill-card-date">Dernier usage: ' + s.lastUsed + '</div>' +
+    '</div>';
+  });
+  $('#skillsGrid').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 9: BACKLOG OVERVIEW
+   ═══════════════════════════════════════════ */
+function renderBacklog() {
+  var b = D.backlog;
+  var total = b.p0 + b.p1 + b.p2 + b.icebox;
+  var items = [
+    { label: 'P0', val: b.p0, cls: 'p0' },
+    { label: 'P1', val: b.p1, cls: 'p1' },
+    { label: 'P2', val: b.p2, cls: 'p2' },
+    { label: 'Icebox', val: b.icebox, cls: 'icebox' }
+  ];
+
+  var html = '';
+  items.forEach(function(item) {
+    var pct = total > 0 ? Math.round((item.val / total) * 100) : 0;
+    var barWidth = total > 0 ? Math.max((item.val / total) * 100, 10) : 0;
+    html += '<div class="backlog-row">' +
+      '<span class="backlog-label">' + item.label + '</span>' +
+      '<div class="backlog-bar-track">' +
+        '<div class="backlog-bar-fill ' + item.cls + '" style="width:' + barWidth + '%">' + item.val + '</div>' +
+      '</div>' +
+      '<span class="backlog-pct">' + pct + '%</span>' +
+    '</div>';
+  });
+
+  $('#backlogBars').innerHTML = html;
+  $('#backlogTotal').textContent = 'Total: ' + total + ' items au backlog';
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 10: DECISIONS (ADR)
+   ═══════════════════════════════════════════ */
+function renderDecisions() {
+  var html = '';
+  D.decisions.forEach(function(d) {
+    html += '<tr>' +
+      '<td style="font-weight:600;color:#a855f7">' + d.id + '</td>' +
+      '<td>' + d.title + '</td>' +
+      '<td style="color:#5e6a8a">' + d.date + '</td>' +
+      '<td><span class="status-badge status-' + d.status + '">' + capitalize(d.status) + '</span></td>' +
+      '<td><span class="status-badge impact-' + d.impact + '">' + capitalize(d.impact) + '</span></td>' +
+      '<td>' + getAgentEmoji(d.agent) + ' ' + d.agent + '</td>' +
+    '</tr>';
+  });
+  $('#decisionsBody').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   INTERSECTION OBSERVER - Active Nav Indicator
+   ═══════════════════════════════════════════ */
+function setupNavObserver() {
+  var sectionIds = [
+    'header', 'activity', 'kanban', 'burndown',
+    'stories', 'timeline', 'agents', 'skills',
+    'backlog', 'decisions'
+  ];
+  var navLinks = $$('.sticky-nav a');
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        navLinks.forEach(function(link) {
+          var href = link.getAttribute('href');
+          if (href === '#' + id) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+  }, {
+    rootMargin: '-80px 0px -55% 0px',
+    threshold: 0.05
+  });
+
+  sectionIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   SMOOTH SCROLL NAV CLICK
+   ═══════════════════════════════════════════ */
+function setupNavClicks() {
+  $$('.sticky-nav a').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var targetId = link.getAttribute('href').replace('#', '');
+      var target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════
+   RESIZE HANDLER
+   ═══════════════════════════════════════════ */
+var resizeTimer;
+function setupResizeHandler() {
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      renderBurndown();
+    }, 250);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   INIT - Render all sections
+   ═══════════════════════════════════════════ */
+function init() {
+  renderHeader();
+  renderFeed();
+  renderKanbanFilters();
+  renderKanban();
+  renderBurndown();
+  renderStoryFilters();
+  renderStories();
+  renderTimeline();
+  renderAgents();
+  renderSkillFilters();
+  renderSkills();
+  renderBacklog();
+  renderDecisions();
+  setupNavObserver();
+  setupNavClicks();
+  setupResizeHandler();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

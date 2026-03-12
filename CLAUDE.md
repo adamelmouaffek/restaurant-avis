@@ -1,64 +1,62 @@
-# Restaurant Avis — CLAUDE.md
+# Restaurant Avis — Suite Digitale SaaS HoReCa
 
-## Projet
+Next.js 14 (App Router) + Tailwind CSS + Shadcn/UI + Supabase + NextAuth.js | Vercel
 
-Suite digitale SaaS HoReCa — Module MVP : Roue Cadeaux + Avis
-Owner : Adam EL MOUAFFEK | Paris, Mars 2026
+## Mode de travail
 
-## Architecture
+Au debut de chaque session, proposer a l'utilisateur :
 
-- **Stack** : Next.js 14 (App Router) + Tailwind CSS + Shadcn/UI + Supabase + NextAuth.js
-- **Structure** : Modulaire par feature (`src/modules/avis/`, futur `menu/`, `site/`...)
-- **DB** : Supabase JS client direct (pas de Prisma)
-- **Auth client** : Google OAuth via NextAuth.js
-- **Auth dashboard** : email/password bcrypt
+> **Mode de travail pour cette session ?**
+>
+> 1. **Solo** — Je travaille directement sur la tache
+> 2. **Agent Team** — J'active des roles specialises
+>
+> **Equipe disponible :**
+> | # | Agent | Role | Activer ? |
+> |---|-------|------|-----------|
+> | 1 | Strategist | Vision, planning, priorites | |
+> | 2 | Architect | Design technique, choix techno, ADR | |
+> | 3 | Builder | Implementation, code, tests | |
+> | 4 | Operator | Deploy, infra, CI/CD, monitoring | |
+> | 5 | Investigator | Debug, audit, performance, securite | |
+> | 6 | Reporter | Reporting, dashboard, mise a jour docs pilotage | Auto |
+>
+> *Le Reporter s'active automatiquement en fin de session.*
+> Roles detailles dans `docs/pm/agents/`
 
-## Structure du code
+## Sprint Actif
 
-```
-src/app/          → Routage uniquement (pages minces)
-src/modules/      → Logique metier (1 dossier = 1 module)
-src/shared/       → Composants UI et utilitaires partages
-Backlogs/         → Gestion agile (user stories, burndown, sprints)
-```
+Lire `docs/pm/sprints/current.md` pour les taches et l'objectif en cours.
 
-## Agent Team
+## Localisations Cles
 
-5 agents specialises. L'orchestrateur coordonne et delegue.
-En cas de desaccord → soumettre le choix a Adam.
+| Quoi | Ou |
+|------|-----|
+| Sprint & Backlog | `docs/pm/` |
+| Vision & Roadmap | `docs/pm/VISION.md` |
+| Roles d'agents | `docs/pm/agents/` |
+| Skills custom | `docs/pm/skills/` |
+| Decisions archi | `docs/pm/adr/` |
+| Reference technique | `docs/reference/` |
+| Dashboard 360 | `dashboard.html` |
+| Code source | `src/modules/`, `src/app/`, `src/shared/` |
 
-### Adam-PO (Product Owner)
-- Role : Cadre les sprints, redige les user stories, priorise le backlog
-- Skills : brainstorming, writing-plans
-- Met a jour : Backlogs/
+## Regles Critiques (toutes sessions)
 
-### Dev-Core (Fullstack Developer)
-- Role : Implemente Next.js, APIs, DB, integrations
-- Skills : test-driven-development, systematic-debugging, verification-before-completion
-- Code dans : src/modules/, src/app/api/, src/shared/lib/
+1. **Secrets** : Ne JAMAIS committer de secrets. Voir `docs/reference/secrets.md`
+2. **Conventions** : Suivre `docs/reference/conventions.md`
+3. **Contraintes** : Lire `docs/reference/tech-constraints.md` avant de coder
+4. **Choix techno** : Toujours rechercher sur internet avant de choisir un outil/lib
+5. **Dashboard** : Mettre a jour `dashboard.html` (section PROJECT_DATA) apres chaque sprint
 
-### Designer-UI (UI/UX Designer)
-- Role : Interfaces pro, mobile-first, animations, experience "wow"
-- Skills : brainstorming, frontend-design
-- Code dans : src/modules/*/components/, src/shared/components/
+## Mise a jour automatique (chaque session)
 
-### QA-Guard (QA Engineer)
-- Role : Teste chaque feature, responsive, performance, anti-abus
-- Skills : systematic-debugging, verification-before-completion, simplify
-- Met a jour : Backlogs/BurndownChart.md
-
-### Ops-Deploy (DevOps)
-- Role : Setup projet, config Supabase, deploiement Vercel, git
-- Skills : using-git-worktrees, finishing-a-development-branch
-
-## Conventions
-
-- Pages dans app/ = minces, importent depuis modules/
-- Composants specifiques a un module = dans modules/[nom]/components/
-- Composants partages = dans shared/components/
-- API routes groupees par module = api/avis/, futur api/menu/
-- Types specifiques = modules/[nom]/types.ts
-- Types partages = shared/types/index.ts
+1. Cocher les taches terminees dans `docs/pm/sprints/current.md`
+2. Ecrire un resume dans `memory/sessions/YYYY-MM-DD.md`
+3. Mettre a jour MEMORY.md si changement significatif
+4. Creer un ADR si decision architecturale majeure
+5. Ajouter les pieges decouverts dans `docs/reference/tech-constraints.md`
+6. Mettre a jour `dashboard.html` PROJECT_DATA si sprint/taches changent
 
 ## Preferences Adam
 
@@ -67,3 +65,14 @@ En cas de desaccord → soumettre le choix a Adam.
 - Arreter aux moments de decision cles — presenter les options
 - Resultat pro, pas un projet de hackathon
 - Budget infra : gratuit (free tier Vercel + Supabase)
+
+## Architecture
+
+- **Structure** : Modulaire par feature (`src/modules/avis/`, `src/modules/menu/`)
+- **DB** : Supabase JS client direct (pas de Prisma)
+- **Auth client** : Google OAuth via NextAuth.js v4
+- **Auth dashboard** : email/password bcrypt
+- Pages dans app/ = minces, importent depuis modules/
+- Composants specifiques = dans modules/[nom]/components/
+- Composants partages = dans shared/components/
+- API routes groupees par module = api/avis/, api/menu/

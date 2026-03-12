@@ -39,3 +39,6 @@ next-env.d.ts
 MDP.md
 
 .vercel
+
+# secrets
+docs/reference/secrets.md

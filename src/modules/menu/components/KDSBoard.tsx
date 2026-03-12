@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/shared/lib/supabase/client";
 import type { OrderWithItems, OrderStatus } from "@/shared/types";
 import { KDSFilters, type KDSFilter } from "./KDSFilters";
@@ -10,6 +10,46 @@ interface KDSBoardProps {
   restaurantId: string;
   restaurantName: string;
   restaurantSlug: string;
+}
+
+// --- Son d'alerte via Web Audio API ---
+function playAlertSound() {
+  try {
+    const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+    oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+    oscillator.type = "sine";
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.8);
+    // Deuxieme bip apres 300ms
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.frequency.setValueAtTime(1100, ctx.currentTime + 0.3);
+    osc2.type = "sine";
+    gain2.gain.setValueAtTime(0.3, ctx.currentTime + 0.3);
+    gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.0);
+    osc2.start(ctx.currentTime + 0.3);
+    osc2.stop(ctx.currentTime + 1.0);
+  } catch {
+    // Web Audio non supporte, on ignore silencieusement
+  }
+}
+
+function triggerVibration() {
+  try {
+    if (navigator.vibrate) {
+      navigator.vibrate([200, 100, 200, 100, 300]);
+    }
+  } catch {
+    // Vibration non supportee
+  }
 }
 
 const ACTIVE_STATUSES: OrderStatus[] = ["pending", "confirmed", "preparing", "ready"];
@@ -32,6 +72,9 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
   const [activeFilter, setActiveFilter] = useState<KDSFilter>("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const soundEnabledRef = useRef(soundEnabled);
+  soundEnabledRef.current = soundEnabled;
   const currentTime = useCurrentTime();
 
   // --- Fetch initial ---
@@ -100,6 +143,12 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
               if (prev.some((o) => o.id === orderId)) return prev;
               return [fullOrder, ...prev];
             });
+
+            // Alerte sonore + vibration pour nouvelle commande
+            if (soundEnabledRef.current) {
+              playAlertSound();
+              triggerVibration();
+            }
           }
 
           if (eventType === "UPDATE") {
@@ -193,6 +242,28 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Toggle son */}
+          <button
+            onClick={() => setSoundEnabled((prev) => !prev)}
+            className={`p-2 rounded-lg transition-colors ${soundEnabled ? "bg-green-600 hover:bg-green-500 text-white" : "bg-gray-700 hover:bg-gray-600 text-gray-400"}`}
+            aria-label={soundEnabled ? "Desactiver le son" : "Activer le son"}
+            title={soundEnabled ? "Son active" : "Son desactive"}
+          >
+            {soundEnabled ? (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            )}
+          </button>
+
           <span className="text-2xl font-mono text-gray-300 tabular-nums">
             {currentTime}
           </span>

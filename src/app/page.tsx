@@ -9,6 +9,10 @@ import {
   Check,
   ArrowRight,
   Sparkles,
+  UtensilsCrossed,
+  MonitorSmartphone,
+  LayoutDashboard,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -34,15 +38,25 @@ export default function Home() {
             </div>
             <span className="font-bold text-lg">Restaurant Avis</span>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Link href="/m/la-belle-assiette/table/1">
+              <Button variant="ghost" size="sm" className="text-xs sm:text-sm px-2 sm:px-3 hidden md:inline-flex">
+                Menu
+              </Button>
+            </Link>
+            <Link href="/kds/la-belle-assiette">
+              <Button variant="ghost" size="sm" className="text-xs sm:text-sm px-2 sm:px-3 hidden md:inline-flex">
+                KDS
+              </Button>
+            </Link>
             <Link href="/dashboard/login">
               <Button variant="ghost" size="sm" className="text-xs sm:text-sm px-2 sm:px-3">
-                Espace gerant
+                Dashboard
               </Button>
             </Link>
             <Link href="/r/la-belle-assiette">
               <Button size="sm" className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white border-0 text-xs sm:text-sm px-2 sm:px-3">
-                Voir la demo
+                Demo Avis
               </Button>
             </Link>
           </div>
@@ -81,6 +95,93 @@ export default function Home() {
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </a>
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Acces rapide a toutes les fonctionnalites */}
+      <section className="py-16 px-4 sm:px-6 bg-gradient-to-b from-white to-muted/20">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-3">
+            Acces rapide
+          </h2>
+          <p className="text-muted-foreground text-center mb-10 max-w-xl mx-auto">
+            Testez toutes les fonctionnalites de la plateforme
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Demo Avis */}
+            <Link href="/r/la-belle-assiette" className="group">
+              <Card className="h-full border hover:border-amber-300 hover:shadow-lg transition-all duration-200">
+                <CardContent className="p-5 flex flex-col items-center text-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                    <Gift className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">Roue Cadeaux + Avis</h3>
+                    <p className="text-xs text-muted-foreground">Parcours client complet : avis, roue, cadeau</p>
+                  </div>
+                  <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
+                    Tester <ExternalLink className="w-3 h-3" />
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* Menu Digital */}
+            <Link href="/m/la-belle-assiette/table/1" className="group">
+              <Card className="h-full border hover:border-orange-300 hover:shadow-lg transition-all duration-200">
+                <CardContent className="p-5 flex flex-col items-center text-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+                    <UtensilsCrossed className="w-6 h-6 text-orange-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">Menu Digital</h3>
+                    <p className="text-xs text-muted-foreground">Menu QR, panier, commande depuis la table</p>
+                  </div>
+                  <span className="text-xs text-orange-600 font-medium flex items-center gap-1">
+                    Tester <ExternalLink className="w-3 h-3" />
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* KDS Cuisine */}
+            <Link href="/kds/la-belle-assiette" className="group">
+              <Card className="h-full border hover:border-blue-300 hover:shadow-lg transition-all duration-200">
+                <CardContent className="p-5 flex flex-col items-center text-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                    <MonitorSmartphone className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">Ecran Cuisine (KDS)</h3>
+                    <p className="text-xs text-muted-foreground">Commandes en temps reel, gestion des statuts</p>
+                  </div>
+                  <span className="text-xs text-blue-600 font-medium flex items-center gap-1">
+                    Tester <ExternalLink className="w-3 h-3" />
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* Dashboard Gerant */}
+            <Link href="/dashboard" className="group">
+              <Card className="h-full border hover:border-green-300 hover:shadow-lg transition-all duration-200">
+                <CardContent className="p-5 flex flex-col items-center text-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                    <LayoutDashboard className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">Dashboard Gerant</h3>
+                    <p className="text-xs text-muted-foreground">Menu, commandes, avis, QR codes, stats</p>
+                  </div>
+                  <span className="text-xs text-green-600 font-medium flex items-center gap-1">
+                    Acceder <ExternalLink className="w-3 h-3" />
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>
