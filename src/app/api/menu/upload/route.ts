@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { getDashboardSession } from "@/shared/lib/dashboard-auth";
 
+export const dynamic = "force-dynamic";
+
 const MAX_SIZE = 5 * 1024 * 1024; // 5 Mo
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 

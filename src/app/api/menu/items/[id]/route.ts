@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { getDashboardSession } from "@/shared/lib/dashboard-auth";
 
+export const dynamic = "force-dynamic";
+
 // PATCH : Mettre a jour un article (dont toggle disponibilite)
 export async function PATCH(
   request: NextRequest,

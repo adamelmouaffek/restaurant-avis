@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import type { OrderWithItems } from "@/shared/types";
 
+export const dynamic = "force-dynamic";
+
 const ACTIVE_STATUSES = ["pending", "confirmed", "preparing", "ready"];
 
 /**
@@ -41,7 +43,7 @@ export async function GET(
   // Fetch commandes actives avec leurs articles
   const { data, error } = await supabaseAdmin
     .from("orders")
-    .select("*, order_items(*)")
+    .select("*, order_items!order_items_order_id_fkey(*)")
     .eq("restaurant_id", restaurant.id)
     .in("status", ACTIVE_STATUSES)
     .order("created_at", { ascending: true }); // Les plus anciennes en premier pour la cuisine

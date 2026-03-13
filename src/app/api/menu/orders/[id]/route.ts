@@ -3,6 +3,8 @@ import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { getDashboardSession } from "@/shared/lib/dashboard-auth";
 import type { OrderStatus, OrderWithItems } from "@/shared/types";
 
+export const dynamic = "force-dynamic";
+
 // Transitions de statut autorisées
 const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   pending: ["confirmed", "cancelled"],
@@ -108,7 +110,7 @@ export async function GET(
 
   const { data, error } = await supabaseAdmin
     .from("orders")
-    .select("*, order_items(*)")
+    .select("*, order_items!order_items_order_id_fkey(*)")
     .eq("id", id)
     .single();
 

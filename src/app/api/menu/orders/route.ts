@@ -3,6 +3,8 @@ import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { getDashboardSession } from "@/shared/lib/dashboard-auth";
 import type { OrderWithItems } from "@/shared/types";
 
+export const dynamic = "force-dynamic";
+
 // POST : Créer une commande (public — envoyé depuis la table du client)
 export async function POST(request: NextRequest) {
   try {
@@ -161,7 +163,7 @@ export async function GET(request: NextRequest) {
 
   let query = supabaseAdmin
     .from("orders")
-    .select("*, order_items(*)")
+    .select("*, order_items!order_items_order_id_fkey(*)")
     .eq("restaurant_id", restaurantId)
     .order("created_at", { ascending: false })
     .limit(limit);
