@@ -53,27 +53,64 @@ export default function ReviewPage() {
     router.push(`/r/${slug}/wheel?${searchParams.toString()}`);
   };
 
-  // Redirect to Google sign-in if user selects Google mode
+  // Redirect to Google sign-in only when user explicitly chooses Google
   useEffect(() => {
     if (authMode === "google" && status === "unauthenticated") {
-      signIn("google", { callbackUrl: `/r/${slug}/review` });
+      signIn("google", { callbackUrl: `/r/${slug}/review?auth=google` });
     }
   }, [authMode, status, slug]);
 
-  // Loading states
-  if (status === "loading") {
+  // If returning from Google OAuth callback, go directly to google mode
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("auth") === "google" && status === "authenticated") {
+      setAuthMode("google");
+    }
+  }, [status]);
+
+  // Loading restaurant data
+  if (loading) {
     return (
       <main className="min-h-dvh bg-white flex items-center justify-center px-4">
-        <div className="text-center space-y-4">
-          <div className="w-10 h-10 border-4 border-gray-200 border-t-gray-800 rounded-full animate-spin mx-auto" />
-          <p className="text-sm text-gray-500">Connexion en cours...</p>
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-gray-800 rounded-full animate-spin" />
+      </main>
+    );
+  }
+
+  // Error state
+  if (error || !restaurant) {
+    return (
+      <main className="min-h-dvh bg-white flex items-center justify-center px-4">
+        <div className="text-center space-y-4 max-w-sm">
+          <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-8 h-8 text-red-500"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </div>
+          <h2 className="text-lg font-semibold text-gray-900">
+            {error || "Restaurant introuvable"}
+          </h2>
+          <p className="text-sm text-gray-500">
+            Verifiez le lien ou scannez a nouveau le QR code.
+          </p>
         </div>
       </main>
     );
   }
 
-  // Show choice screen if unauthenticated and in choice mode
-  if (status === "unauthenticated" && authMode === "choice" && !loading && restaurant) {
+  // ─── CHOICE SCREEN (always shown first) ───────────────
+  if (authMode === "choice") {
     return (
       <main className="min-h-dvh bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
         <div className="text-center mb-8">
@@ -114,7 +151,7 @@ export default function ReviewPage() {
               variant="outline"
               className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg border border-gray-300 text-gray-900 hover:bg-gray-50"
             >
-              Tester avec un email
+              Continuer avec un email
             </Button>
           </div>
         </div>
@@ -122,46 +159,7 @@ export default function ReviewPage() {
     );
   }
 
-  if (loading) {
-    return (
-      <main className="min-h-dvh bg-white flex items-center justify-center px-4">
-        <div className="w-10 h-10 border-4 border-gray-200 border-t-gray-800 rounded-full animate-spin" />
-      </main>
-    );
-  }
-
-  if (error || !restaurant) {
-    return (
-      <main className="min-h-dvh bg-white flex items-center justify-center px-4">
-        <div className="text-center space-y-4 max-w-sm">
-          <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-8 h-8 text-red-500"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-          </div>
-          <h2 className="text-lg font-semibold text-gray-900">
-            {error || "Restaurant introuvable"}
-          </h2>
-          <p className="text-sm text-gray-500">
-            Vérifiez le lien ou scannez à nouveau le QR code.
-          </p>
-        </div>
-      </main>
-    );
-  }
-
-  // Email mode - no authentication needed
+  // ─── EMAIL MODE ───────────────────────────────────────
   if (authMode === "email") {
     return (
       <main className="min-h-dvh bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
@@ -187,7 +185,7 @@ export default function ReviewPage() {
     );
   }
 
-  // Google OAuth mode - wait for authentication
+  // ─── GOOGLE MODE - waiting for auth ───────────────────
   if (authMode === "google" && status !== "authenticated") {
     return (
       <main className="min-h-dvh bg-white flex items-center justify-center px-4">
@@ -199,10 +197,9 @@ export default function ReviewPage() {
     );
   }
 
-  // Google OAuth mode - user is authenticated
+  // ─── GOOGLE MODE - authenticated ──────────────────────
   return (
     <main className="min-h-dvh bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
-      {/* Restaurant header */}
       <div className="text-center mb-6">
         <h1 className="text-lg font-semibold text-gray-900">
           {restaurant.name}
@@ -219,8 +216,14 @@ export default function ReviewPage() {
         onSuccess={handleSuccess}
       />
 
-      {/* Connected as */}
-      <p className="text-xs text-gray-400 mt-6">
+      <button
+        onClick={() => setAuthMode("choice")}
+        className="text-xs text-gray-400 hover:text-gray-600 mt-6 transition-colors min-h-[44px] px-4"
+      >
+        Retour au choix d&apos;authentification
+      </button>
+
+      <p className="text-xs text-gray-400 mt-2">
         Connecte en tant que {session!.user.email}
       </p>
     </main>
