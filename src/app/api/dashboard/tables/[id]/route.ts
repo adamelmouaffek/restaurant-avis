@@ -52,6 +52,10 @@ export async function PATCH(
   if (typeof body.is_active === "boolean") {
     updates.is_active = body.is_active;
   }
+  // Staff assignment (nullable — null means unassigned)
+  if (body.assigned_staff_id !== undefined) {
+    updates.assigned_staff_id = body.assigned_staff_id || null;
+  }
 
   if (Object.keys(updates).length === 0) {
     return NextResponse.json(

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import bcrypt from "bcryptjs";
 import { signJWT } from "@/shared/lib/jwt";
+import { checkLockout, recordFailedPin, clearLockout } from "@/shared/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,16 @@ export async function POST(
     return NextResponse.json({ error: "Restaurant introuvable" }, { status: 404 });
   }
 
+  // Check account lockout
+  const lockout = checkLockout(restaurant.id);
+  if (lockout.locked) {
+    const minutes = Math.ceil(lockout.remainingMs / 60000);
+    return NextResponse.json(
+      { error: `Trop de tentatives. Reessayez dans ${minutes} minute${minutes > 1 ? "s" : ""}.` },
+      { status: 423 }
+    );
+  }
+
   // Get active staff with kitchen or manager role
   const { data: staffList } = await supabaseAdmin
     .from("staff")
@@ -46,8 +57,12 @@ export async function POST(
   const matchedStaff = staffList.find((s) => bcrypt.compareSync(pin, s.pin));
 
   if (!matchedStaff) {
+    recordFailedPin(restaurant.id);
     return NextResponse.json({ error: "PIN incorrect" }, { status: 401 });
   }
+
+  // Successful login — clear lockout counter
+  clearLockout(restaurant.id);
 
   const sessionData = {
     staffId: matchedStaff.id,

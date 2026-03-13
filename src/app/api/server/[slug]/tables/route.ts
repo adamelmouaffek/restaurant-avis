@@ -26,13 +26,20 @@ export async function GET(
     return NextResponse.json({ error: "Restaurant introuvable" }, { status: 404 });
   }
 
-  // Get all tables
-  const { data: tables } = await supabaseAdmin
+  // Get tables — optionally filter by staff assignment
+  let tablesQuery = supabaseAdmin
     .from("restaurant_tables")
     .select("*")
     .eq("restaurant_id", restaurant.id)
     .eq("is_active", true)
     .order("number");
+
+  const onlyMyTables = req.nextUrl.searchParams.get("my_tables") === "true";
+  if (onlyMyTables && session.staffId) {
+    tablesQuery = tablesQuery.or(`assigned_staff_id.eq.${session.staffId},assigned_staff_id.is.null`);
+  }
+
+  const { data: tables } = await tablesQuery;
 
   // Get active sessions
   const { data: sessions } = await supabaseAdmin

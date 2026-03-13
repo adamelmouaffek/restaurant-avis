@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ClipboardList } from "lucide-react";
@@ -192,6 +192,32 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
   const totalItems = cart.reduce((sum, c) => sum + c.quantity, 0);
   const totalPrice = cart.reduce((sum, c) => sum + c.price * c.quantity, 0);
 
+  // --- Cart timeout: clear after 15 minutes of inactivity ---
+  const cartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [cartExpired, setCartExpired] = useState(false);
+
+  useEffect(() => {
+    if (cart.length === 0) {
+      if (cartTimeoutRef.current) clearTimeout(cartTimeoutRef.current);
+      setCartExpired(false);
+      return;
+    }
+
+    if (cartTimeoutRef.current) clearTimeout(cartTimeoutRef.current);
+    setCartExpired(false);
+
+    cartTimeoutRef.current = setTimeout(() => {
+      setCart([]);
+      setIsCartOpen(false);
+      setCartExpired(true);
+      setTimeout(() => setCartExpired(false), 8000);
+    }, 15 * 60 * 1000);
+
+    return () => {
+      if (cartTimeoutRef.current) clearTimeout(cartTimeoutRef.current);
+    };
+  }, [cart]);
+
   // --- Envoi de la commande ---
   const handleOrder = async (notes: string) => {
     if (cart.length === 0 || isSubmitting) return;
@@ -269,6 +295,14 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
           tableNumber={tableNumber}
           orderCount={orderCount}
         />
+      )}
+
+      {/* Cart expired warning */}
+      {cartExpired && (
+        <div className="fixed top-4 inset-x-4 z-50 max-w-md mx-auto bg-amber-50 border border-amber-200 rounded-xl p-4 text-center shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+          <p className="text-sm font-medium text-amber-800">Votre panier a expire apres 15 minutes d&apos;inactivite.</p>
+          <p className="text-xs text-amber-600 mt-1">Ajoutez a nouveau vos articles pour commander.</p>
+        </div>
       )}
 
       {/* Contenu principal */}

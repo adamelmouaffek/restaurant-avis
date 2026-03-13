@@ -62,8 +62,22 @@ export async function PATCH(
     updates.discount_reason = body.discount_reason || null;
   }
 
-  // Table transfer
-  if (body.table_number) {
+  // Table transfer — check for conflicts
+  if (body.table_number && body.table_number !== order.table_number) {
+    const { count } = await supabaseAdmin
+      .from("orders")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", order.restaurant_id)
+      .eq("table_number", body.table_number)
+      .in("status", ["pending", "confirmed", "preparing", "ready"]);
+
+    if ((count ?? 0) > 0 && !body.force_transfer) {
+      return NextResponse.json(
+        { error: `La table ${body.table_number} a deja des commandes actives. Envoyez force_transfer: true pour confirmer.` },
+        { status: 409 }
+      );
+    }
+
     updates.table_number = body.table_number;
     if (body.table_session_id) {
       updates.table_session_id = body.table_session_id;

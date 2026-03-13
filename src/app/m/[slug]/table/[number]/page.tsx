@@ -17,6 +17,15 @@ async function getRestaurant(slug: string): Promise<Restaurant | null> {
   return data;
 }
 
+async function tableExists(restaurantId: string, tableNumber: string): Promise<boolean> {
+  const { count } = await supabaseAdmin
+    .from("restaurant_tables")
+    .select("id", { count: "exact", head: true })
+    .eq("restaurant_id", restaurantId)
+    .eq("table_number", tableNumber);
+  return (count ?? 0) > 0;
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const restaurant = await getRestaurant(params.slug);
   if (!restaurant) return { title: "Menu introuvable" };
@@ -30,6 +39,12 @@ export default async function MenuTablePage({ params }: PageProps) {
   const restaurant = await getRestaurant(params.slug);
 
   if (!restaurant) {
+    notFound();
+  }
+
+  // Validate that the table exists for this restaurant
+  const valid = await tableExists(restaurant.id, params.number);
+  if (!valid) {
     notFound();
   }
 

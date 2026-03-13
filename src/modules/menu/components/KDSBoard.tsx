@@ -98,6 +98,20 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
   soundEnabledRef.current = soundEnabled;
   const currentTime = useCurrentTime();
 
+  // --- Online/offline detection ---
+  const [isOnline, setIsOnline] = useState(true);
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+    setIsOnline(navigator.onLine);
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+
   // --- Fetch initial ---
   useEffect(() => {
     let cancelled = false;
@@ -294,6 +308,13 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
   // --- Rendu ---
   return (
     <PageTransition className="min-h-screen bg-gray-900 flex flex-col">
+      {/* Offline banner */}
+      {!isOnline && (
+        <div className="bg-red-600 text-white text-center py-2 px-4 text-sm font-medium flex items-center justify-center gap-2 flex-shrink-0">
+          <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+          Hors-ligne — Les commandes affichees sont en cache. Reconnexion automatique...
+        </div>
+      )}
       {/* Header */}
       <header className="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between gap-4 flex-shrink-0">
         <div>
