@@ -58,10 +58,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Creer le participant
+    // Creer le participant (google_sub omis si absent pour eviter erreur null)
+    const participantData: Record<string, unknown> = { restaurant_id, email, name };
+    if (google_sub) participantData.google_sub = google_sub;
+
     const { data: participant, error: participantError } = await supabaseAdmin
       .from("participants")
-      .insert({ restaurant_id, email, name, google_sub })
+      .insert(participantData)
       .select()
       .single();
 

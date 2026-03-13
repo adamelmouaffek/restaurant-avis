@@ -57,7 +57,6 @@ export function EmailReviewForm({
           restaurant_id: restaurantId,
           email: formData.email,
           name: formData.name || formData.email.split("@")[0],
-          google_sub: null,
           rating: formData.rating,
           comment: formData.comment || null,
         }),
