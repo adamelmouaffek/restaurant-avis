@@ -1,11 +1,13 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { PrizeReveal } from "@/modules/avis/components/PrizeReveal";
 import { PageTransition, FadeIn } from "@/shared/components/animations";
 
 export default function PrizePage() {
   const searchParams = useSearchParams();
+  const params = useParams();
+  const slug = params.slug as string;
 
   const prizeName = searchParams.get("name");
   const prizeIcon = searchParams.get("icon");
@@ -36,6 +38,7 @@ export default function PrizePage() {
             prizeName={prizeName}
             prizeIcon={prizeIcon}
             prizeDescription={prizeDescription}
+            slug={slug}
           />
         </FadeIn>
       </PageTransition>

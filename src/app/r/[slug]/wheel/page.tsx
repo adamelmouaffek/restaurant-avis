@@ -137,6 +137,7 @@ export default function WheelPage() {
             restaurantId={restaurantId!}
             participantId={participantId!}
             reviewId={reviewId!}
+            slug={slug}
             onPrizeWon={handlePrizeWon}
           />
         </div>
@@ -159,6 +160,7 @@ export default function WheelPage() {
                 restaurantId={restaurantId!}
                 participantId={participantId!}
                 reviewId={reviewId!}
+                slug={slug}
                 onPrizeWon={handlePrizeWon}
               />
             </div>

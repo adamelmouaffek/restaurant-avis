@@ -11,6 +11,7 @@ interface SpinningWheelProps {
   restaurantId: string;
   participantId: string;
   reviewId: string;
+  slug: string;
   onPrizeWon: (result: SpinResult) => void;
 }
 
@@ -37,6 +38,7 @@ export function SpinningWheel({
   restaurantId,
   participantId,
   reviewId,
+  slug,
   onPrizeWon,
 }: SpinningWheelProps) {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -264,6 +266,15 @@ export function SpinningWheel({
           "TOURNEZ LA ROUE !"
         )}
       </Button>
+
+      <a
+        href={`/r/${slug}/reglement`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-white/30 hover:text-white/50 text-xs transition-colors"
+      >
+        Voir le reglement du jeu-concours
+      </a>
     </div>
   );
 }

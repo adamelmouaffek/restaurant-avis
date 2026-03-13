@@ -7,12 +7,14 @@ interface PrizeRevealProps {
   prizeName: string;
   prizeIcon: string;
   prizeDescription: string | null;
+  slug: string;
 }
 
 export function PrizeReveal({
   prizeName,
   prizeIcon,
   prizeDescription,
+  slug,
 }: PrizeRevealProps) {
   const confettiFired = useRef(false);
 
@@ -114,6 +116,16 @@ export function PrizeReveal({
           pour recuperer votre cadeau
         </p>
       </div>
+
+      {/* Rules link */}
+      <a
+        href={`/r/${slug}/reglement`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-gray-400 hover:text-gray-300 text-xs transition-colors"
+      >
+        Reglement du jeu-concours
+      </a>
 
       {/* Custom animation keyframes via style tag */}
       <style jsx global>{`
