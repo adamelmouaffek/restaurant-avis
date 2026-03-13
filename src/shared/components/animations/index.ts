@@ -3,3 +3,8 @@ export { StaggerContainer, StaggerItem } from "./StaggerContainer";
 export { AnimatedCounter } from "./AnimatedCounter";
 export { TextReveal } from "./TextReveal";
 export { GradientBackground } from "./GradientBackground";
+export { ParallaxSection } from "./ParallaxSection";
+export { GlowCard } from "./GlowCard";
+export { LogoCarousel } from "./LogoCarousel";
+export { DarkGradientMesh } from "./DarkGradientMesh";
+export { PageTransition } from "./PageTransition";

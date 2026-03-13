@@ -2,6 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
+import { PageTransition, FadeIn } from "@/shared/components/animations";
 
 function ConfirmationContent({ slug }: { slug: string }) {
   const searchParams = useSearchParams();
@@ -17,7 +18,9 @@ function ConfirmationContent({ slug }: { slug: string }) {
     : "0,00";
 
   return (
+    <PageTransition>
     <main className="min-h-dvh bg-gray-50 flex items-center justify-center px-4">
+      <FadeIn direction="up" delay={0.1}>
       <div className="w-full max-w-md mx-auto">
         <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-10 text-center space-y-6">
           {/* Icone succes */}
@@ -72,7 +75,9 @@ function ConfirmationContent({ slug }: { slug: string }) {
           </button>
         </div>
       </div>
+      </FadeIn>
     </main>
+    </PageTransition>
   );
 }
 

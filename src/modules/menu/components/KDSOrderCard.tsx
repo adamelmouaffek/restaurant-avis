@@ -1,11 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import type { OrderWithItems, OrderStatus } from "@/shared/types";
 import { ORDER_STATUS_LABELS } from "@/modules/menu/types";
+import { KDSTimerBadge } from "./KDSTimerBadge";
+import { KDSRejectModal } from "./KDSRejectModal";
+import { KDSItemChecklist } from "./KDSItemChecklist";
 
 interface KDSOrderCardProps {
   order: OrderWithItems;
   onStatusChange: (orderId: string, newStatus: OrderStatus) => void;
+  onReject: (orderId: string, reason: string) => void;
+  restaurantSlug: string;
 }
 
 // Couleurs des badges statut — variantes dark pour le KDS
@@ -16,20 +22,55 @@ const STATUS_BADGE_CLASSES: Record<OrderStatus, string> = {
   ready: "bg-green-500/20 text-green-300 border border-green-500/40",
   delivered: "bg-gray-500/20 text-gray-300 border border-gray-500/40",
   cancelled: "bg-red-500/20 text-red-300 border border-red-500/40",
+  rejected: "bg-red-500/20 text-red-300 border border-red-500/40",
 };
 
-function formatRelativeTime(dateString: string): string {
-  const now = Date.now();
-  const past = new Date(dateString).getTime();
-  const diffMs = now - past;
+// Priority border styles
+function getPriorityBorderClass(priority: "normal" | "rush" | "vip"): string {
+  switch (priority) {
+    case "rush":
+      return "ring-2 ring-orange-400/60 shadow-[0_0_15px_rgba(251,146,60,0.3)]";
+    case "vip":
+      return "ring-2 ring-yellow-400/60 shadow-[0_0_15px_rgba(250,204,21,0.3)]";
+    default:
+      return "";
+  }
+}
 
-  const diffSec = Math.floor(diffMs / 1000);
-  const diffMin = Math.floor(diffSec / 60);
-  const diffH = Math.floor(diffMin / 60);
+// Priority badge
+function PriorityBadge({ priority }: { priority: "normal" | "rush" | "vip" }) {
+  if (priority === "normal") return null;
 
-  if (diffSec < 60) return "il y a quelques secondes";
-  if (diffMin < 60) return `il y a ${diffMin} min`;
-  return `il y a ${diffH}h${String(diffMin % 60).padStart(2, "0")}`;
+  const classes =
+    priority === "rush"
+      ? "bg-orange-500/20 text-orange-300 border-orange-500/40"
+      : "bg-yellow-500/20 text-yellow-300 border-yellow-500/40";
+
+  const label = priority === "rush" ? "RUSH" : "VIP";
+
+  return (
+    <span
+      className={`text-[10px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-wider ${classes}`}
+    >
+      {label}
+    </span>
+  );
+}
+
+// Source badge
+function SourceBadge({ source }: { source: "client" | "waiter" }) {
+  const isClient = source === "client";
+  return (
+    <span
+      className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${
+        isClient
+          ? "bg-purple-500/20 text-purple-300 border-purple-500/40"
+          : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
+      }`}
+    >
+      {isClient ? "Client" : "Serveur"}
+    </span>
+  );
 }
 
 interface ActionButton {
@@ -61,92 +102,132 @@ const ACTION_BUTTONS: Partial<Record<OrderStatus, ActionButton>> = {
   },
 };
 
+const REJECTABLE_STATUSES: OrderStatus[] = ["pending", "confirmed"];
 const CANCELLABLE_STATUSES: OrderStatus[] = ["pending", "confirmed"];
 
-export function KDSOrderCard({ order, onStatusChange }: KDSOrderCardProps) {
+export function KDSOrderCard({
+  order,
+  onStatusChange,
+  onReject,
+  restaurantSlug,
+}: KDSOrderCardProps) {
+  const [showRejectModal, setShowRejectModal] = useState(false);
+
   const actionBtn = ACTION_BUTTONS[order.status];
   const canCancel = CANCELLABLE_STATUSES.includes(order.status);
+  const canReject = REJECTABLE_STATUSES.includes(order.status);
+  const priority = order.priority || "normal";
+  const source = order.source || "client";
+  const priorityBorder = getPriorityBorderClass(priority);
+
+  const handleRejectConfirm = (orderId: string, reason: string) => {
+    setShowRejectModal(false);
+    onReject(orderId, reason);
+  };
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-xl flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="flex items-start justify-between px-4 pt-4 pb-3 border-b border-gray-700">
-        <div>
-          <p className="text-2xl font-bold tracking-tight">
-            Table {order.table_number}
-          </p>
-          <p className="text-sm text-gray-400 mt-0.5">
-            {formatRelativeTime(order.created_at)}
-          </p>
-        </div>
-        <span
-          className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-            STATUS_BADGE_CLASSES[order.status]
-          }`}
-        >
-          {ORDER_STATUS_LABELS[order.status]}
-        </span>
-      </div>
-
-      {/* Articles */}
-      <div className="px-4 py-3 flex-1 space-y-2">
-        {order.order_items.map((item) => (
-          <div key={item.id} className="flex items-start justify-between gap-2">
-            <div className="flex-1 min-w-0">
-              <span className="font-medium text-white">
-                {item.quantity}× {item.name}
-              </span>
-              {item.notes && (
-                <p className="text-xs text-gray-400 mt-0.5 italic truncate">
-                  {item.notes}
-                </p>
+    <>
+      <div
+        className={`bg-gray-800 border border-gray-700 rounded-xl flex flex-col overflow-hidden transition-shadow ${priorityBorder}`}
+      >
+        {/* Header */}
+        <div className="flex items-start justify-between px-4 pt-4 pb-3 border-b border-gray-700">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-2xl font-bold tracking-tight text-white">
+                Table {order.table_number}
+              </p>
+              <PriorityBadge priority={priority} />
+              <SourceBadge source={source} />
+            </div>
+            <div className="flex items-center gap-2 mt-1.5">
+              <KDSTimerBadge createdAt={order.created_at} priority={priority} />
+              {order.estimated_prep_minutes && (
+                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded border bg-gray-600/50 text-gray-300 border-gray-500/40">
+                  ~{order.estimated_prep_minutes} min
+                </span>
               )}
             </div>
-            <span className="text-sm text-gray-400 whitespace-nowrap">
-              {(item.price * item.quantity).toFixed(2)} €
-            </span>
           </div>
-        ))}
+          <span
+            className={`text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0 ${
+              STATUS_BADGE_CLASSES[order.status]
+            }`}
+          >
+            {ORDER_STATUS_LABELS[order.status]}
+          </span>
+        </div>
 
-        {/* Notes generales */}
-        {order.notes && (
-          <div className="mt-3 pt-3 border-t border-gray-700">
-            <p className="text-xs text-gray-400 italic">
-              Note : {order.notes}
-            </p>
-          </div>
-        )}
-      </div>
+        {/* Articles — interactive checklist */}
+        <div className="px-4 py-3 flex-1">
+          <KDSItemChecklist
+            items={order.order_items}
+            restaurantSlug={restaurantSlug}
+            orderId={order.id}
+          />
 
-      {/* Footer */}
-      <div className="px-4 pb-4 pt-3 border-t border-gray-700 flex items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-gray-300">
-          Total :{" "}
-          <span className="text-white">{order.total_amount.toFixed(2)} €</span>
-        </p>
-
-        <div className="flex items-center gap-2">
-          {/* Bouton annuler */}
-          {canCancel && (
-            <button
-              onClick={() => onStatusChange(order.id, "cancelled")}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-900 hover:bg-red-800 text-red-200 transition-colors"
-            >
-              Annuler
-            </button>
-          )}
-
-          {/* Bouton action principale */}
-          {actionBtn && (
-            <button
-              onClick={() => onStatusChange(order.id, actionBtn.nextStatus)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${actionBtn.className}`}
-            >
-              {actionBtn.label}
-            </button>
+          {/* Notes generales */}
+          {order.notes && (
+            <div className="mt-3 pt-3 border-t border-gray-700">
+              <p className="text-xs text-gray-400 italic">
+                Note : {order.notes}
+              </p>
+            </div>
           )}
         </div>
+
+        {/* Footer */}
+        <div className="px-4 pb-4 pt-3 border-t border-gray-700 flex items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-gray-300">
+            Total :{" "}
+            <span className="text-white">
+              {order.total_amount.toFixed(2)} €
+            </span>
+          </p>
+
+          <div className="flex items-center gap-2">
+            {/* Bouton rejeter */}
+            {canReject && (
+              <button
+                onClick={() => setShowRejectModal(true)}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-900/80 hover:bg-red-800 text-red-200 transition-colors"
+              >
+                Rejeter
+              </button>
+            )}
+
+            {/* Bouton annuler */}
+            {canCancel && (
+              <button
+                onClick={() => onStatusChange(order.id, "cancelled")}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors"
+              >
+                Annuler
+              </button>
+            )}
+
+            {/* Bouton action principale */}
+            {actionBtn && (
+              <button
+                onClick={() => onStatusChange(order.id, actionBtn.nextStatus)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${actionBtn.className}`}
+              >
+                {actionBtn.label}
+              </button>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+
+      {/* Reject Modal */}
+      {showRejectModal && (
+        <KDSRejectModal
+          orderId={order.id}
+          tableNumber={order.table_number}
+          onConfirm={handleRejectConfirm}
+          onClose={() => setShowRejectModal(false)}
+        />
+      )}
+    </>
   );
 }

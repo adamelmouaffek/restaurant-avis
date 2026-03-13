@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ClipboardList } from "lucide-react";
 import type { Restaurant, MenuItem, MenuCategory, MenuItemWithCategory } from "@/shared/types";
 import type { CartItem, CreateOrderResponse } from "@/modules/menu/types";
 import MenuHeader from "./MenuHeader";
@@ -9,6 +11,9 @@ import CategoryNav from "./CategoryNav";
 import MenuItemCard from "./MenuItemCard";
 import CartBadge from "./CartBadge";
 import CartDrawer from "./CartDrawer";
+import CallWaiterButton from "./CallWaiterButton";
+import TableSessionBanner from "./TableSessionBanner";
+import { PageTransition, StaggerContainer, StaggerItem } from "@/shared/components/animations";
 
 interface MenuPageProps {
   restaurant: Restaurant;
@@ -25,6 +30,10 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Table session state
+  const [tableSessionId, setTableSessionId] = useState<string | null>(null);
+  const [orderCount, setOrderCount] = useState(0);
 
   // Derives : categories uniques dans l'ordre de sort_order
   const categories: MenuCategory[] = (() => {
@@ -48,6 +57,73 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
     }
     return result;
   })();
+
+  // Fetch order count for the current session
+  const fetchOrderCount = useCallback(async (sessionId: string) => {
+    try {
+      const res = await fetch(
+        `/api/menu/orders/by-session?table_session_id=${sessionId}&count_only=true`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setOrderCount(typeof data.count === "number" ? data.count : (Array.isArray(data) ? data.length : 0));
+      }
+    } catch {
+      // Non-blocking
+    }
+  }, []);
+
+  // --- Table Session Management ---
+  useEffect(() => {
+    async function initTableSession() {
+      const storageKey = `table_session_${restaurant.slug}_${tableNumber}`;
+      const storedSessionId = localStorage.getItem(storageKey);
+
+      if (storedSessionId) {
+        // Verify the stored session is still active
+        try {
+          const res = await fetch(
+            `/api/menu/table-sessions?session_id=${storedSessionId}`
+          );
+          if (res.ok) {
+            const session = await res.json();
+            if (session && session.status === "active") {
+              setTableSessionId(storedSessionId);
+              // Fetch order count for this session
+              fetchOrderCount(storedSessionId);
+              return;
+            }
+          }
+        } catch {
+          // Session expired or not found, create new one
+        }
+        // Clear the expired session
+        localStorage.removeItem(storageKey);
+      }
+
+      // Create a new table session
+      try {
+        const res = await fetch("/api/menu/table-sessions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            restaurant_id: restaurant.id,
+            table_number: tableNumber,
+          }),
+        });
+
+        if (res.ok) {
+          const session = await res.json();
+          setTableSessionId(session.id);
+          localStorage.setItem(storageKey, session.id);
+        }
+      } catch {
+        // Non-blocking: table session is optional, orders still work without it
+      }
+    }
+
+    initTableSession();
+  }, [restaurant.id, restaurant.slug, tableNumber, fetchOrderCount]);
 
   // --- Chargement des items depuis l'API ---
   useEffect(() => {
@@ -128,6 +204,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
         body: JSON.stringify({
           restaurant_id: restaurant.id,
           table_number: tableNumber,
+          table_session_id: tableSessionId,
           notes,
           items: cart.map((c) => ({
             menu_item_id: c.menuItemId,
@@ -145,6 +222,9 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
       }
 
       const data: CreateOrderResponse = await res.json();
+
+      // Update order count
+      setOrderCount((prev) => prev + 1);
 
       // Vider le panier et fermer le drawer avant la redirection
       setCart([]);
@@ -170,7 +250,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
 
   // --- Render ---
   return (
-    <div className="min-h-dvh bg-gray-50">
+    <PageTransition className="min-h-dvh bg-gray-50">
       {/* En-tete sticky */}
       <MenuHeader restaurant={restaurant} tableNumber={tableNumber} />
 
@@ -182,11 +262,20 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
         />
       )}
 
+      {/* Table Session Banner - active orders indicator */}
+      {orderCount > 0 && (
+        <TableSessionBanner
+          slug={restaurant.slug}
+          tableNumber={tableNumber}
+          orderCount={orderCount}
+        />
+      )}
+
       {/* Contenu principal */}
       <main className="max-w-2xl mx-auto px-4 py-6 pb-32">
         {loading && (
           <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 rounded-full border-2 border-gray-900 border-t-transparent animate-spin" />
+            <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />
           </div>
         )}
 
@@ -195,7 +284,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
             <p className="text-gray-500">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="text-sm underline text-gray-700"
+              className="text-sm underline text-blue-600"
             >
               Recharger la page
             </button>
@@ -224,22 +313,43 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
               </h2>
 
               {/* Liste des items */}
-              <div className="space-y-3">
+              <StaggerContainer className="space-y-3">
                 {catItems.map((item) => (
-                  <MenuItemCard
-                    key={item.id}
-                    item={item}
-                    quantity={getQuantity(item.id)}
-                    onAdd={() => addToCart(item)}
-                    onRemove={() => removeFromCart(item.id)}
-                    isAvailable={item.is_available !== false}
-                  />
+                  <StaggerItem key={item.id}>
+                    <MenuItemCard
+                      item={item}
+                      quantity={getQuantity(item.id)}
+                      onAdd={() => addToCart(item)}
+                      onRemove={() => removeFromCart(item.id)}
+                      isAvailable={item.is_available !== false}
+                    />
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             </section>
           );
         })}
       </main>
+
+      {/* Call Waiter FAB (bottom-left) */}
+      <CallWaiterButton
+        restaurantId={restaurant.id}
+        tableNumber={tableNumber}
+        tableSessionId={tableSessionId}
+      />
+
+      {/* "Voir mes commandes" pill (above cart badge, bottom-right) */}
+      {orderCount > 0 && (
+        <div className="fixed bottom-[88px] right-4 sm:right-6 z-50">
+          <Link
+            href={`/m/${restaurant.slug}/table/${tableNumber}/status`}
+            className="flex items-center gap-1.5 bg-white border border-blue-200 text-blue-600 text-xs font-medium px-3 py-1.5 rounded-full shadow-md hover:bg-blue-50 transition-colors"
+          >
+            <ClipboardList className="w-3.5 h-3.5" />
+            Mes commandes
+          </Link>
+        </div>
+      )}
 
       {/* Badge panier flottant */}
       <CartBadge count={totalItems} onClick={() => setIsCartOpen(true)} />
@@ -254,9 +364,9 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
         onClose={() => setIsCartOpen(false)}
         onOrder={handleOrder}
         isSubmitting={isSubmitting}
-        // Passe les items complets pour pouvoir retrouver le MenuItem depuis le CartItem
         menuItems={items}
+        tableNumber={tableNumber}
       />
-    </div>
+    </PageTransition>
   );
 }

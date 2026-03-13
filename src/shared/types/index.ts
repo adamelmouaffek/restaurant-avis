@@ -70,6 +70,9 @@ export interface RestaurantTable {
   number: string;
   capacity: number | null;
   is_active: boolean;
+  position_x: number;
+  position_y: number;
+  shape: "square" | "round" | "rectangle";
   created_at: string;
 }
 
@@ -108,7 +111,8 @@ export type OrderStatus =
   | "preparing"
   | "ready"
   | "delivered"
-  | "cancelled";
+  | "cancelled"
+  | "rejected";
 
 export interface Order {
   id: string;
@@ -118,6 +122,15 @@ export interface Order {
   notes: string | null;
   total_amount: number;
   payment_method: "server" | "stripe";
+  table_session_id: string | null;
+  source: "client" | "waiter";
+  priority: "normal" | "rush" | "vip";
+  staff_id: string | null;
+  estimated_prep_minutes: number | null;
+  rejection_reason: string | null;
+  paid: boolean;
+  discount_amount: number;
+  discount_reason: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -130,9 +143,63 @@ export interface OrderItem {
   price: number;
   quantity: number;
   notes: string | null;
+  item_status: "pending" | "preparing" | "done";
   created_at: string;
 }
 
 export interface OrderWithItems extends Order {
   order_items: OrderItem[];
 }
+
+// ==================== PHASE 2 : Serveur/Client/Cuisine ====================
+
+export interface TableSession {
+  id: string;
+  restaurant_id: string;
+  table_number: string;
+  status: "active" | "requesting_bill" | "paid" | "closed";
+  opened_at: string;
+  closed_at: string | null;
+  created_at: string;
+}
+
+export interface ServiceRequest {
+  id: string;
+  restaurant_id: string;
+  table_number: string;
+  table_session_id: string | null;
+  type: "call_waiter" | "request_bill";
+  status: "pending" | "acknowledged" | "resolved";
+  created_at: string;
+  resolved_at: string | null;
+}
+
+export interface Staff {
+  id: string;
+  restaurant_id: string;
+  name: string;
+  pin: string;
+  role: "waiter" | "manager" | "kitchen";
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface KitchenMessage {
+  id: string;
+  restaurant_id: string;
+  order_id: string | null;
+  direction: "to_kitchen" | "from_kitchen";
+  message: string;
+  sender_name: string | null;
+  read_at: string | null;
+  created_at: string;
+}
+
+export type TableStatus =
+  | "empty"
+  | "occupied"
+  | "ordering"
+  | "waiting_food"
+  | "eating"
+  | "requesting_bill"
+  | "calling_waiter";

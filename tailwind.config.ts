@@ -44,6 +44,15 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      brand: {
+        orange: "#3B82F6",
+        gold: "#60A5FA",
+        blue: "#3B82F6",
+        emerald: "#3B82F6",
+        purple: "#8B5CF6",
+        dark: "#0F172A",
+        "dark-lighter": "#111827",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

@@ -57,16 +57,23 @@ export function MenuManager({ restaurantId }: MenuManagerProps) {
   }, [restaurantId]);
 
   const toggleItemAvailability = async (id: string, current: boolean) => {
+    // Optimistic update
+    setItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, is_available: !current } : item))
+    );
     try {
-      const res = await fetch(`/api/menu/items/${id}`, {
+      const res = await fetch(`/api/menu/items/${id}/availability`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ is_available: !current }),
       });
-      if (!res.ok) throw new Error("Echec de la mise a jour");
-      setItems((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, is_available: !current } : item))
-      );
+      if (!res.ok) {
+        // Rollback
+        setItems((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, is_available: current } : item))
+        );
+        throw new Error("Echec de la mise a jour");
+      }
     } catch {
       alert("Impossible de modifier la disponibilite");
     }
@@ -345,14 +352,14 @@ export function MenuManager({ restaurantId }: MenuManagerProps) {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      {/* Availability toggle */}
+                      {/* Quick 86 Toggle */}
                       <button
-                        title={item.is_available ? "Disponible — cliquer pour desactiver" : "Indisponible — cliquer pour activer"}
+                        title={item.is_available ? "Disponible — cliquer pour marquer epuise (86)" : "Epuise (86) — cliquer pour remettre disponible"}
                         onClick={() => toggleItemAvailability(item.id, item.is_available)}
-                        className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border transition-colors ${
+                        className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border transition-colors ${
                           item.is_available
                             ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
-                            : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100"
+                            : "bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
                         }`}
                       >
                         {item.is_available ? (
@@ -360,7 +367,7 @@ export function MenuManager({ restaurantId }: MenuManagerProps) {
                         ) : (
                           <ToggleLeft className="h-4 w-4" />
                         )}
-                        {item.is_available ? "Dispo" : "Indispo"}
+                        {item.is_available ? "Dispo" : "86 - Epuise"}
                       </button>
 
                       <button

@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { QRCodeGenerator } from "@/modules/avis/components/QRCodeGenerator";
 import { MenuQRGenerator } from "@/modules/menu/components/MenuQRGenerator";
+import { PageTransition, FadeIn } from "@/shared/components/animations";
 
 export default async function QRCodesPage() {
   const session = await getDashboardSession();
@@ -17,15 +18,19 @@ export default async function QRCodesPage() {
   const slug = restaurant?.slug || "";
 
   return (
-    <div className="space-y-10">
+    <PageTransition className="space-y-10">
       {/* Section Menu QR */}
-      <MenuQRGenerator restaurantSlug={slug} />
+      <FadeIn delay={0.1}>
+        <MenuQRGenerator restaurantSlug={slug} />
+      </FadeIn>
 
       {/* Separateur */}
       <hr className="border-border" />
 
       {/* Section Avis QR (existant) */}
-      <QRCodeGenerator restaurantId={session.restaurantId} restaurantSlug={slug} />
-    </div>
+      <FadeIn delay={0.2}>
+        <QRCodeGenerator restaurantId={session.restaurantId} restaurantSlug={slug} />
+      </FadeIn>
+    </PageTransition>
   );
 }

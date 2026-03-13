@@ -29,7 +29,7 @@ export function PrizeReveal({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#fbbf24", "#f59e0b", "#ef4444", "#8b5cf6", "#3b82f6", "#10b981"],
+        colors: ["#3B82F6", "#60A5FA", "#1D4ED8", "#818CF8", "#6366F1"],
       });
 
       // Second burst after a short delay
@@ -39,14 +39,14 @@ export function PrizeReveal({
           angle: 60,
           spread: 55,
           origin: { x: 0 },
-          colors: ["#fbbf24", "#f59e0b", "#ef4444", "#8b5cf6"],
+          colors: ["#3B82F6", "#60A5FA", "#818CF8", "#6366F1"],
         });
         confetti({
           particleCount: 60,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
-          colors: ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"],
+          colors: ["#1D4ED8", "#3B82F6", "#60A5FA", "#818CF8"],
         });
       }, 300);
     });

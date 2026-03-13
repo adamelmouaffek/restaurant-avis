@@ -57,3 +57,48 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ─── Brand utilities ─────────────────────────────────── */
+@layer utilities {
+  .section-dark {
+    @apply bg-[#0F172A] text-white;
+  }
+  .section-light {
+    @apply bg-white text-slate-900;
+  }
+  .text-gradient-orange,
+  .text-gradient-emerald {
+    @apply bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] bg-clip-text text-transparent;
+  }
+  .glow-orange,
+  .glow-emerald {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+  }
+  .glow-orange-intense,
+  .glow-emerald-intense {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 80px rgba(59, 130, 246, 0.2);
+  }
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+  }
+  .nav-link-underline {
+    @apply relative;
+  }
+  .nav-link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-[#3B82F6] transition-all duration-300;
+  }
+  .nav-link-underline:hover::after {
+    @apply w-full;
+  }
+}
+
+@layer components {
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-scroll-left {
+    animation: scroll-left 30s linear infinite;
+  }
+}

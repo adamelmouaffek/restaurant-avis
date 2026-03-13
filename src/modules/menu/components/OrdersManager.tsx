@@ -32,6 +32,7 @@ const NEXT_STATUS: Record<OrderStatus, OrderStatus | null> = {
   ready: "delivered",
   delivered: null,
   cancelled: null,
+  rejected: "pending",
 };
 
 const NEXT_STATUS_LABEL: Record<OrderStatus, string> = {
@@ -41,6 +42,7 @@ const NEXT_STATUS_LABEL: Record<OrderStatus, string> = {
   ready: "Marquer servie",
   delivered: "",
   cancelled: "",
+  rejected: "Re-soumettre",
 };
 
 export function OrdersManager({ restaurantId }: OrdersManagerProps) {

@@ -6,6 +6,7 @@ import { signIn, useSession } from "next-auth/react";
 import { ReviewForm } from "@/modules/avis/components/ReviewForm";
 import { EmailReviewForm } from "@/modules/avis/components/EmailReviewForm";
 import { Button } from "@/shared/components/ui/button";
+import { PageTransition, FadeIn } from "@/shared/components/animations";
 import type { Restaurant } from "@/shared/types";
 
 type AuthMode = "choice" | "google" | "email";
@@ -113,48 +114,52 @@ export default function ReviewPage() {
   if (authMode === "choice") {
     return (
       <main className="min-h-dvh bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-lg font-semibold text-gray-900">
-            {restaurant.name}
-          </h1>
-        </div>
-
-        <div className="w-full max-w-md mx-auto space-y-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 space-y-6">
-            <div className="text-center space-y-2">
-              <h2 className="text-xl font-semibold text-gray-900">
-                Donnez votre avis
-              </h2>
-              <p className="text-sm text-gray-500">
-                Choisissez votre mode d&apos;authentification
-              </p>
-            </div>
-
-            <Button
-              onClick={() => setAuthMode("google")}
-              className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              Continuer avec Google
-            </Button>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">ou</span>
-              </div>
-            </div>
-
-            <Button
-              onClick={() => setAuthMode("email")}
-              variant="outline"
-              className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg border border-gray-300 text-gray-900 hover:bg-gray-50"
-            >
-              Continuer avec un email
-            </Button>
+        <PageTransition>
+          <div className="text-center mb-8">
+            <h1 className="text-lg font-semibold text-gray-900">
+              {restaurant.name}
+            </h1>
           </div>
-        </div>
+
+          <div className="w-full max-w-md mx-auto space-y-4">
+            <FadeIn delay={0.1}>
+              <div className="bg-white rounded-xl shadow-lg p-8 space-y-6">
+                <div className="text-center space-y-2">
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    Donnez votre avis
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    Choisissez votre mode d&apos;authentification
+                  </p>
+                </div>
+
+                <Button
+                  onClick={() => setAuthMode("google")}
+                  className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Continuer avec Google
+                </Button>
+
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200" />
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white text-gray-500">ou</span>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => setAuthMode("email")}
+                  variant="outline"
+                  className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg border border-gray-300 text-gray-900 hover:bg-gray-50"
+                >
+                  Continuer avec un email
+                </Button>
+              </div>
+            </FadeIn>
+          </div>
+        </PageTransition>
       </main>
     );
   }
@@ -163,24 +168,28 @@ export default function ReviewPage() {
   if (authMode === "email") {
     return (
       <main className="min-h-dvh bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
-        <div className="text-center mb-6">
-          <h1 className="text-lg font-semibold text-gray-900">
-            {restaurant.name}
-          </h1>
-        </div>
+        <PageTransition>
+          <div className="text-center mb-6">
+            <h1 className="text-lg font-semibold text-gray-900">
+              {restaurant.name}
+            </h1>
+          </div>
 
-        <EmailReviewForm
-          restaurantId={restaurant.id}
-          restaurantName={restaurant.name}
-          onSuccess={handleSuccess}
-        />
+          <FadeIn delay={0.1}>
+            <EmailReviewForm
+              restaurantId={restaurant.id}
+              restaurantName={restaurant.name}
+              onSuccess={handleSuccess}
+            />
+          </FadeIn>
 
-        <button
-          onClick={() => setAuthMode("choice")}
-          className="text-xs text-gray-400 hover:text-gray-600 mt-6 transition-colors min-h-[44px] px-4"
-        >
-          Retour au choix d&apos;authentification
-        </button>
+          <button
+            onClick={() => setAuthMode("choice")}
+            className="text-xs text-gray-400 hover:text-gray-600 mt-6 transition-colors min-h-[44px] px-4"
+          >
+            Retour au choix d&apos;authentification
+          </button>
+        </PageTransition>
       </main>
     );
   }
@@ -200,32 +209,36 @@ export default function ReviewPage() {
   // ─── GOOGLE MODE - authenticated ──────────────────────
   return (
     <main className="min-h-dvh bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
-      <div className="text-center mb-6">
-        <h1 className="text-lg font-semibold text-gray-900">
-          {restaurant.name}
-        </h1>
-      </div>
+      <PageTransition>
+        <div className="text-center mb-6">
+          <h1 className="text-lg font-semibold text-gray-900">
+            {restaurant.name}
+          </h1>
+        </div>
 
-      <ReviewForm
-        restaurantId={restaurant.id}
-        restaurantName={restaurant.name}
-        googleMapsUrl={restaurant.google_maps_url}
-        userEmail={session!.user.email!}
-        userName={session!.user.name ?? null}
-        googleSub={session!.user.id}
-        onSuccess={handleSuccess}
-      />
+        <FadeIn delay={0.1}>
+          <ReviewForm
+            restaurantId={restaurant.id}
+            restaurantName={restaurant.name}
+            googleMapsUrl={restaurant.google_maps_url}
+            userEmail={session!.user.email!}
+            userName={session!.user.name ?? null}
+            googleSub={session!.user.id}
+            onSuccess={handleSuccess}
+          />
+        </FadeIn>
 
-      <button
-        onClick={() => setAuthMode("choice")}
-        className="text-xs text-gray-400 hover:text-gray-600 mt-6 transition-colors min-h-[44px] px-4"
-      >
-        Retour au choix d&apos;authentification
-      </button>
+        <button
+          onClick={() => setAuthMode("choice")}
+          className="text-xs text-gray-400 hover:text-gray-600 mt-6 transition-colors min-h-[44px] px-4"
+        >
+          Retour au choix d&apos;authentification
+        </button>
 
-      <p className="text-xs text-gray-400 mt-2">
-        Connecte en tant que {session!.user.email}
-      </p>
+        <p className="text-xs text-gray-400 mt-2">
+          Connecte en tant que {session!.user.email}
+        </p>
+      </PageTransition>
     </main>
   );
 }

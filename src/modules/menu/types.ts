@@ -32,6 +32,7 @@ export const ORDER_STATUS_LABELS: Record<string, string> = {
   ready: "Prête",
   delivered: "Servie",
   cancelled: "Annulée",
+  rejected: "Refusée",
 };
 
 export const ORDER_STATUS_COLORS: Record<string, string> = {
@@ -41,6 +42,7 @@ export const ORDER_STATUS_COLORS: Record<string, string> = {
   ready: "bg-green-100 text-green-800",
   delivered: "bg-gray-100 text-gray-800",
   cancelled: "bg-red-100 text-red-800",
+  rejected: "bg-red-100 text-red-800",
 };
 
 export const ALLERGENS_EU = [

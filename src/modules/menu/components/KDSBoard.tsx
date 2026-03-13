@@ -5,6 +5,7 @@ import { supabase } from "@/shared/lib/supabase/client";
 import type { OrderWithItems, OrderStatus } from "@/shared/types";
 import { KDSFilters, type KDSFilter } from "./KDSFilters";
 import { KDSOrderCard } from "./KDSOrderCard";
+import { PageTransition } from "@/shared/components/animations";
 
 interface KDSBoardProps {
   restaurantId: string;
@@ -67,9 +68,29 @@ function useCurrentTime(intervalMs = 30_000): string {
   return time;
 }
 
+// Priority sorting weight: vip=0, rush=1, normal=2
+function priorityWeight(priority: string | undefined | null): number {
+  if (priority === "vip") return 0;
+  if (priority === "rush") return 1;
+  return 2;
+}
+
+function sortOrders(orders: OrderWithItems[]): OrderWithItems[] {
+  return [...orders].sort((a, b) => {
+    // Priority first (vip > rush > normal)
+    const pw = priorityWeight(a.priority) - priorityWeight(b.priority);
+    if (pw !== 0) return pw;
+    // Then by creation time (oldest first)
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  });
+}
+
+type PriorityFilter = "all" | "rush" | "vip" | "normal";
+
 export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBoardProps) {
   const [orders, setOrders] = useState<OrderWithItems[]>([]);
   const [activeFilter, setActiveFilter] = useState<KDSFilter>("all");
+  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -166,7 +187,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
                       }
                     : o
                 )
-                // Retirer les commandes qui ne sont plus "actives" (delivered/cancelled)
+                // Retirer les commandes qui ne sont plus "actives" (delivered/cancelled/rejected)
                 .filter((o) => ACTIVE_STATUSES.includes(o.status))
             );
 
@@ -214,6 +235,31 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
     }
   }, [restaurantSlug]);
 
+  // --- Reject order ---
+  const handleReject = useCallback(async (orderId: string, reason: string) => {
+    // Optimistic: remove from board
+    setOrders((prev) => prev.filter((o) => o.id !== orderId));
+
+    try {
+      const res = await fetch(`/api/kds/${restaurantSlug}/orders/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "rejected", rejection_reason: reason }),
+      });
+
+      if (!res.ok) {
+        // Rollback
+        const refetchRes = await fetch(`/api/kds/${restaurantSlug}/orders`);
+        if (refetchRes.ok) {
+          const data: OrderWithItems[] = await refetchRes.json();
+          setOrders(data);
+        }
+      }
+    } catch {
+      // Realtime will correct
+    }
+  }, [restaurantSlug]);
+
   // --- Calcul des counts pour les filtres ---
   const counts: Partial<Record<KDSFilter, number>> = {
     all: orders.length,
@@ -223,15 +269,31 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
     ready: orders.filter((o) => o.status === "ready").length,
   };
 
-  // --- Filtrage ---
-  const filteredOrders =
+  // --- Filtrage par statut ---
+  let filteredOrders =
     activeFilter === "all"
       ? orders
       : orders.filter((o) => o.status === activeFilter);
 
+  // --- Filtrage par priorite ---
+  if (priorityFilter !== "all") {
+    filteredOrders = filteredOrders.filter((o) => (o.priority || "normal") === priorityFilter);
+  }
+
+  // --- Tri : rush/VIP d'abord, puis par date ---
+  const sortedOrders = sortOrders(filteredOrders);
+
+  // Priority counts
+  const priorityCounts = {
+    all: orders.length,
+    rush: orders.filter((o) => o.priority === "rush").length,
+    vip: orders.filter((o) => o.priority === "vip").length,
+    normal: orders.filter((o) => !o.priority || o.priority === "normal").length,
+  };
+
   // --- Rendu ---
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col">
+    <PageTransition className="min-h-screen bg-gray-900 flex flex-col">
       {/* Header */}
       <header className="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between gap-4 flex-shrink-0">
         <div>
@@ -278,18 +340,59 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
       </header>
 
       {/* Filters */}
-      <div className="px-4 pt-4">
+      <div className="px-4 pt-4 space-y-2">
         <KDSFilters
           activeFilter={activeFilter}
           onChange={setActiveFilter}
           counts={counts}
         />
+
+        {/* Priority filter tabs */}
+        <div className="flex flex-wrap gap-2">
+          {(
+            [
+              { value: "all" as PriorityFilter, label: "Toutes priorites" },
+              { value: "vip" as PriorityFilter, label: "VIP" },
+              { value: "rush" as PriorityFilter, label: "Rush" },
+              { value: "normal" as PriorityFilter, label: "Normal" },
+            ] as const
+          ).map(({ value, label }) => {
+            const count = priorityCounts[value];
+            const isActive = priorityFilter === value;
+            const colorClass =
+              value === "vip"
+                ? "bg-yellow-500/20 text-yellow-300 border-yellow-500/40"
+                : value === "rush"
+                ? "bg-orange-500/20 text-orange-300 border-orange-500/40"
+                : "";
+
+            return (
+              <button
+                key={value}
+                onClick={() => setPriorityFilter(value)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
+                  isActive
+                    ? value === "vip"
+                      ? "bg-yellow-500/30 text-yellow-200 border-yellow-500/60"
+                      : value === "rush"
+                      ? "bg-orange-500/30 text-orange-200 border-orange-500/60"
+                      : "bg-white text-gray-900 border-white"
+                    : `bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700 hover:text-gray-200 ${colorClass}`
+                }`}
+              >
+                {label}
+                {count > 0 && (
+                  <span className="ml-1.5 text-[10px]">({count})</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Main content */}
       <main className="flex-1 p-4">
         {isLoading ? (
-          // Le loading.tsx gere le skeleton, mais on affiche un fallback inline si besoin
           <div className="flex items-center justify-center h-48 text-gray-500">
             Chargement des commandes...
           </div>
@@ -303,7 +406,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
               Recharger la page
             </button>
           </div>
-        ) : filteredOrders.length === 0 ? (
+        ) : sortedOrders.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-48 gap-2 text-center">
             <span className="text-4xl">&#10003;</span>
             <p className="text-gray-400 font-medium text-lg">
@@ -315,16 +418,18 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {filteredOrders.map((order) => (
+            {sortedOrders.map((order) => (
               <KDSOrderCard
                 key={order.id}
                 order={order}
                 onStatusChange={handleStatusChange}
+                onReject={handleReject}
+                restaurantSlug={restaurantSlug}
               />
             ))}
           </div>
         )}
       </main>
-    </div>
+    </PageTransition>
   );
 }

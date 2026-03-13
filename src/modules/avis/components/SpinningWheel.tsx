@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import confetti from "canvas-confetti";
 import { Button } from "@/shared/components/ui/button";
 import type { Prize } from "@/shared/types";
@@ -14,32 +14,23 @@ interface SpinningWheelProps {
   onPrizeWon: (result: SpinResult) => void;
 }
 
-// ─── Geometry helpers ──────────────────────────────────────
+// ─── Geometry helpers ─────────────────────────────────────
 function polar(cx: number, cy: number, r: number, deg: number) {
   const rad = ((deg - 90) * Math.PI) / 180;
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
 }
 
-function arc(cx: number, cy: number, r: number, s: number, e: number) {
-  const a = polar(cx, cy, r, e);
-  const b = polar(cx, cy, r, s);
-  const lg = e - s > 180 ? 1 : 0;
+function slicePath(cx: number, cy: number, r: number, startDeg: number, endDeg: number) {
+  const a = polar(cx, cy, r, endDeg);
+  const b = polar(cx, cy, r, startDeg);
+  const lg = endDeg - startDeg > 180 ? 1 : 0;
   return `M${cx},${cy} L${a.x},${a.y} A${r},${r} 0 ${lg} 0 ${b.x},${b.y} Z`;
 }
 
-// ─── Premium color palette (casino style) ──────────────────
-const SEGMENT_COLORS = [
-  "#e63946", // red
-  "#1d3557", // navy
-  "#f4a261", // warm orange
-  "#2a9d8f", // teal
-  "#e76f51", // coral
-  "#264653", // dark teal
-  "#f9c74f", // gold
-  "#6a4c93", // purple
-  "#43aa8b", // emerald
-  "#f94144", // bright red
-];
+// ─── Colors — blue alternating ───────────────────
+const C1 = "#1E40AF";
+const C2 = "#60A5FA";
+const GOLD = "#3B82F6";
 
 export function SpinningWheel({
   prizes,
@@ -52,40 +43,18 @@ export function SpinningWheel({
   const [rotation, setRotation] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [alreadySpun, setAlreadySpun] = useState(false);
-  const [bulbPhase, setBulbPhase] = useState(false);
 
-  const seg = 360 / prizes.length;
-  const CX = 200;
-  const CY = 200;
-  const R = 175;
-  const BULB_R = 192;
-  const NUM_BULBS = 20;
+  const n = prizes.length;
+  const seg = 360 / n;
+  const CX = 250;
+  const CY = 250;
+  const R = 220;
 
-  // Bulb animation (alternating blink)
-  useEffect(() => {
-    const interval = setInterval(() => setBulbPhase((p) => !p), 500);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Fire confetti
   const fireConfetti = useCallback(() => {
-    const duration = 2000;
-    const end = Date.now() + duration;
+    const end = Date.now() + 2000;
     const frame = () => {
-      confetti({
-        particleCount: 3,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0, y: 0.6 },
-        colors: ["#fbbf24", "#f59e0b", "#ef4444", "#10b981", "#3b82f6"],
-      });
-      confetti({
-        particleCount: 3,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1, y: 0.6 },
-        colors: ["#fbbf24", "#f59e0b", "#ef4444", "#10b981", "#3b82f6"],
-      });
+      confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ["#3B82F6", "#60A5FA", "#1D4ED8", "#818CF8", "#6366F1"] });
+      confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ["#3B82F6", "#60A5FA", "#1D4ED8", "#818CF8", "#6366F1"] });
       if (Date.now() < end) requestAnimationFrame(frame);
     };
     frame();
@@ -95,37 +64,23 @@ export function SpinningWheel({
     if (isSpinning) return;
     setError(null);
     setIsSpinning(true);
-
     try {
-      const response = await fetch("/api/avis/wheel/spin", {
+      const res = await fetch("/api/avis/wheel/spin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          restaurant_id: restaurantId,
-          participant_id: participantId,
-          review_id: reviewId,
-        }),
+        body: JSON.stringify({ restaurant_id: restaurantId, participant_id: participantId, review_id: reviewId }),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          setAlreadySpun(true);
-        } else {
-          setError(data.error || "Erreur lors du tirage.");
-        }
+      const data = await res.json();
+      if (!res.ok) {
+        if (res.status === 409) setAlreadySpun(true);
+        else setError(data.error || "Erreur lors du tirage.");
         setIsSpinning(false);
         return;
       }
-
-      const targetAngle = data.angle as number;
-      setRotation((prev) => prev + targetAngle);
-
+      setRotation((prev) => prev + (data.angle as number));
       setTimeout(() => {
         setIsSpinning(false);
         fireConfetti();
-        // Small delay for confetti to start before redirect
         setTimeout(() => {
           onPrizeWon({
             prizeId: data.prizeId,
@@ -143,197 +98,157 @@ export function SpinningWheel({
     }
   }, [isSpinning, restaurantId, participantId, reviewId, onPrizeWon, fireConfetti]);
 
-  // Pick color per segment
-  const getColor = (i: number) =>
-    prizes[i].color && prizes[i].color !== "#000000"
-      ? prizes[i].color
-      : SEGMENT_COLORS[i % SEGMENT_COLORS.length];
-
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-[380px] mx-auto px-2">
-      {/* ─── Wheel ─────────────────────────────────────── */}
-      <div className="relative w-full aspect-square max-w-[360px]">
-        {/* Pointer / Arrow */}
-        <div className="absolute top-1 left-1/2 -translate-x-1/2 z-30">
+    <div className="flex flex-col items-center gap-5 w-full max-w-[520px] mx-auto px-1">
+      <div className="relative w-full aspect-square max-w-[500px]">
+        {/* Pointer — star/cursor style */}
+        <div className="absolute top-[-6px] left-1/2 -translate-x-1/2 z-30">
           <svg width="40" height="48" viewBox="0 0 40 48" className="drop-shadow-lg">
             <defs>
-              <linearGradient id="ptr" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#fde68a" />
-                <stop offset="50%" stopColor="#f59e0b" />
-                <stop offset="100%" stopColor="#d97706" />
+              <linearGradient id="ptr-g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#93C5FD" />
+                <stop offset="50%" stopColor="#3B82F6" />
+                <stop offset="100%" stopColor="#1D4ED8" />
               </linearGradient>
             </defs>
-            <polygon points="20,46 3,8 37,8" fill="url(#ptr)" stroke="#92400e" strokeWidth="2" strokeLinejoin="round" />
-            <polygon points="20,38 9,14 31,14" fill="#fbbf24" opacity="0.6" />
+            <polygon points="20,46 4,8 20,18 36,8" fill="url(#ptr-g)" stroke="#1E3A8A" strokeWidth="1.5" strokeLinejoin="round" />
           </svg>
         </div>
 
-        {/* Outer frame (dark metallic) */}
+        {/* Gold outer border ring */}
         <div
           className="absolute inset-0 rounded-full"
           style={{
-            background: "linear-gradient(145deg, #374151, #1f2937)",
-            padding: "14px",
-            boxShadow: "0 0 0 3px #f59e0b, 0 8px 32px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.1)",
+            background: `linear-gradient(145deg, ${GOLD}, #1D4ED8)`,
+            padding: "5px",
+            boxShadow: `0 0 0 2px #1E3A8A, 0 8px 30px rgba(0,0,0,0.4)`,
           }}
         >
-          <div className="w-full h-full rounded-full bg-transparent" />
+          <div className="w-full h-full rounded-full bg-[#1a1a2e]" />
         </div>
 
-        {/* Light bulbs around the frame */}
-        <svg
-          viewBox="0 0 400 400"
-          className="absolute inset-0 w-full h-full z-10 pointer-events-none"
-        >
-          {Array.from({ length: NUM_BULBS }).map((_, i) => {
-            const angle = (360 / NUM_BULBS) * i;
-            const p = polar(200, 200, BULB_R, angle - 90);
-            const on = i % 2 === (bulbPhase ? 0 : 1);
-            return (
-              <circle
-                key={i}
-                cx={p.x}
-                cy={p.y}
-                r="5"
-                fill={on ? "#fbbf24" : "#78716c"}
-                opacity={on ? 1 : 0.4}
-                style={{
-                  filter: on ? "drop-shadow(0 0 4px #fbbf24)" : "none",
-                  transition: "fill 0.3s, opacity 0.3s",
-                }}
-              />
-            );
-          })}
-        </svg>
-
-        {/* SVG Wheel */}
-        <div className="absolute inset-[14px]">
+        {/* Wheel SVG */}
+        <div className="absolute inset-[5px]">
           <svg
-            viewBox="0 0 400 400"
+            viewBox="0 0 500 500"
             className="w-full h-full"
             style={{
               transform: `rotate(${rotation}deg)`,
-              transition: isSpinning
-                ? "transform 4s cubic-bezier(0.15, 0.60, 0.10, 1.0)"
-                : "none",
+              transition: isSpinning ? "transform 4s cubic-bezier(0.15, 0.60, 0.10, 1.0)" : "none",
             }}
           >
             <defs>
-              <radialGradient id="depth" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="white" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="black" stopOpacity="0.12" />
-              </radialGradient>
               <filter id="ts">
-                <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#000" floodOpacity="0.6" />
+                <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#000" floodOpacity="0.7" />
               </filter>
-              <clipPath id="wc">
+              <clipPath id="wclip">
                 <circle cx={CX} cy={CY} r={R} />
               </clipPath>
             </defs>
 
-            <g clipPath="url(#wc)">
+            <g clipPath="url(#wclip)">
               {prizes.map((prize, i) => {
-                const s = seg * i;
-                const e = seg * (i + 1);
-                const mid = s + seg / 2;
-                const color = getColor(i);
+                const startAngle = seg * i;
+                const endAngle = seg * (i + 1);
+                const midAngle = startAngle + seg / 2;
+                const color = i % 2 === 0 ? C1 : C2;
 
-                const iconP = polar(CX, CY, R * 0.75, mid - 90);
-                const textP = polar(CX, CY, R * 0.48, mid - 90);
+                // Text along the radius: exterior → center
+                // Position text at 85% of radius, reading from outside toward center
+                const textDist = R * 0.58;
+                const tp = polar(CX, CY, textDist, midAngle);
+
+                // Rotate text so it reads along the radius from exterior to center
+                // For segments on the bottom half, flip 180 so text isn't upside down
+                const isBottom = midAngle > 90 && midAngle < 270;
+                const textRotation = isBottom ? midAngle + 180 : midAngle;
+
+                const label = prize.name.length > 14 ? prize.name.slice(0, 13) + "\u2026" : prize.name;
 
                 return (
                   <g key={prize.id}>
-                    {/* Segment */}
-                    <path d={arc(CX, CY, R, s, e)} fill={color} />
-                    <path d={arc(CX, CY, R, s, e)} fill="url(#depth)" />
-                    <path d={arc(CX, CY, R, s, e)} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="2" />
+                    {/* Segment fill */}
+                    <path d={slicePath(CX, CY, R, startAngle, endAngle)} fill={color} />
 
-                    {/* Icon */}
+                    {/* Gold separator lines */}
+                    <line
+                      x1={CX}
+                      y1={CY}
+                      x2={polar(CX, CY, R, startAngle).x}
+                      y2={polar(CX, CY, R, startAngle).y}
+                      stroke={GOLD}
+                      strokeWidth="2"
+                      opacity="0.8"
+                    />
+
+                    {/* Prize name — bold white text along radius */}
                     <text
-                      x={iconP.x}
-                      y={iconP.y}
+                      x={tp.x}
+                      y={tp.y}
                       textAnchor="middle"
                       dominantBaseline="central"
-                      fontSize="30"
-                      filter="url(#ts)"
-                      transform={`rotate(${mid},${iconP.x},${iconP.y})`}
-                    >
-                      {prize.icon}
-                    </text>
-
-                    {/* Name */}
-                    <text
-                      x={textP.x}
-                      y={textP.y}
-                      textAnchor="middle"
-                      dominantBaseline="central"
-                      fontSize="11"
+                      fontSize="18"
                       fontWeight="800"
+                      fontFamily="system-ui, -apple-system, sans-serif"
                       fill="white"
-                      stroke="rgba(0,0,0,0.3)"
-                      strokeWidth="3"
-                      paintOrder="stroke"
-                      transform={`rotate(${mid},${textP.x},${textP.y})`}
+                      filter="url(#ts)"
+                      transform={`rotate(${textRotation}, ${tp.x}, ${tp.y})`}
+                      letterSpacing="0.5"
                     >
-                      {prize.name.length > 14 ? prize.name.slice(0, 13) + "..." : prize.name}
+                      {label}
                     </text>
                   </g>
                 );
               })}
             </g>
 
-            {/* Center hub - metallic rings */}
-            <circle cx={CX} cy={CY} r="44" fill="#e5e7eb" />
-            <circle cx={CX} cy={CY} r="40" fill="url(#hub-grad)" stroke="#d4d4d8" strokeWidth="1" />
-            <circle cx={CX} cy={CY} r="32" fill="#1f2937" />
-            <circle cx={CX} cy={CY} r="24" fill="#374151" />
-            <circle cx={CX} cy={CY} r="16" fill="#4b5563" />
-            <text x={CX} y={CY + 1} textAnchor="middle" dominantBaseline="central" fontSize="20" fill="#fbbf24">
-              ★
+            {/* Outer gold ring (inside SVG for clean look) */}
+            <circle cx={CX} cy={CY} r={R} fill="none" stroke={GOLD} strokeWidth="4" opacity="0.9" />
+
+            {/* Center hub — small golden star */}
+            <circle cx={CX} cy={CY} r="28" fill="url(#hub-gradient)" stroke={GOLD} strokeWidth="3" />
+            <circle cx={CX} cy={CY} r="18" fill="#1a1a2e" />
+            <text x={CX} y={CY + 1} textAnchor="middle" dominantBaseline="central" fontSize="16" fill={GOLD}>
+              &#x2605;
             </text>
 
+            {/* Hub gradient definition */}
             <defs>
-              <linearGradient id="hub-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#f3f4f6" />
-                <stop offset="100%" stopColor="#d1d5db" />
-              </linearGradient>
+              <radialGradient id="hub-gradient" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#374151" />
+                <stop offset="100%" stopColor="#1f2937" />
+              </radialGradient>
             </defs>
           </svg>
         </div>
 
-        {/* Glow when idle */}
+        {/* Idle glow pulse */}
         {!isSpinning && !alreadySpun && (
           <div
             className="absolute inset-0 rounded-full animate-pulse pointer-events-none"
-            style={{ boxShadow: "0 0 50px rgba(245,158,11,0.3), 0 0 100px rgba(245,158,11,0.1)" }}
+            style={{ boxShadow: `0 0 50px rgba(59,130,246,0.25), 0 0 100px rgba(96,165,250,0.1)` }}
           />
         )}
       </div>
 
-      {/* ─── Messages ──────────────────────────────────── */}
       {alreadySpun && (
         <div className="rounded-2xl bg-amber-50 border border-amber-200 p-6 text-center w-full space-y-3 shadow-sm">
-          <div className="text-4xl">🎡</div>
-          <p className="text-base font-semibold text-amber-800">
-            Vous avez deja tourne la roue !
-          </p>
-          <p className="text-sm text-amber-600">
-            Chaque participant ne peut tourner qu&apos;une seule fois.
-          </p>
+          <p className="text-base font-semibold text-amber-800">Vous avez deja tourne la roue !</p>
+          <p className="text-sm text-amber-600">Chaque participant ne peut tourner qu&apos;une seule fois.</p>
         </div>
       )}
 
       {error && !alreadySpun && (
-        <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-sm text-red-700 text-center w-full">
-          {error}
-        </div>
+        <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-sm text-red-700 text-center w-full">{error}</div>
       )}
 
-      {/* ─── Spin Button ───────────────────────────────── */}
       <Button
         onClick={handleSpin}
         disabled={isSpinning || alreadySpun}
-        className="w-full max-w-[320px] h-16 text-xl font-extrabold rounded-2xl shadow-xl shadow-amber-500/30 transition-all duration-200 hover:shadow-2xl hover:shadow-amber-500/40 hover:scale-[1.04] active:scale-[0.96] disabled:scale-100 disabled:shadow-none bg-gradient-to-b from-amber-400 via-amber-500 to-orange-600 hover:from-amber-500 hover:via-amber-600 hover:to-orange-700 text-white border-0 tracking-wide"
+        className="w-full max-w-[360px] h-16 text-xl font-extrabold rounded-2xl shadow-xl shadow-blue-500/30 transition-all duration-200 hover:shadow-2xl hover:shadow-blue-500/40 hover:scale-[1.04] active:scale-[0.96] disabled:scale-100 disabled:shadow-none text-white border-0 tracking-wide"
+        style={{
+          background: `linear-gradient(to bottom, #3B82F6, #1D4ED8)`,
+        }}
       >
         {isSpinning ? (
           <span className="flex items-center gap-3">
