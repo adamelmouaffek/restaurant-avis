@@ -22,7 +22,7 @@ async function tableExists(restaurantId: string, tableNumber: string): Promise<b
     .from("restaurant_tables")
     .select("id", { count: "exact", head: true })
     .eq("restaurant_id", restaurantId)
-    .eq("table_number", tableNumber);
+    .eq("number", tableNumber);
   return (count ?? 0) > 0;
 }
 

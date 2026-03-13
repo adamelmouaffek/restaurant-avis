@@ -52,10 +52,10 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      const qty = validatePositiveInt(item.quantity, 99);
+      const qty = validatePositiveInt(item.quantity, 10);
       if (!qty) {
         return NextResponse.json(
-          { error: "Quantite invalide (1-99)" },
+          { error: "Quantite invalide (1-10 par article)" },
           { status: 400 }
         );
       }
