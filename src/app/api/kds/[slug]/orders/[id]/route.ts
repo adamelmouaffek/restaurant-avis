@@ -1,29 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
+import { getKdsSession } from "@/shared/lib/kds-auth";
 import type { OrderStatus } from "@/shared/types";
 
 export const dynamic = "force-dynamic";
 
 const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  pending: ["confirmed", "cancelled"],
-  confirmed: ["preparing", "cancelled"],
+  pending: ["confirmed", "cancelled", "rejected"],
+  confirmed: ["preparing", "cancelled", "rejected"],
   preparing: ["ready"],
   ready: ["delivered"],
   delivered: [],
   cancelled: [],
+  rejected: ["pending"],
 };
 
 /**
  * PATCH /api/kds/[slug]/orders/[id]
  *
- * Endpoint dédié au KDS cuisine — authentification par slug (pas de session).
- * Permet au personnel de cuisine de changer le statut sans connexion dashboard.
+ * KDS route protected by signed JWT session cookie.
  */
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { slug: string; id: string } }
 ) {
   const { slug, id } = params;
+
+  // Auth check
+  const session = await getKdsSession();
+  if (!session || session.slug !== slug) {
+    return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
+  }
 
   // Résoudre le slug → restaurant
   const { data: restaurant, error: restaurantError } = await supabaseAdmin
@@ -36,14 +43,14 @@ export async function PATCH(
     return NextResponse.json({ error: "Restaurant introuvable" }, { status: 404 });
   }
 
-  let body: { status?: OrderStatus };
+  let body: { status?: OrderStatus; rejection_reason?: string; estimated_prep_minutes?: number };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Corps de requête JSON invalide" }, { status: 400 });
   }
 
-  const { status: newStatus } = body;
+  const { status: newStatus, rejection_reason, estimated_prep_minutes } = body;
 
   if (!newStatus) {
     return NextResponse.json({ error: "Le champ status est requis" }, { status: 400 });
@@ -79,9 +86,24 @@ export async function PATCH(
     );
   }
 
+  const updatePayload: Record<string, unknown> = {
+    status: newStatus,
+    updated_at: new Date().toISOString(),
+  };
+
+  // Add rejection reason when rejecting
+  if (newStatus === "rejected" && rejection_reason) {
+    updatePayload.rejection_reason = rejection_reason;
+  }
+
+  // Add estimated prep time if provided
+  if (estimated_prep_minutes !== undefined && estimated_prep_minutes !== null) {
+    updatePayload.estimated_prep_minutes = estimated_prep_minutes;
+  }
+
   const { data: updatedOrder, error: updateError } = await supabaseAdmin
     .from("orders")
-    .update({ status: newStatus, updated_at: new Date().toISOString() })
+    .update(updatePayload)
     .eq("id", id)
     .select()
     .single();

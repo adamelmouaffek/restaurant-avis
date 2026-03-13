@@ -7,12 +7,13 @@ export const dynamic = "force-dynamic";
 
 // Transitions de statut autorisées
 const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  pending: ["confirmed", "cancelled"],
-  confirmed: ["preparing", "cancelled"],
+  pending: ["confirmed", "rejected", "cancelled"],
+  confirmed: ["preparing", "rejected", "cancelled"],
   preparing: ["ready"],
   ready: ["delivered"],
   delivered: [],
   cancelled: [],
+  rejected: ["pending"],
 };
 
 // PATCH : Changer le statut d'une commande (protégé dashboard)
@@ -101,7 +102,7 @@ export async function PATCH(
   return NextResponse.json(updatedOrder);
 }
 
-// GET : Retourner une commande avec ses items
+// GET : Retourner une commande avec ses items (requires auth or matching session)
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -119,6 +120,21 @@ export async function GET(
       { error: "Commande introuvable" },
       { status: 404 }
     );
+  }
+
+  // Auth check: dashboard session OR matching table_session_id
+  const dashSession = await getDashboardSession();
+  if (dashSession) {
+    if (dashSession.restaurantId !== data.restaurant_id) {
+      return NextResponse.json({ error: "Acces non autorise" }, { status: 403 });
+    }
+  } else {
+    // Public access requires matching table_session_id
+    const { searchParams } = new URL(request.url);
+    const tableSessionId = searchParams.get("table_session_id");
+    if (!tableSessionId || tableSessionId !== data.table_session_id) {
+      return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    }
   }
 
   return NextResponse.json(data as OrderWithItems);

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
+import { getKdsSession } from "@/shared/lib/kds-auth";
 import { KDSBoard } from "@/modules/menu/components/KDSBoard";
 
 interface KDSPageProps {
@@ -8,6 +9,12 @@ interface KDSPageProps {
 
 export default async function KDSPage({ params }: KDSPageProps) {
   const { slug } = params;
+
+  // Check KDS session
+  const session = await getKdsSession();
+  if (!session || session.slug !== slug) {
+    redirect(`/kds/${slug}/login`);
+  }
 
   const { data: restaurant, error } = await supabaseAdmin
     .from("restaurants")

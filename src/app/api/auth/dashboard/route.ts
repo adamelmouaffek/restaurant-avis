@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
+import { signJWT } from "@/shared/lib/jwt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,10 +40,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Creer un token simple (base64 de l'id du restaurant)
-    const token = Buffer.from(
-      JSON.stringify({ restaurantId: restaurant.id, email: restaurant.owner_email })
-    ).toString("base64");
+    // Creer un token JWT signe
+    const token = await signJWT(
+      { restaurantId: restaurant.id, email: restaurant.owner_email },
+      "7d"
+    );
 
     // Set cookie
     const cookieStore = await cookies();

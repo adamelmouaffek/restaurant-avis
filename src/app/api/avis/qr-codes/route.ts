@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
+import { getDashboardSession } from "@/shared/lib/dashboard-auth";
 
 export const dynamic = "force-dynamic";
 
+// GET: Dashboard auth required (QR codes are managed in dashboard)
 export async function GET(request: NextRequest) {
+  const session = await getDashboardSession();
+  if (!session) {
+    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const restaurantId = searchParams.get("restaurant_id");
 
   if (!restaurantId) {
     return NextResponse.json({ error: "restaurant_id requis" }, { status: 400 });
+  }
+
+  if (restaurantId !== session.restaurantId) {
+    return NextResponse.json({ error: "Acces non autorise" }, { status: 403 });
   }
 
   const { data, error } = await supabaseAdmin
@@ -24,10 +35,20 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(data);
 }
 
+// POST: Dashboard auth required
 export async function POST(request: NextRequest) {
+  const session = await getDashboardSession();
+  if (!session) {
+    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const { restaurant_id, table_number, url } = body;
+
+    if (restaurant_id !== session.restaurantId) {
+      return NextResponse.json({ error: "Acces non autorise" }, { status: 403 });
+    }
 
     const { data, error } = await supabaseAdmin
       .from("qr_codes")

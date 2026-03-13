@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
+import { getKdsSession } from "@/shared/lib/kds-auth";
 import type { OrderWithItems } from "@/shared/types";
 
 export const dynamic = "force-dynamic";
@@ -9,12 +10,7 @@ const ACTIVE_STATUSES = ["pending", "confirmed", "preparing", "ready"];
 /**
  * GET /api/kds/[slug]/orders
  *
- * Route publique dediee au KDS.
- * Authentification par slug (pas de session cookie).
- * Retourne uniquement les commandes "actives" (pending, confirmed, preparing, ready).
- *
- * Le slug est suffisant comme mecanisme de controle d'acces pour un ecran cuisine :
- * seul le personnel possedant le slug peut ouvrir la page /kds/[slug].
+ * KDS route protected by signed JWT session cookie.
  */
 export async function GET(
   _request: NextRequest,
@@ -22,8 +18,10 @@ export async function GET(
 ) {
   const { slug } = params;
 
-  if (!slug) {
-    return NextResponse.json({ error: "slug est requis" }, { status: 400 });
+  // Auth check
+  const session = await getKdsSession();
+  if (!session || session.slug !== slug) {
+    return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
   }
 
   // Resoudre le slug → restaurant

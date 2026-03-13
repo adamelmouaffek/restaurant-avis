@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  let query = supabaseAdmin.from("restaurants").select("*");
+  let query = supabaseAdmin.from("restaurants").select("id, name, slug, google_maps_url, google_place_id, logo_url, primary_color, created_at");
 
   if (slug) {
     query = query.eq("slug", slug);

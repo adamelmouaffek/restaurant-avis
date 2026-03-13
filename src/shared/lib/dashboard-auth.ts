@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { verifyJWT } from "./jwt";
 
 export interface DashboardSession {
   restaurantId: string;
@@ -14,10 +15,9 @@ export async function getDashboardSession(): Promise<DashboardSession | null> {
       return null;
     }
 
-    const decoded = Buffer.from(sessionCookie.value, "base64").toString("utf-8");
-    const session = JSON.parse(decoded) as DashboardSession;
+    const session = await verifyJWT<DashboardSession>(sessionCookie.value);
 
-    if (!session.restaurantId || !session.email) {
+    if (!session?.restaurantId || !session?.email) {
       return null;
     }
 

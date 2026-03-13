@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { getDashboardSession } from "@/shared/lib/dashboard-auth";
+import { rateLimit } from "@/shared/lib/rate-limit";
+import { getClientIp } from "@/shared/lib/get-client-ip";
+import { sanitizeString, validatePositiveInt, MAX_LENGTHS } from "@/shared/lib/validation";
 import type { OrderWithItems } from "@/shared/types";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +14,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { restaurant_id, table_number, notes, items } = body;
 
+    // Rate limit par restaurant + table
+    if (restaurant_id && table_number) {
+      const ip = getClientIp(request);
+      const rl = rateLimit(`order:${restaurant_id}:${table_number}:${ip}`, 20, 10 * 60 * 1000);
+      if (!rl.success) {
+        return NextResponse.json(
+          { error: "Trop de commandes. Reessayez dans quelques minutes." },
+          { status: 429, headers: { "Retry-After": String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
+        );
+      }
+    }
+
     // Validation des champs requis
     if (!restaurant_id || !table_number) {
       return NextResponse.json(
@@ -19,21 +34,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!Array.isArray(items) || items.length === 0) {
+    if (!Array.isArray(items) || items.length === 0 || items.length > 50) {
       return NextResponse.json(
-        { error: "La commande doit contenir au moins un article" },
+        { error: "La commande doit contenir entre 1 et 50 articles" },
         { status: 400 }
       );
     }
 
+    // Sanitize notes
+    if (notes) body.notes = sanitizeString(notes, MAX_LENGTHS.notes);
+
     // Validation de la structure de chaque item
     for (const item of items) {
-      if (!item.menu_item_id || typeof item.quantity !== "number" || item.quantity < 1) {
+      if (!item.menu_item_id) {
         return NextResponse.json(
-          { error: "Chaque article doit avoir un menu_item_id et une quantité valide (>= 1)" },
+          { error: "Chaque article doit avoir un menu_item_id" },
           { status: 400 }
         );
       }
+      const qty = validatePositiveInt(item.quantity, 99);
+      if (!qty) {
+        return NextResponse.json(
+          { error: "Quantite invalide (1-99)" },
+          { status: 400 }
+        );
+      }
+      item.quantity = qty;
+      if (item.notes) item.notes = sanitizeString(item.notes, MAX_LENGTHS.itemNotes);
     }
 
     // Re-fetch des prix depuis la DB — NE JAMAIS faire confiance aux prix du client
@@ -144,7 +171,7 @@ export async function GET(request: NextRequest) {
   const restaurantId = searchParams.get("restaurant_id");
   const status = searchParams.get("status");
   const limitParam = searchParams.get("limit");
-  const limit = limitParam ? parseInt(limitParam, 10) : 50;
+  const limit = Math.min(limitParam ? parseInt(limitParam, 10) : 50, 200);
 
   if (!restaurantId) {
     return NextResponse.json(

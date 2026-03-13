@@ -1,14 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
+import { getDashboardSession } from "@/shared/lib/dashboard-auth";
+import { sanitizeString, MAX_LENGTHS } from "@/shared/lib/validation";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
+  // Dashboard auth required — reviews list is admin-only
+  const session = await getDashboardSession();
+  if (!session) {
+    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const restaurantId = searchParams.get("restaurant_id");
 
   if (!restaurantId) {
     return NextResponse.json({ error: "restaurant_id requis" }, { status: 400 });
+  }
+
+  if (restaurantId !== session.restaurantId) {
+    return NextResponse.json({ error: "Acces non autorise" }, { status: 403 });
   }
 
   const { data, error } = await supabaseAdmin
@@ -27,7 +39,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { restaurant_id, email, name, google_sub, rating, comment } = body;
+    const { restaurant_id, email, google_sub, rating } = body;
+    const name = sanitizeString(body.name, MAX_LENGTHS.name);
+    const comment = sanitizeString(body.comment, MAX_LENGTHS.comment);
 
     if (!restaurant_id || !email || !rating) {
       return NextResponse.json(
