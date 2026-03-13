@@ -61,14 +61,20 @@ export function Footer() {
                 </h4>
                 <ul className="space-y-2">
                   <li>
-                    <span className="text-white/50 text-sm">
+                    <Link
+                      href="/mentions-legales"
+                      className="text-white/50 hover:text-white transition-colors text-sm"
+                    >
                       Mentions legales
-                    </span>
+                    </Link>
                   </li>
                   <li>
-                    <span className="text-white/50 text-sm">
+                    <Link
+                      href="/confidentialite"
+                      className="text-white/50 hover:text-white transition-colors text-sm"
+                    >
                       Confidentialite
-                    </span>
+                    </Link>
                   </li>
                 </ul>
               </div>
