@@ -201,7 +201,33 @@ export function ReviewForm({
               </p>
             </div>
 
-            {/* CTA */}
+            {/* Google Maps CTA (if URL exists) */}
+            {googleMapsUrl && (
+              <a
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full h-12 px-8 rounded-xl bg-gradient-to-r from-[#4285F4] to-[#34A853] text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-5 h-5"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+                Laisser un avis Google
+              </a>
+            )}
+
+            {/* Back CTA */}
             <Link
               href={`/r/${slug}`}
               className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)] text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
