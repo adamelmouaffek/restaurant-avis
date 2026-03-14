@@ -146,9 +146,9 @@ export default function OrderStatusPage() {
     fetchEstablishmentType();
   }, [slug]);
 
-  // Get table session ID from localStorage
+  // Get table session ID from sessionStorage
   useEffect(() => {
-    const storedSessionId = localStorage.getItem(
+    const storedSessionId = sessionStorage.getItem(
       `table_session_${slug}_${tableNumber}`
     );
     setTableSessionId(storedSessionId);

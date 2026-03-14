@@ -8,9 +8,6 @@ interface GoogleMapsRedirectProps {
   googleMapsUrl: string;
   slug: string;
   restaurantId: string;
-  userEmail: string;
-  userName: string | null;
-  googleSub: string;
   onFallback: () => void;
 }
 
@@ -19,9 +16,6 @@ export function GoogleMapsRedirect({
   googleMapsUrl,
   slug,
   restaurantId,
-  userEmail,
-  userName,
-  googleSub,
   onFallback,
 }: GoogleMapsRedirectProps) {
   const handleGoToGoogleMaps = () => {
@@ -29,9 +23,6 @@ export function GoogleMapsRedirect({
       slug,
       googleMapsUrl,
       restaurantId,
-      userEmail,
-      userName,
-      googleSub,
     });
     window.location.href = googleMapsUrl;
   };

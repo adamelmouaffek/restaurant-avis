@@ -77,7 +77,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
   useEffect(() => {
     async function initTableSession() {
       const storageKey = `table_session_${restaurant.slug}_${tableNumber}`;
-      const storedSessionId = localStorage.getItem(storageKey);
+      const storedSessionId = sessionStorage.getItem(storageKey);
 
       if (storedSessionId) {
         // Verify the stored session is still active
@@ -98,7 +98,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
           // Session expired or not found, create new one
         }
         // Clear the expired session
-        localStorage.removeItem(storageKey);
+        sessionStorage.removeItem(storageKey);
       }
 
       // Create a new table session
@@ -115,7 +115,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
         if (res.ok) {
           const session = await res.json();
           setTableSessionId(session.id);
-          localStorage.setItem(storageKey, session.id);
+          sessionStorage.setItem(storageKey, session.id);
         }
       } catch {
         // Non-blocking: table session is optional, orders still work without it

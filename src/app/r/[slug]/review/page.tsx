@@ -300,9 +300,6 @@ export default function ReviewPage() {
               googleMapsUrl={restaurant.google_maps_url}
               slug={slug}
               restaurantId={restaurant.id}
-              userEmail={session!.user.email!}
-              userName={session!.user.name ?? null}
-              googleSub={session!.user.id}
               onFallback={() => setStep("google-fallback")}
             />
           </FadeIn>
@@ -337,6 +334,9 @@ export default function ReviewPage() {
                 googleMapsUrl={restaurant.google_maps_url}
                 slug={slug}
                 session={gmapsSession}
+                userEmail={session!.user.email!}
+                userName={session!.user.name ?? null}
+                googleSub={session!.user.id}
                 onSuccess={handleSuccess}
               />
             </FadeIn>

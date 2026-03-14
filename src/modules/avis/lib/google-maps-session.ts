@@ -1,5 +1,6 @@
 // Utilitaires pour gerer la session Google Maps dans sessionStorage
 // Persiste l'etat du flow entre la navigation vers Google Maps et le retour
+// SECURITE: ne stocke PAS de PII (email, googleSub) — seulement des IDs et timestamps
 
 const STORAGE_KEY_PREFIX = "gmaps_session_";
 
@@ -9,9 +10,6 @@ export interface GoogleMapsSession {
   departureTimestamp: number;
   googleMapsUrl: string;
   restaurantId: string;
-  userEmail: string;
-  userName: string | null;
-  googleSub: string;
   attempts: number;
 }
 
@@ -19,9 +17,6 @@ export function startSession(data: {
   slug: string;
   googleMapsUrl: string;
   restaurantId: string;
-  userEmail: string;
-  userName: string | null;
-  googleSub: string;
 }): void {
   const session: GoogleMapsSession = {
     ...data,

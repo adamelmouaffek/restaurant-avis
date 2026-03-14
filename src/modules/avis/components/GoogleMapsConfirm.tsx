@@ -15,6 +15,9 @@ interface GoogleMapsConfirmProps {
   googleMapsUrl: string;
   slug: string;
   session: GoogleMapsSession;
+  userEmail: string;
+  userName: string | null;
+  googleSub: string;
   onSuccess: (participantId: string, reviewId: string) => void;
 }
 
@@ -25,6 +28,9 @@ export function GoogleMapsConfirm({
   googleMapsUrl,
   slug,
   session,
+  userEmail,
+  userName,
+  googleSub,
   onSuccess,
 }: GoogleMapsConfirmProps) {
   const [countdown, setCountdown] = useState(COOLDOWN_SECONDS);
@@ -62,9 +68,9 @@ export function GoogleMapsConfirm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           restaurant_id: session.restaurantId,
-          email: session.userEmail,
-          name: session.userName,
-          google_sub: session.googleSub,
+          email: userEmail,
+          name: userName,
+          google_sub: googleSub,
           google_maps_flow: true,
           rating: null,
           comment: null,
