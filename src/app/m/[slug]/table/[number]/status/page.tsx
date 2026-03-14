@@ -16,7 +16,7 @@ import {
   Receipt,
   RefreshCw,
 } from "lucide-react";
-import { PageTransition, FadeIn } from "@/shared/components/animations";
+import { PageTransition } from "@/shared/components/animations";
 import type { OrderStatus, OrderWithItems, EstablishmentType } from "@/shared/types";
 import { getLabels } from "@/shared/lib/labels";
 
@@ -126,34 +126,46 @@ export default function OrderStatusPage() {
     setTableSessionId(storedSessionId);
   }, [slug, tableNumber]);
 
-  // Fetch orders for this table session
+  // Fetch orders — try by session first, always fallback to by-table
   const fetchOrders = useCallback(async () => {
-    if (!tableSessionId) {
-      setLoading(false);
-      return;
-    }
-
     try {
       setError(null);
-      const res = await fetch(
-        `/api/menu/orders/by-session?table_session_id=${tableSessionId}`
-      );
+      let data = null;
 
-      if (!res.ok) {
-        // Fallback: fetch by table number if session endpoint not yet available
-        const fallbackRes = await fetch(
-          `/api/menu/orders/by-table?slug=${slug}&table_number=${tableNumber}`
+      // Try by session ID first (if available)
+      if (tableSessionId) {
+        const res = await fetch(
+          `/api/menu/orders/by-session?table_session_id=${tableSessionId}`
         );
-        if (fallbackRes.ok) {
-          const data = await fallbackRes.json();
-          setOrders(data);
-        } else {
-          throw new Error("Impossible de charger vos commandes");
+        if (res.ok) {
+          data = await res.json();
         }
-      } else {
-        const data = await res.json();
-        setOrders(data);
       }
+
+      // Always also fetch by table number to catch orders without session
+      const fallbackRes = await fetch(
+        `/api/menu/orders/by-table?slug=${slug}&table_number=${tableNumber}`
+      );
+      if (fallbackRes.ok) {
+        const tableData = await fallbackRes.json();
+        if (!data || data.length === 0) {
+          data = tableData;
+        } else {
+          // Merge: add any orders from table that aren't already in session results
+          const existingIds = new Set(data.map((o: { id: string }) => o.id));
+          for (const order of tableData) {
+            if (!existingIds.has(order.id)) {
+              data.push(order);
+            }
+          }
+          // Sort by created_at desc
+          data.sort((a: { created_at: string }, b: { created_at: string }) =>
+            b.created_at.localeCompare(a.created_at)
+          );
+        }
+      }
+
+      setOrders(data ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
@@ -233,35 +245,7 @@ export default function OrderStatusPage() {
     (o) => o.status === "delivered" || o.status === "cancelled"
   );
 
-  // No session found
-  if (!loading && !tableSessionId) {
-    return (
-      <PageTransition className="min-h-dvh bg-gray-50">
-        <main className="max-w-md mx-auto px-4 py-20 text-center">
-          <FadeIn direction="up" delay={0.1}>
-            <div className="bg-white rounded-2xl shadow-sm p-8 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto">
-                <AlertCircle className="w-8 h-8 text-blue-400" />
-              </div>
-              <h1 className="text-xl font-bold text-gray-900">
-                Aucune commande en cours
-              </h1>
-              <p className="text-sm text-gray-500">
-                Scannez le QR code de votre table ou commandez depuis le menu.
-              </p>
-              <Link
-                href={`/m/${slug}?table=${tableNumber}`}
-                className="inline-flex items-center gap-2 bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-600 transition-colors mt-2"
-              >
-                <Plus className="w-4 h-4" />
-                Voir le menu
-              </Link>
-            </div>
-          </FadeIn>
-        </main>
-      </PageTransition>
-    );
-  }
+  // Note: no session check — we always try to fetch by table number as fallback
 
   return (
     <PageTransition className="min-h-dvh bg-gray-50">
