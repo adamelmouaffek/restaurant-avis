@@ -189,6 +189,10 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
     [cart]
   );
 
+  const clearCart = useCallback(() => {
+    setCart([]);
+  }, []);
+
   const totalItems = cart.reduce((sum, c) => sum + c.quantity, 0);
   const totalPrice = cart.reduce((sum, c) => sum + c.price * c.quantity, 0);
 
@@ -395,6 +399,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
         items={cart}
         onAdd={addToCart}
         onRemove={removeFromCart}
+        onClear={clearCart}
         total={totalPrice}
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}

@@ -10,6 +10,7 @@ interface CartDrawerProps {
   items: CartItem[];
   onAdd: (item: MenuItem) => void;
   onRemove: (menuItemId: string) => void;
+  onClear: () => void;
   total: number;
   isOpen: boolean;
   onClose: () => void;
@@ -25,6 +26,7 @@ export default function CartDrawer({
   items,
   onAdd,
   onRemove,
+  onClear,
   total,
   isOpen,
   onClose,
@@ -197,6 +199,16 @@ export default function CartDrawer({
                   </p>
                 ) : (
                   <>
+                    {/* Bouton vider le panier */}
+                    <div className="flex justify-end mb-2">
+                      <button
+                        onClick={onClear}
+                        className="text-xs text-red-500 hover:text-red-700 transition-colors px-2 py-1 rounded-md hover:bg-red-50"
+                      >
+                        Vider le panier
+                      </button>
+                    </div>
+
                     {/* Liste des items */}
                     <ul className="space-y-3">
                       {items.map((cartItem) => {
