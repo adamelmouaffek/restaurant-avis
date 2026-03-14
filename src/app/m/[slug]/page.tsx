@@ -24,6 +24,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${restaurant.name} — Menu`,
     description: `Consultez le menu de ${restaurant.name} et commandez directement depuis votre table.`,
+    alternates: {
+      canonical: `https://restaurant-avis.vercel.app/m/${params.slug}`,
+    },
+    openGraph: {
+      title: `${restaurant.name} — Menu`,
+      description: `Consultez le menu de ${restaurant.name} et commandez directement depuis votre table.`,
+    },
   };
 }
 

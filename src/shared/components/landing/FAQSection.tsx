@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Card } from "@/shared/components/ui/card";
 import { FadeIn } from "@/shared/components/animations";
+import { JsonLd, generateFaqSchema } from "@/shared/components/JsonLd";
 
 interface FAQItemProps {
   question: string;
@@ -84,8 +85,11 @@ const faqData: FAQItemProps[] = [
 ];
 
 export function FAQSection() {
+  const faqSchema = generateFaqSchema(faqData);
+
   return (
     <section className="py-20 bg-[#f8fafc]">
+      <JsonLd data={faqSchema} />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <FadeIn>

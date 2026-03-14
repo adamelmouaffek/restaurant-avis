@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import { getDashboardSession } from "@/shared/lib/dashboard-auth";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { Sidebar } from "@/shared/components/Sidebar";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function DashboardLayout({
   children,
