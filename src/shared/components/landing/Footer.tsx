@@ -37,10 +37,10 @@ export function Footer() {
                 <ul className="space-y-2">
                   <li>
                     <Link
-                      href="/r/la-belle-assiette"
+                      href="/dashboard/signup"
                       className="text-white/50 hover:text-white transition-colors text-sm"
                     >
-                      Demo
+                      S&apos;inscrire
                     </Link>
                   </li>
                   <li>

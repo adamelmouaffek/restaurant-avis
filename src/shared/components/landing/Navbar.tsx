@@ -2,50 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  UtensilsCrossed,
-  ChefHat,
-  MonitorSmartphone,
-  LayoutDashboard,
-  Menu,
-  X,
-  Sparkles,
-} from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
-
-// ─── Demo access links ──────────────────────────────────
-// Login credentials (for demo):
-//   Admin dashboard : admin@labelleassiette.fr / admin123
-//   Menu client     : no login needed (public)
-//   KDS cuisine     : no login needed (public, /kds/la-belle-assiette)
-//   Serveur         : no login needed (public, /m/la-belle-assiette/table/1)
-const demoLinks = [
-  {
-    label: "Menu",
-    href: "/m/la-belle-assiette/table/1",
-    icon: UtensilsCrossed,
-    description: "Client scanne le QR",
-  },
-  {
-    label: "Serveur",
-    href: "/s/la-belle-assiette",
-    icon: MonitorSmartphone,
-    description: "Interface serveur",
-  },
-  {
-    label: "Cuisine",
-    href: "/kds/la-belle-assiette",
-    icon: ChefHat,
-    description: "Ecran cuisine (KDS)",
-  },
-  {
-    label: "Admin",
-    href: "/dashboard/login",
-    icon: LayoutDashboard,
-    description: "Dashboard gerant",
-  },
-];
 
 const navLinks = [
   { label: "Fonctionnalites", href: "#fonctionnalites" },
@@ -97,28 +56,14 @@ export function Navbar() {
               </Link>
             ))}
 
-            {/* Separator */}
-            <div className="w-px h-5 bg-white/15" />
+            {/* Se connecter */}
+            <Link
+              href="/dashboard/login"
+              className="text-white/70 hover:text-white text-sm font-medium transition-colors"
+            >
+              Se connecter
+            </Link>
 
-            {/* Demo access buttons */}
-            {demoLinks.map((demo) => {
-              const Icon = demo.icon;
-              return (
-                <Link key={demo.label} href={demo.href}>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-white/60 hover:text-white hover:bg-white/10 text-xs gap-1.5 h-8 px-2.5 transition-all"
-                    title={demo.description}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    {demo.label}
-                  </Button>
-                </Link>
-              );
-            })}
-
-            {/* Separator */}
             <div className="w-px h-5 bg-white/15" />
 
             {/* Primary CTA */}
@@ -173,33 +118,14 @@ export function Navbar() {
               {/* Separator */}
               <div className="border-t border-white/10" />
 
-              {/* Demo access grid */}
-              <p className="text-white/40 text-xs font-medium uppercase tracking-wider">
-                Tester la plateforme
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {demoLinks.map((demo) => {
-                  const Icon = demo.icon;
-                  return (
-                    <Link
-                      key={demo.label}
-                      href={demo.href}
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-                    >
-                      <Icon className="w-4 h-4 text-blue-400" />
-                      <div>
-                        <p className="text-white text-sm font-medium">
-                          {demo.label}
-                        </p>
-                        <p className="text-white/40 text-[10px]">
-                          {demo.description}
-                        </p>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
+              {/* Se connecter */}
+              <Link
+                href="/dashboard/login"
+                className="block text-center text-white/70 hover:text-white text-sm font-medium py-2"
+                onClick={() => setMobileOpen(false)}
+              >
+                Se connecter
+              </Link>
 
               {/* CTA */}
               <Link

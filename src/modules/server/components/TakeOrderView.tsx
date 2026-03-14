@@ -196,8 +196,8 @@ export default function TakeOrderView({
         throw new Error(err.error || "Erreur lors de la commande");
       }
 
-      // Success - go back to tables
-      router.push(`/s/${slug}/tables`);
+      // Success - go back to table detail
+      router.push(`/s/${slug}/table/${tableNumber}`);
     } catch (err) {
       alert(err instanceof Error ? err.message : "Erreur");
     } finally {

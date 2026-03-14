@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, email, password, confirmPassword } = body;
+    const { name, email, password, confirmPassword, tableCount, firstServer } = body;
 
     // Validate required fields
     if (!name || !email || !password || !confirmPassword) {
@@ -131,11 +131,25 @@ export async function POST(request: NextRequest) {
         { restaurant_id: restaurant.id, name: "Desserts", sort_order: 2 },
       ]);
 
-      // 2 default tables
-      await supabaseAdmin.from("restaurant_tables").insert([
-        { restaurant_id: restaurant.id, number: "1", capacity: 4 },
-        { restaurant_id: restaurant.id, number: "2", capacity: 2 },
-      ]);
+      // Dynamic tables based on user input
+      const validTableCount = Math.min(Math.max(parseInt(tableCount) || 6, 1), 50);
+      const tableInserts = Array.from({ length: validTableCount }, (_, i) => ({
+        restaurant_id: restaurant.id,
+        number: String(i + 1),
+        capacity: i < 4 ? 4 : 2,
+      }));
+      await supabaseAdmin.from("restaurant_tables").insert(tableInserts);
+
+      // Optional first staff member (waiter)
+      if (firstServer?.name && firstServer?.pin && /^\d{4}$/.test(firstServer.pin)) {
+        const hashedPin = await bcrypt.hash(firstServer.pin, 10);
+        await supabaseAdmin.from("staff").insert({
+          restaurant_id: restaurant.id,
+          name: sanitizeString(firstServer.name, 50),
+          pin: hashedPin,
+          role: "waiter",
+        });
+      }
     } catch {
       // Seed failure is not critical
     }

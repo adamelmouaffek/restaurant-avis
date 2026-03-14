@@ -74,7 +74,7 @@ export function HeroSection() {
                     variant="outline"
                     className="border-white/30 text-white hover:bg-white/10 bg-transparent text-base px-8 h-12"
                   >
-                    Voir la demo
+                    Decouvrir les fonctionnalites
                   </Button>
                 </Link>
               </div>

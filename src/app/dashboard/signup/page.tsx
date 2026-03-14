@@ -21,6 +21,9 @@ export default function DashboardSignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [tableCount, setTableCount] = useState(6);
+  const [firstServerName, setFirstServerName] = useState("");
+  const [firstServerPin, setFirstServerPin] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -38,13 +41,27 @@ export default function DashboardSignupPage() {
       return;
     }
 
+    if (firstServerName && !/^\d{4}$/.test(firstServerPin)) {
+      setError("Le PIN du serveur doit etre exactement 4 chiffres");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, confirmPassword }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          confirmPassword,
+          tableCount,
+          firstServer: firstServerName
+            ? { name: firstServerName, pin: firstServerPin }
+            : undefined,
+        }),
       });
 
       const data = await res.json();
@@ -125,6 +142,57 @@ export default function DashboardSignupPage() {
                 minLength={8}
               />
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="tableCount">Nombre de tables</Label>
+              <Input
+                id="tableCount"
+                type="number"
+                min={1}
+                max={50}
+                value={tableCount}
+                onChange={(e) => setTableCount(parseInt(e.target.value) || 1)}
+              />
+            </div>
+
+            {/* Separator */}
+            <div className="relative py-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-2 text-muted-foreground">
+                  Optionnel : Premier serveur
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="serverName">Nom du serveur</Label>
+              <Input
+                id="serverName"
+                type="text"
+                placeholder="Prenom du serveur"
+                value={firstServerName}
+                onChange={(e) => setFirstServerName(e.target.value)}
+                maxLength={50}
+              />
+            </div>
+
+            {firstServerName && (
+              <div className="space-y-2">
+                <Label htmlFor="serverPin">PIN du serveur (4 chiffres)</Label>
+                <Input
+                  id="serverPin"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="1234"
+                  value={firstServerPin}
+                  onChange={(e) => setFirstServerPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                  maxLength={4}
+                />
+              </div>
+            )}
 
             {error && (
               <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
