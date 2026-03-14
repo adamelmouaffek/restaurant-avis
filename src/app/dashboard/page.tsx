@@ -40,7 +40,7 @@ export default async function DashboardPage() {
       .gte("created_at", new Date().toISOString().split("T")[0]),
     supabaseAdmin
       .from("restaurants")
-      .select("slug, establishment_type")
+      .select("slug, establishment_type, google_maps_url")
       .eq("id", restaurantId)
       .single(),
     supabaseAdmin
@@ -74,6 +74,7 @@ export default async function DashboardPage() {
 
   const slug = restaurantRes.data?.slug || "";
   const establishmentType = (restaurantRes.data?.establishment_type || "restaurant") as EstablishmentType;
+  const hasGoogleMapsUrl = !!restaurantRes.data?.google_maps_url;
   const etLabels = getLabels(establishmentType);
   const staffCount = staffCountRes.count ?? 0;
   const tableCount = tableCountRes.count ?? 0;
@@ -94,6 +95,7 @@ export default async function DashboardPage() {
         staffCount={staffCount}
         menuItemCount={menuItemCount}
         tableCount={tableCount}
+        hasGoogleMapsUrl={hasGoogleMapsUrl}
         establishmentType={establishmentType}
       />
 

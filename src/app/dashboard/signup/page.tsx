@@ -28,6 +28,8 @@ export default function DashboardSignupPage() {
   const [firstServerPin, setFirstServerPin] = useState("");
   const [establishmentType, setEstablishmentType] = useState<EstablishmentType>("restaurant");
   const [seedDemoData, setSeedDemoData] = useState(true);
+  const [googleMapsUrl, setGoogleMapsUrl] = useState("");
+  const [showGoogleHelp, setShowGoogleHelp] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -66,6 +68,7 @@ export default function DashboardSignupPage() {
           tableCount,
           establishmentType,
           seedDemoData,
+          googleMapsUrl: googleMapsUrl || undefined,
           firstServer: firstServerName
             ? { name: firstServerName, pin: firstServerPin }
             : undefined,
@@ -128,6 +131,49 @@ export default function DashboardSignupPage() {
                 <option value="cafe">Cafe</option>
                 <option value="bar">Bar</option>
               </select>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="googleMapsUrl">
+                  Lien Google Maps <span className="text-muted-foreground font-normal">(optionnel)</span>
+                </Label>
+                <button
+                  type="button"
+                  onClick={() => setShowGoogleHelp(!showGoogleHelp)}
+                  className="text-xs text-primary hover:underline"
+                >
+                  Comment trouver mon lien ?
+                </button>
+              </div>
+              <Input
+                id="googleMapsUrl"
+                type="url"
+                placeholder="https://maps.google.com/..."
+                value={googleMapsUrl}
+                onChange={(e) => setGoogleMapsUrl(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                Les clients satisfaits (4+ etoiles) seront invites a poster un avis Google
+              </p>
+              {showGoogleHelp && (
+                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm space-y-2">
+                  <p className="font-semibold text-blue-900">Trouver votre lien Google Maps :</p>
+                  <ol className="list-decimal list-inside space-y-1 text-blue-800">
+                    <li>Ouvrez <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="underline">Google Maps</a></li>
+                    <li>Recherchez le nom de votre etablissement</li>
+                    <li>Cliquez sur votre fiche</li>
+                    <li>Cliquez sur le bouton <strong>Partager</strong></li>
+                    <li>Copiez le lien et collez-le ici</li>
+                  </ol>
+                  <button
+                    type="button"
+                    onClick={() => setShowGoogleHelp(false)}
+                    className="text-xs text-blue-600 hover:underline mt-1"
+                  >
+                    Fermer
+                  </button>
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

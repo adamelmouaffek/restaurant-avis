@@ -692,27 +692,27 @@ const PROJECT_DATA = {
     stack: "Next.js 14 + Tailwind + Shadcn/UI + Supabase + Vercel"
   },
   sprint: {
-    name: "Module 1 \u2014 Menu QR + Commande + KDS + Labels",
-    goal: "Menu digital fonctionnel avec commande, KDS, labels dynamiques et type etablissement",
+    name: "Module 1 \u2014 Menu QR + Commande + KDS + Labels + Themes + Google Maps",
+    goal: "Menu digital fonctionnel avec commande, KDS, labels dynamiques, themes par type, demo data et lien Google Maps",
     startDate: "2026-03-11",
     progress: 100
   },
   kpis: {
-    totalTasks: 19,
-    done: 19,
+    totalTasks: 26,
+    done: 26,
     inProgress: 0,
     todo: 0,
     backlogTotal: 100,
-    sprintsCompleted: 5,
-    sessionsTotal: 7
+    sprintsCompleted: 6,
+    sessionsTotal: 9
   },
   agents: [
     { name: "Strategist", emoji: "\ud83c\udfaf", active: false, tasksAssigned: 0, tasksCompleted: 0, lastActivity: "Sprint MVP planning", skills: ["writing-plans"] },
     { name: "Architect", emoji: "\ud83d\udcd0", active: true, tasksAssigned: 3, tasksCompleted: 3, lastActivity: "ADR-005 Labels dynamiques getLabels()", skills: ["brainstorming", "writing-plans"] },
-    { name: "Builder", emoji: "\ud83d\udd28", active: true, tasksAssigned: 15, tasksCompleted: 15, lastActivity: "Labels dynamiques + Settings + QR recompense", skills: ["test-driven-development", "executing-plans", "dispatching-parallel-agents"] },
-    { name: "Operator", emoji: "\ud83d\ude80", active: true, tasksAssigned: 2, tasksCompleted: 2, lastActivity: "Deploy Vercel prod", skills: ["verification-before-completion"] },
-    { name: "Investigator", emoji: "\ud83d\udd0d", active: true, tasksAssigned: 4, tasksCompleted: 4, lastActivity: "Theme sync pages avis", skills: ["systematic-debugging"] },
-    { name: "Reporter", emoji: "\ud83d\udcca", active: true, tasksAssigned: 0, tasksCompleted: 1, lastActivity: "Dashboard 360 update S7", skills: ["verification-before-completion"] }
+    { name: "Builder", emoji: "\ud83d\udd28", active: true, tasksAssigned: 21, tasksCompleted: 21, lastActivity: "Lien Google Maps inscription + onboarding", skills: ["test-driven-development", "executing-plans", "dispatching-parallel-agents"] },
+    { name: "Operator", emoji: "\ud83d\ude80", active: true, tasksAssigned: 3, tasksCompleted: 3, lastActivity: "Force deploy Vercel prod S8", skills: ["verification-before-completion"] },
+    { name: "Investigator", emoji: "\ud83d\udd0d", active: true, tasksAssigned: 5, tasksCompleted: 5, lastActivity: "Contrast fixes review pages + seed data existants", skills: ["systematic-debugging"] },
+    { name: "Reporter", emoji: "\ud83d\udcca", active: true, tasksAssigned: 0, tasksCompleted: 2, lastActivity: "Dashboard 360 update S8", skills: ["verification-before-completion"] }
   ],
   tasks: [
     { id: "T-M01", title: "Schema DB 5 tables menu", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M01", completedAt: "2026-03-11", session: "S5" },
@@ -733,7 +733,14 @@ const PROJECT_DATA = {
     { id: "T-M16", title: "Theme sync pages avis (dark navy)", status: "done", priority: "P1", agent: "Investigator", sprint: "Module 1", story: "US-M07", completedAt: "2026-03-14", session: "S7" },
     { id: "T-M17", title: "QR code recompense page prize", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M08", completedAt: "2026-03-14", session: "S7" },
     { id: "T-M18", title: "Page verification recompense /r/[slug]/verify", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M08", completedAt: "2026-03-14", session: "S7" },
-    { id: "T-M19", title: "Page reglages admin /dashboard/settings", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M09", completedAt: "2026-03-14", session: "S7" }
+    { id: "T-M19", title: "Page reglages admin /dashboard/settings", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M09", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M20", title: "Demo data seeding a l'inscription (menu + cadeaux)", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M10", completedAt: "2026-03-14", session: "S8" },
+    { id: "T-M21", title: "Theme CSS variables par type etablissement", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M11", completedAt: "2026-03-14", session: "S8" },
+    { id: "T-M22", title: "Fix contraste boutons/inputs pages avis dark", status: "done", priority: "P0", agent: "Investigator", sprint: "Module 1", story: "US-M07", completedAt: "2026-03-14", session: "S8" },
+    { id: "T-M23", title: "Seed donnees existants hotel/bar (Supabase API)", status: "done", priority: "P0", agent: "Investigator", sprint: "Module 1", story: "US-M10", completedAt: "2026-03-14", session: "S8" },
+    { id: "T-M24", title: "Force deploy + verification themes prod", status: "done", priority: "P0", agent: "Operator", sprint: "Module 1", story: "US-M11", completedAt: "2026-03-14", session: "S8" },
+    { id: "T-M25", title: "Champ Google Maps URL a l'inscription + guide aide", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M12", completedAt: "2026-03-14", session: "S9" },
+    { id: "T-M26", title: "Etape onboarding 'Lier Google Maps' dans checklist", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M12", completedAt: "2026-03-14", session: "S9" }
   ],
   stories: [
     // Module 1 : Menu QR + Commande + Paiement
@@ -837,6 +844,9 @@ const PROJECT_DATA = {
     { id: "US-091b", story: "Labels dynamiques selon type etablissement", priority: "P0", status: "done", agent: "Builder", sprint: "Transverse" },
     { id: "US-091c", story: "Page reglages admin (type, nom, Google Maps URL)", priority: "P1", status: "done", agent: "Builder", sprint: "Transverse" },
     { id: "US-091d", story: "Theme unifie pages avis (dark navy)", priority: "P1", status: "done", agent: "Investigator", sprint: "Transverse" },
+    { id: "US-091e", story: "Themes CSS variables par type (bleu/gold/bordeaux/violet)", priority: "P1", status: "done", agent: "Builder", sprint: "Transverse" },
+    { id: "US-091f", story: "Demo data seeding auto a l'inscription", priority: "P0", status: "done", agent: "Builder", sprint: "Transverse" },
+    { id: "US-091g", story: "Lien Google Maps simplifie inscription + onboarding", priority: "P1", status: "done", agent: "Builder", sprint: "Transverse" },
     // Transverse : Billing, Admin, Compliance
     { id: "US-091", story: "Abonnements Stripe (4 plans)", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
     { id: "US-092", story: "Portail client facturation", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
@@ -856,7 +866,8 @@ const PROJECT_DATA = {
     { session: "S4", date: "2026-03-09", remaining: 12, ideal: 12 },
     { session: "S5", date: "2026-03-11", remaining: 4, ideal: 8 },
     { session: "S6", date: "2026-03-12", remaining: 2, ideal: 4 },
-    { session: "S7", date: "2026-03-14", remaining: 0, ideal: 0 }
+    { session: "S7", date: "2026-03-14", remaining: 5, ideal: 0 },
+    { session: "S8", date: "2026-03-14", remaining: 0, ideal: 0 }
   ],
   decisions: [
     { id: "ADR-001", title: "Stack: Next.js 14 + Supabase + Vercel", date: "2026-03-07", status: "accepted", impact: "high", agent: "Architect" },
@@ -865,7 +876,9 @@ const PROJECT_DATA = {
     { id: "ADR-004", title: "KDS auth par slug (pas session)", date: "2026-03-12", status: "accepted", impact: "medium", agent: "Investigator" },
     { id: "ADR-005", title: "Labels dynamiques via getLabels() pure function", date: "2026-03-14", status: "accepted", impact: "high", agent: "Architect" },
     { id: "ADR-006", title: "establishment_type colonne simple (pas table separee)", date: "2026-03-14", status: "accepted", impact: "medium", agent: "Architect" },
-    { id: "ADR-007", title: "QR code recompense affiche (pas email — free tier)", date: "2026-03-14", status: "accepted", impact: "medium", agent: "Architect" }
+    { id: "ADR-007", title: "QR code recompense affiche (pas email — free tier)", date: "2026-03-14", status: "accepted", impact: "medium", agent: "Architect" },
+    { id: "ADR-008", title: "CSS custom properties [data-et] pour theming dynamique", date: "2026-03-14", status: "accepted", impact: "high", agent: "Architect" },
+    { id: "ADR-009", title: "Demo data seeding optionnel (checkbox defaut ON)", date: "2026-03-14", status: "accepted", impact: "medium", agent: "Architect" }
   ],
   sessions: [
     { date: "2026-03-07", summary: "MVP Roue Cadeaux + Avis complet (72 points, 3 sprints)", tasksCompleted: 24, agents: ["Strategist", "Architect", "Builder", "Operator"] },
@@ -873,17 +886,26 @@ const PROJECT_DATA = {
     { date: "2026-03-09", summary: "Fix OAuth + git credentials + Google app production", tasksCompleted: 3, agents: ["Investigator", "Operator"] },
     { date: "2026-03-11", summary: "Module 1 complet: 35 fichiers, menu + commande + KDS", tasksCompleted: 8, agents: ["Builder", "Architect"] },
     { date: "2026-03-12", summary: "Fix KDS PATCH + setup Session-Sprint v2", tasksCompleted: 3, agents: ["Investigator", "Operator", "Reporter"] },
-    { date: "2026-03-14", summary: "Type etablissement + labels dynamiques + theme avis + QR recompense + page settings", tasksCompleted: 9, agents: ["Builder", "Architect", "Investigator", "Reporter"] }
+    { date: "2026-03-14", summary: "Type etablissement + labels dynamiques + theme avis + QR recompense + page settings", tasksCompleted: 9, agents: ["Builder", "Architect", "Investigator", "Reporter"] },
+    { date: "2026-03-14", summary: "Themes par type (CSS vars) + demo data seeding + contrast fixes + seed comptes existants", tasksCompleted: 5, agents: ["Builder", "Investigator", "Operator", "Reporter"] }
   ],
   backlog: { p0: 2, p1: 22, p2: 42, icebox: 7 },
   skills: [
     { name: "writing-plans", usedBy: ["Strategist", "Architect"], usedCount: 5, lastUsed: "2026-03-14", description: "Planification structuree avant implementation" },
-    { name: "dispatching-parallel-agents", usedBy: ["Builder"], usedCount: 3, lastUsed: "2026-03-14", description: "Labels dynamiques sur ~25 fichiers en parallele" },
-    { name: "systematic-debugging", usedBy: ["Investigator"], usedCount: 5, lastUsed: "2026-03-14", description: "Fix OAuth, KDS PATCH, theme sync avis" },
-    { name: "verification-before-completion", usedBy: ["Reporter", "Operator"], usedCount: 6, lastUsed: "2026-03-14", description: "Build + deploy + verification prod" },
-    { name: "executing-plans", usedBy: ["Builder"], usedCount: 4, lastUsed: "2026-03-14", description: "Labels + Settings + QR recompense" }
+    { name: "dispatching-parallel-agents", usedBy: ["Builder"], usedCount: 4, lastUsed: "2026-03-14", description: "Themes CSS variables sur 24 fichiers en parallele" },
+    { name: "systematic-debugging", usedBy: ["Investigator"], usedCount: 7, lastUsed: "2026-03-14", description: "Fix contrast dark theme + seed data comptes existants" },
+    { name: "verification-before-completion", usedBy: ["Reporter", "Operator"], usedCount: 8, lastUsed: "2026-03-14", description: "Force deploy + verification themes prod" },
+    { name: "executing-plans", usedBy: ["Builder"], usedCount: 5, lastUsed: "2026-03-14", description: "Demo data seeding + CSS variables theming" }
   ],
   activityFeed: [
+    { time: "2026-03-14 21:00", type: "report", agent: "Reporter", emoji: "\ud83d\udcca", message: "Dashboard 360 mis a jour — Sprint complet (24/24 taches)" },
+    { time: "2026-03-14 20:30", type: "task-done", agent: "Operator", emoji: "\u2705", message: "T-M24 Force deploy Vercel + verification themes prod" },
+    { time: "2026-03-14 20:00", type: "task-done", agent: "Investigator", emoji: "\u2705", message: "T-M23 Seed donnees hotel/bar existants via Supabase API" },
+    { time: "2026-03-14 19:30", type: "task-done", agent: "Investigator", emoji: "\u2705", message: "T-M22 Fix contraste boutons/inputs dark theme avis" },
+    { time: "2026-03-14 19:00", type: "task-done", agent: "Builder", emoji: "\u2705", message: "T-M21 CSS variables [data-et] — 4 themes (bleu/gold/bordeaux/violet)" },
+    { time: "2026-03-14 18:30", type: "task-done", agent: "Builder", emoji: "\u2705", message: "T-M20 Demo data seeding inscription (menu + cadeaux par type)" },
+    { time: "2026-03-14 18:15", type: "decision", agent: "Architect", emoji: "\ud83c\udfdb\ufe0f", message: "ADR-008/009: CSS custom properties theming + demo data seed optionnel" },
+    { time: "2026-03-14 18:00", type: "session-start", agent: "\u2014", emoji: "\ud83d\udfe2", message: "Session S8 demarree — Themes par type + demo data + fixes" },
     { time: "2026-03-14 18:00", type: "report", agent: "Reporter", emoji: "\ud83d\udcca", message: "Dashboard 360 mis a jour — Sprint Module 1 complet (19/19 taches)" },
     { time: "2026-03-14 17:30", type: "task-done", agent: "Builder", emoji: "\u2705", message: "T-M19 Page reglages admin /dashboard/settings" },
     { time: "2026-03-14 17:00", type: "task-done", agent: "Builder", emoji: "\u2705", message: "T-M17/18 QR code recompense + page verification staff" },

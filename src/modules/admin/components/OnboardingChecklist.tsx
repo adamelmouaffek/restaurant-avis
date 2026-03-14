@@ -10,6 +10,7 @@ import {
   Users,
   LayoutGrid,
   ExternalLink,
+  MapPin,
   X,
   Rocket,
 } from "lucide-react";
@@ -21,6 +22,7 @@ interface OnboardingChecklistProps {
   staffCount: number;
   menuItemCount: number;
   tableCount: number;
+  hasGoogleMapsUrl: boolean;
   establishmentType?: EstablishmentType;
 }
 
@@ -31,6 +33,7 @@ export function OnboardingChecklist({
   staffCount,
   menuItemCount,
   tableCount,
+  hasGoogleMapsUrl,
   establishmentType = "restaurant",
 }: OnboardingChecklistProps) {
   const labels = getLabels(establishmentType);
@@ -60,6 +63,12 @@ export function OnboardingChecklist({
       icon: LayoutGrid,
     },
     {
+      label: "Lier votre fiche Google Maps",
+      href: "/dashboard/settings",
+      done: hasGoogleMapsUrl,
+      icon: MapPin,
+    },
+    {
       label: `Tester ${labels.menu === "Menu" ? "le menu" : "la carte"} client`,
       href: `/m/${slug}/table/1`,
       done: false,
@@ -69,7 +78,8 @@ export function OnboardingChecklist({
   ];
 
   const completedCount = steps.filter((s) => s.done).length;
-  const allDone = completedCount >= 3; // 3 actionable steps (4th is always unchecked)
+  const actionableSteps = 4; // menu, staff, tables, google maps (5th "tester" is always unchecked)
+  const allDone = completedCount >= actionableSteps;
 
   if (dismissed) return null;
 
@@ -97,7 +107,7 @@ export function OnboardingChecklist({
               {allDone ? `Votre ${labels.establishment} est pret !` : `Bienvenue ! Configurez votre ${labels.establishment}`}
             </h3>
             <p className="text-sm text-muted-foreground">
-              {completedCount}/3 etapes completees
+              {completedCount}/{actionableSteps} etapes completees
             </p>
           </div>
         </div>
@@ -106,7 +116,7 @@ export function OnboardingChecklist({
         <div className="h-2 w-full rounded-full bg-blue-100 mb-4 overflow-hidden">
           <div
             className="h-full bg-blue-500 rounded-full transition-all duration-500"
-            style={{ width: `${(completedCount / 3) * 100}%` }}
+            style={{ width: `${(completedCount / actionableSteps) * 100}%` }}
           />
         </div>
 

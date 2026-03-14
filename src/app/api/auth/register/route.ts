@@ -31,11 +31,20 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, email, password, confirmPassword, tableCount, firstServer, establishmentType, seedDemoData } = body;
+    const { name, email, password, confirmPassword, tableCount, firstServer, establishmentType, seedDemoData, googleMapsUrl } = body;
 
     // Validate establishment type
     const VALID_TYPES = ["restaurant", "hotel", "cafe", "bar"];
     const validType = VALID_TYPES.includes(establishmentType) ? establishmentType : "restaurant";
+
+    // Validate Google Maps URL (optional)
+    let cleanGoogleMapsUrl: string | null = null;
+    if (googleMapsUrl && typeof googleMapsUrl === "string") {
+      const trimmed = googleMapsUrl.trim();
+      if (trimmed && (trimmed.startsWith("https://") || trimmed.startsWith("http://"))) {
+        cleanGoogleMapsUrl = trimmed.slice(0, 500);
+      }
+    }
 
     // Validate required fields
     if (!name || !email || !password || !confirmPassword) {
@@ -117,6 +126,7 @@ export async function POST(request: NextRequest) {
         owner_email: email.toLowerCase().trim(),
         owner_password_hash: passwordHash,
         establishment_type: validType,
+        google_maps_url: cleanGoogleMapsUrl,
       })
       .select("id, name, slug, owner_email")
       .single();
