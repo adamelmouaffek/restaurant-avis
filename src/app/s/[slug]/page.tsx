@@ -67,7 +67,7 @@ export default function ServerLoginPage() {
   );
 
   return (
-    <div className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4">
+    <div className="min-h-dvh bg-[var(--et-bg)] flex flex-col items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -76,8 +76,8 @@ export default function ServerLoginPage() {
       >
         {/* Logo / icon */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-blue-600/20 flex items-center justify-center mb-4">
-            <Utensils className="w-8 h-8 text-blue-400" />
+          <div className="w-16 h-16 rounded-2xl bg-[rgba(var(--et-accent-rgb),0.2)] flex items-center justify-center mb-4">
+            <Utensils className="w-8 h-8 text-[var(--et-accent-light)]" />
           </div>
           <h1 className="text-2xl font-bold text-white">{labels.serverSpace}</h1>
           <p className="text-sm text-gray-400 mt-1">

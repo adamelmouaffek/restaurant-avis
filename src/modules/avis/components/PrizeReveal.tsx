@@ -39,7 +39,7 @@ export function PrizeReveal({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#3B82F6", "#60A5FA", "#1D4ED8", "#818CF8", "#6366F1"],
+        colors: labels.theme.confetti,
       });
 
       // Second burst after a short delay
@@ -49,14 +49,14 @@ export function PrizeReveal({
           angle: 60,
           spread: 55,
           origin: { x: 0 },
-          colors: ["#3B82F6", "#60A5FA", "#818CF8", "#6366F1"],
+          colors: labels.theme.confetti,
         });
         confetti({
           particleCount: 60,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
-          colors: ["#1D4ED8", "#3B82F6", "#60A5FA", "#818CF8"],
+          colors: labels.theme.confetti,
         });
       }, 300);
     });
@@ -85,18 +85,18 @@ export function PrizeReveal({
     <div className="flex flex-col items-center gap-8 w-full max-w-md mx-auto px-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Prize icon */}
       <div className="relative">
-        <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/20 shadow-xl flex items-center justify-center border-4 border-blue-400/30 animate-bounce-slow">
+        <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[rgba(var(--et-accent-rgb),0.2)] shadow-xl flex items-center justify-center border-4 border-[rgba(var(--et-accent-rgb),0.3)] animate-bounce-slow">
           <span className="text-6xl sm:text-7xl" role="img" aria-label={prizeName}>
             {prizeIcon}
           </span>
         </div>
         {/* Glow effect */}
-        <div className="absolute inset-0 rounded-full bg-blue-400/20 blur-xl -z-10 scale-150" />
+        <div className="absolute inset-0 rounded-full bg-[rgba(var(--et-accent-rgb),0.2)] blur-xl -z-10 scale-150" />
       </div>
 
       {/* Congratulations */}
       <div className="text-center space-y-2">
-        <p className="text-sm font-medium text-blue-400 uppercase tracking-wider">
+        <p className="text-sm font-medium text-[var(--et-accent-light)] uppercase tracking-wider">
           Felicitations !
         </p>
         <h1 className="text-2xl sm:text-3xl font-bold text-white">
@@ -136,7 +136,7 @@ export function PrizeReveal({
           </p>
           <button
             onClick={handleDownloadQR}
-            className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-xs text-[var(--et-accent-light)] hover:text-[var(--et-accent)] transition-colors"
           >
             Telecharger le QR code
           </button>
@@ -155,7 +155,7 @@ export function PrizeReveal({
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="w-5 h-5 text-blue-400"
+              className="w-5 h-5 text-[var(--et-accent-light)]"
             >
               <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 006 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
               <path d="M9 18h6" />

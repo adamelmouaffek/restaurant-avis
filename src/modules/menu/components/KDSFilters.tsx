@@ -25,7 +25,7 @@ const FILTER_OPTIONS: FilterOption[] = [
 
 export function KDSFilters({ activeFilter, onChange, counts }: KDSFiltersProps) {
   return (
-    <div className="bg-[#1E293B] rounded-xl px-4 py-3 flex flex-wrap gap-2">
+    <div className="bg-[var(--et-bg2)] rounded-xl px-4 py-3 flex flex-wrap gap-2">
       {FILTER_OPTIONS.map(({ value, label }) => {
         const count = counts[value] ?? 0;
         const isActive = activeFilter === value;
@@ -39,7 +39,7 @@ export function KDSFilters({ activeFilter, onChange, counts }: KDSFiltersProps) 
               ${
                 isActive
                   ? "bg-white text-gray-900"
-                  : "bg-[#0F172A] text-gray-300 hover:bg-[#334155] hover:text-white"
+                  : "bg-[var(--et-bg)] text-gray-300 hover:bg-[#334155] hover:text-white"
               }
             `}
           >

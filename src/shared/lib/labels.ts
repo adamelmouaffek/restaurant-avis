@@ -1,5 +1,15 @@
 import type { EstablishmentType } from "@/shared/types";
 
+export interface ThemeColors {
+  bg: string;
+  bg2: string;
+  accent: string;
+  accentLight: string;
+  wheelC1: string;
+  wheelC2: string;
+  confetti: string[];
+}
+
 export interface EstablishmentLabels {
   table: string;
   tables: string;
@@ -14,6 +24,7 @@ export interface EstablishmentLabels {
   defaultCategories: string[];
   staffLabel: string;
   showTo: string;
+  theme: ThemeColors;
 }
 
 const LABELS: Record<EstablishmentType, EstablishmentLabels> = {
@@ -31,6 +42,12 @@ const LABELS: Record<EstablishmentType, EstablishmentLabels> = {
     defaultCategories: ["Entrees", "Plats", "Desserts"],
     staffLabel: "serveur",
     showTo: "au serveur",
+    theme: {
+      bg: "#0F172A", bg2: "#1E293B",
+      accent: "#3B82F6", accentLight: "#60A5FA",
+      wheelC1: "#1E40AF", wheelC2: "#60A5FA",
+      confetti: ["#3B82F6", "#60A5FA", "#1D4ED8", "#818CF8", "#6366F1"],
+    },
   },
   hotel: {
     table: "Chambre",
@@ -46,6 +63,12 @@ const LABELS: Record<EstablishmentType, EstablishmentLabels> = {
     defaultCategories: ["Petit-dejeuner", "Dejeuner", "Diner", "Boissons"],
     staffLabel: "service",
     showTo: "au service",
+    theme: {
+      bg: "#0D0D0D", bg2: "#1C1917",
+      accent: "#B8860B", accentLight: "#DAA520",
+      wheelC1: "#8B6914", wheelC2: "#DAA520",
+      confetti: ["#B8860B", "#DAA520", "#FFD700", "#C9A32E", "#8B6914"],
+    },
   },
   cafe: {
     table: "Place",
@@ -61,6 +84,12 @@ const LABELS: Record<EstablishmentType, EstablishmentLabels> = {
     defaultCategories: ["Boissons chaudes", "Boissons froides", "Patisseries"],
     staffLabel: "barista",
     showTo: "au barista",
+    theme: {
+      bg: "#1A0A0F", bg2: "#2D1520",
+      accent: "#9F1239", accentLight: "#E11D48",
+      wheelC1: "#881337", wheelC2: "#E11D48",
+      confetti: ["#9F1239", "#E11D48", "#F43F5E", "#BE123C", "#FB7185"],
+    },
   },
   bar: {
     table: "Table",
@@ -76,6 +105,12 @@ const LABELS: Record<EstablishmentType, EstablishmentLabels> = {
     defaultCategories: ["Cocktails", "Bieres", "Vins", "Planches"],
     staffLabel: "barman",
     showTo: "au barman",
+    theme: {
+      bg: "#0F0A20", bg2: "#1E1040",
+      accent: "#7C3AED", accentLight: "#A78BFA",
+      wheelC1: "#5B21B6", wheelC2: "#A78BFA",
+      confetti: ["#7C3AED", "#A78BFA", "#8B5CF6", "#6D28D9", "#C4B5FD"],
+    },
   },
 };
 

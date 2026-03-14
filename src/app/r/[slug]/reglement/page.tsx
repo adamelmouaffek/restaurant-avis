@@ -26,11 +26,11 @@ export default async function ReglementPage({
   if (!restaurant) notFound();
 
   return (
-    <div className="min-h-screen bg-[#0F172A] text-white">
+    <div className="min-h-screen bg-[var(--et-bg)] text-white">
       <div className="max-w-3xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <Link
           href={`/r/${slug}`}
-          className="text-blue-400 hover:text-blue-300 text-sm mb-8 inline-block"
+          className="text-[var(--et-accent-light)] hover:text-blue-300 text-sm mb-8 inline-block"
         >
           &larr; Retour
         </Link>
@@ -141,7 +141,7 @@ export default async function ReglementPage({
               RGPD et a notre{" "}
               <Link
                 href="/confidentialite"
-                className="text-blue-400 hover:underline"
+                className="text-[var(--et-accent-light)] hover:underline"
               >
                 Politique de confidentialite
               </Link>
@@ -204,7 +204,7 @@ export default async function ReglementPage({
               Pour toute question relative au jeu-concours, contactez :{" "}
               <a
                 href="mailto:contact@restaurant-avis.fr"
-                className="text-blue-400 hover:underline"
+                className="text-[var(--et-accent-light)] hover:underline"
               >
                 contact@restaurant-avis.fr
               </a>

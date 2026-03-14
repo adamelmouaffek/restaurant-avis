@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   const establishmentType = restaurant?.establishment_type || "restaurant";
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/30" data-et={establishmentType}>
       <Sidebar restaurantName={restaurantName} establishmentType={establishmentType} />
       <main className="lg:pl-64">
         <div className="p-6 pt-16 lg:pt-6 max-w-7xl mx-auto">

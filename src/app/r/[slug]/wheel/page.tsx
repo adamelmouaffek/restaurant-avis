@@ -5,7 +5,7 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { SpinningWheel } from "@/modules/avis/components/SpinningWheel";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PageTransition } from "@/shared/components/animations";
-import type { Prize } from "@/shared/types";
+import type { Prize, EstablishmentType } from "@/shared/types";
 import type { SpinResult } from "@/modules/avis/types";
 
 export default function WheelPage() {
@@ -19,6 +19,7 @@ export default function WheelPage() {
 
   const [prizes, setPrizes] = useState<Prize[]>([]);
   const [restaurantId, setRestaurantId] = useState<string | null>(null);
+  const [establishmentType, setEstablishmentType] = useState<EstablishmentType>("restaurant");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,6 +44,9 @@ export default function WheelPage() {
         }
         const restaurant = await restaurantRes.json();
         setRestaurantId(restaurant.id);
+        if (restaurant.establishment_type) {
+          setEstablishmentType(restaurant.establishment_type);
+        }
 
         const prizesRes = await fetch(
           `/api/avis/prizes?restaurant_id=${restaurant.id}`
@@ -83,7 +87,7 @@ export default function WheelPage() {
 
   if (loading) {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4 py-8">
+      <main className="min-h-dvh bg-[var(--et-bg)] flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-sm mx-auto flex flex-col items-center gap-6">
           <Skeleton className="h-7 w-52 mx-auto bg-white/10" />
           <Skeleton className="w-full aspect-square max-w-[320px] rounded-full bg-white/10" />
@@ -95,7 +99,7 @@ export default function WheelPage() {
 
   if (error) {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4">
+      <main className="min-h-dvh bg-[var(--et-bg)] flex items-center justify-center px-4">
         <div className="text-center space-y-4 max-w-sm">
           <div className="w-16 h-16 rounded-full bg-amber-900/30 flex items-center justify-center mx-auto">
             <svg
@@ -121,7 +125,7 @@ export default function WheelPage() {
   }
 
   return (
-    <main className="min-h-dvh bg-[#0F172A] overflow-hidden">
+    <main className="min-h-dvh bg-[var(--et-bg)] overflow-hidden">
       <PageTransition className="min-h-dvh">
         {/* Mobile: full wheel centered */}
         <div className="flex lg:hidden flex-col items-center justify-center min-h-dvh px-4 py-8 gap-6">
@@ -139,6 +143,7 @@ export default function WheelPage() {
             participantId={participantId!}
             reviewId={reviewId!}
             slug={slug}
+            establishmentType={establishmentType}
             onPrizeWon={handlePrizeWon}
           />
         </div>
@@ -162,6 +167,7 @@ export default function WheelPage() {
                 participantId={participantId!}
                 reviewId={reviewId!}
                 slug={slug}
+                establishmentType={establishmentType}
                 onPrizeWon={handlePrizeWon}
               />
             </div>
@@ -172,7 +178,7 @@ export default function WheelPage() {
             <div className="max-w-lg space-y-6">
               <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight">
                 Tentez votre{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3B82F6] to-[#60A5FA]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)]">
                   chance !
                 </span>
               </h1>

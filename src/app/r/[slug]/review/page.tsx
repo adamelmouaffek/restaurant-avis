@@ -72,8 +72,8 @@ export default function ReviewPage() {
   // Loading restaurant data
   if (loading) {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4">
-        <div className="w-10 h-10 border-4 border-white/10 border-t-blue-400 rounded-full animate-spin" />
+      <main className="min-h-dvh bg-[var(--et-bg)] flex items-center justify-center px-4">
+        <div className="w-10 h-10 border-4 border-white/10 border-t-[var(--et-accent-light)] rounded-full animate-spin" />
       </main>
     );
   }
@@ -81,7 +81,7 @@ export default function ReviewPage() {
   // Error state
   if (error || !restaurant) {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4">
+      <main className="min-h-dvh bg-[var(--et-bg)] flex items-center justify-center px-4">
         <div className="text-center space-y-4 max-w-sm">
           <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto">
             <svg
@@ -113,7 +113,7 @@ export default function ReviewPage() {
   // ─── CHOICE SCREEN (always shown first) ───────────────
   if (authMode === "choice") {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4 py-8">
+      <main className="min-h-dvh bg-[var(--et-bg)] flex flex-col items-center justify-center px-4 py-8">
         <PageTransition>
           <div className="text-center mb-8">
             <h1 className="text-lg font-semibold text-white">
@@ -135,7 +135,7 @@ export default function ReviewPage() {
 
                 <Button
                   onClick={() => setAuthMode("google")}
-                  className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg bg-[var(--et-accent)] hover:bg-[var(--et-accent)] text-white"
                 >
                   Continuer avec Google
                 </Button>
@@ -145,7 +145,7 @@ export default function ReviewPage() {
                     <div className="w-full border-t border-white/10" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-[#0F172A] text-white/40">ou</span>
+                    <span className="px-2 bg-[var(--et-bg)] text-white/40">ou</span>
                   </div>
                 </div>
 
@@ -167,7 +167,7 @@ export default function ReviewPage() {
   // ─── EMAIL MODE ───────────────────────────────────────
   if (authMode === "email") {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4 py-8">
+      <main className="min-h-dvh bg-[var(--et-bg)] flex flex-col items-center justify-center px-4 py-8">
         <PageTransition>
           <div className="text-center mb-6">
             <h1 className="text-lg font-semibold text-white">
@@ -197,9 +197,9 @@ export default function ReviewPage() {
   // ─── GOOGLE MODE - waiting for auth ───────────────────
   if (authMode === "google" && status !== "authenticated") {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4">
+      <main className="min-h-dvh bg-[var(--et-bg)] flex items-center justify-center px-4">
         <div className="text-center space-y-4">
-          <div className="w-10 h-10 border-4 border-white/10 border-t-blue-400 rounded-full animate-spin mx-auto" />
+          <div className="w-10 h-10 border-4 border-white/10 border-t-[var(--et-accent-light)] rounded-full animate-spin mx-auto" />
           <p className="text-sm text-white/60">Redirection vers Google...</p>
         </div>
       </main>
@@ -208,7 +208,7 @@ export default function ReviewPage() {
 
   // ─── GOOGLE MODE - authenticated ──────────────────────
   return (
-    <main className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4 py-8">
+    <main className="min-h-dvh bg-[var(--et-bg)] flex flex-col items-center justify-center px-4 py-8">
       <PageTransition>
         <div className="text-center mb-6">
           <h1 className="text-lg font-semibold text-white">

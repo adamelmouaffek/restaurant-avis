@@ -58,9 +58,9 @@ export function Sidebar({ restaurantName, establishmentType = "restaurant" }: Si
   };
 
   const navContent = (
-    <div className="flex flex-col h-full bg-[#0F172A] text-white">
+    <div className="flex flex-col h-full bg-[var(--et-bg)] text-white">
       {/* Header */}
-      <div className="p-6 bg-gradient-to-r from-[#3B82F6] to-[#60A5FA]">
+      <div className="p-6 bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)]">
         <h2 className="text-lg font-bold text-white truncate">
           {restaurantName}
         </h2>
@@ -81,7 +81,7 @@ export function Sidebar({ restaurantName, establishmentType = "restaurant" }: Si
               onClick={() => setMobileOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 active
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[var(--et-accent)] text-white"
                   : "text-white/60 hover:bg-white/10 hover:text-white"
               }`}
             >
@@ -116,7 +116,7 @@ export function Sidebar({ restaurantName, establishmentType = "restaurant" }: Si
           variant="outline"
           size="icon"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="bg-[#0F172A] text-white border-white/10 shadow-md"
+          className="bg-[var(--et-bg)] text-white border-white/10 shadow-md"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
@@ -132,7 +132,7 @@ export function Sidebar({ restaurantName, establishmentType = "restaurant" }: Si
 
       {/* Mobile sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#0F172A] border-r border-white/10 transform transition-transform duration-200 ease-in-out lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-[var(--et-bg)] border-r border-white/10 transform transition-transform duration-200 ease-in-out lg:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -140,7 +140,7 @@ export function Sidebar({ restaurantName, establishmentType = "restaurant" }: Si
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[#0F172A] border-r border-white/10">
+      <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[var(--et-bg)] border-r border-white/10">
         {navContent}
       </aside>
     </>

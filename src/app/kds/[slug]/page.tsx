@@ -27,11 +27,13 @@ export default async function KDSPage({ params }: KDSPageProps) {
   }
 
   return (
-    <KDSBoard
-      restaurantId={restaurant.id}
-      restaurantName={restaurant.name}
-      restaurantSlug={slug}
-      establishmentType={restaurant.establishment_type ?? "restaurant"}
-    />
+    <div data-et={restaurant.establishment_type || "restaurant"}>
+      <KDSBoard
+        restaurantId={restaurant.id}
+        restaurantName={restaurant.name}
+        restaurantSlug={slug}
+        establishmentType={restaurant.establishment_type ?? "restaurant"}
+      />
+    </div>
   );
 }

@@ -36,7 +36,7 @@ export default async function RestaurantPage({ params }: PageProps) {
   }
 
   return (
-    <main className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-dvh bg-[var(--et-bg)] flex flex-col items-center justify-center px-4 py-12">
       <PageTransition className="w-full max-w-md mx-auto flex flex-col items-center gap-8 text-center">
         {/* Logo / Restaurant identity */}
         <FadeIn direction="down" delay={0.1}>
@@ -52,7 +52,7 @@ export default async function RestaurantPage({ params }: PageProps) {
               />
             ) : (
               <div
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl mx-auto shadow-lg flex items-center justify-center text-white text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#3B82F6] to-[#60A5FA]"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl mx-auto shadow-lg flex items-center justify-center text-white text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)]"
               >
                 {restaurant.name.charAt(0).toUpperCase()}
               </div>
@@ -85,7 +85,7 @@ export default async function RestaurantPage({ params }: PageProps) {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#3B82F6"
+              stroke="var(--et-accent)"
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -103,7 +103,7 @@ export default async function RestaurantPage({ params }: PageProps) {
         <FadeIn delay={0.4}>
           <Link
             href={`/r/${restaurant.slug}/review`}
-            className="w-full max-w-[280px] h-14 rounded-2xl font-semibold text-lg text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center bg-gradient-to-r from-[#3B82F6] to-[#60A5FA]"
+            className="w-full max-w-[280px] h-14 rounded-2xl font-semibold text-lg text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)]"
           >
             Donner mon avis
           </Link>

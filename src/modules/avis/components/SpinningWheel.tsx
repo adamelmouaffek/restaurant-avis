@@ -3,7 +3,8 @@
 import { useState, useCallback } from "react";
 import confetti from "canvas-confetti";
 import { Button } from "@/shared/components/ui/button";
-import type { Prize } from "@/shared/types";
+import { getLabels } from "@/shared/lib/labels";
+import type { Prize, EstablishmentType } from "@/shared/types";
 import type { SpinResult } from "@/modules/avis/types";
 
 interface SpinningWheelProps {
@@ -12,6 +13,7 @@ interface SpinningWheelProps {
   participantId: string;
   reviewId: string;
   slug: string;
+  establishmentType?: EstablishmentType;
   onPrizeWon: (result: SpinResult) => void;
 }
 
@@ -28,19 +30,20 @@ function slicePath(cx: number, cy: number, r: number, startDeg: number, endDeg: 
   return `M${cx},${cy} L${a.x},${a.y} A${r},${r} 0 ${lg} 0 ${b.x},${b.y} Z`;
 }
 
-// ─── Colors — blue alternating ───────────────────
-const C1 = "#1E40AF";
-const C2 = "#60A5FA";
-const GOLD = "#3B82F6";
-
 export function SpinningWheel({
   prizes,
   restaurantId,
   participantId,
   reviewId,
   slug,
+  establishmentType,
   onPrizeWon,
 }: SpinningWheelProps) {
+  const labels = getLabels(establishmentType);
+  const theme = labels.theme;
+  const C1 = theme.wheelC1;
+  const C2 = theme.wheelC2;
+  const GOLD = theme.accent;
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -55,12 +58,12 @@ export function SpinningWheel({
   const fireConfetti = useCallback(() => {
     const end = Date.now() + 2000;
     const frame = () => {
-      confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ["#3B82F6", "#60A5FA", "#1D4ED8", "#818CF8", "#6366F1"] });
-      confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ["#3B82F6", "#60A5FA", "#1D4ED8", "#818CF8", "#6366F1"] });
+      confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: theme.confetti });
+      confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: theme.confetti });
       if (Date.now() < end) requestAnimationFrame(frame);
     };
     frame();
-  }, []);
+  }, [theme.confetti]);
 
   const handleSpin = useCallback(async () => {
     if (isSpinning) return;
@@ -109,12 +112,12 @@ export function SpinningWheel({
           <svg width="40" height="48" viewBox="0 0 40 48" className="drop-shadow-lg">
             <defs>
               <linearGradient id="ptr-g" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#93C5FD" />
-                <stop offset="50%" stopColor="#3B82F6" />
-                <stop offset="100%" stopColor="#1D4ED8" />
+                <stop offset="0%" stopColor={C2} />
+                <stop offset="50%" stopColor={GOLD} />
+                <stop offset="100%" stopColor={C1} />
               </linearGradient>
             </defs>
-            <polygon points="20,46 4,8 20,18 36,8" fill="url(#ptr-g)" stroke="#1E3A8A" strokeWidth="1.5" strokeLinejoin="round" />
+            <polygon points="20,46 4,8 20,18 36,8" fill="url(#ptr-g)" stroke={C1} strokeWidth="1.5" strokeLinejoin="round" />
           </svg>
         </div>
 
@@ -122,9 +125,9 @@ export function SpinningWheel({
         <div
           className="absolute inset-0 rounded-full"
           style={{
-            background: `linear-gradient(145deg, ${GOLD}, #1D4ED8)`,
+            background: `linear-gradient(145deg, ${GOLD}, ${C1})`,
             padding: "5px",
-            boxShadow: `0 0 0 2px #1E3A8A, 0 8px 30px rgba(0,0,0,0.4)`,
+            boxShadow: `0 0 0 2px ${C1}, 0 8px 30px rgba(0,0,0,0.4)`,
           }}
         >
           <div className="w-full h-full rounded-full bg-[#1a1a2e]" />
@@ -229,7 +232,7 @@ export function SpinningWheel({
         {!isSpinning && !alreadySpun && (
           <div
             className="absolute inset-0 rounded-full animate-pulse pointer-events-none"
-            style={{ boxShadow: `0 0 50px rgba(59,130,246,0.25), 0 0 100px rgba(96,165,250,0.1)` }}
+            style={{ boxShadow: `0 0 50px ${GOLD}40, 0 0 100px ${C2}1A` }}
           />
         )}
       </div>
@@ -248,9 +251,10 @@ export function SpinningWheel({
       <Button
         onClick={handleSpin}
         disabled={isSpinning || alreadySpun}
-        className="w-full max-w-[360px] h-16 text-xl font-extrabold rounded-2xl shadow-xl shadow-blue-500/30 transition-all duration-200 hover:shadow-2xl hover:shadow-blue-500/40 hover:scale-[1.04] active:scale-[0.96] disabled:scale-100 disabled:shadow-none text-white border-0 tracking-wide"
+        className="w-full max-w-[360px] h-16 text-xl font-extrabold rounded-2xl shadow-xl transition-all duration-200 hover:shadow-2xl hover:scale-[1.04] active:scale-[0.96] disabled:scale-100 disabled:shadow-none text-white border-0 tracking-wide"
         style={{
-          background: `linear-gradient(to bottom, #3B82F6, #1D4ED8)`,
+          background: `linear-gradient(to bottom, ${GOLD}, ${C1})`,
+          boxShadow: `0 10px 15px -3px ${GOLD}4D, 0 4px 6px -4px ${GOLD}4D`,
         }}
       >
         {isSpinning ? (

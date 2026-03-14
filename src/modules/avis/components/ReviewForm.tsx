@@ -125,7 +125,7 @@ export function ReviewForm({
             {/* CTA */}
             <Link
               href={`/r/${slug}`}
-              className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)] text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +199,7 @@ export function ReviewForm({
                 setFormData((prev) => ({ ...prev, comment: e.target.value }))
               }
               rows={4}
-              className="resize-none text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-400"
+              className="resize-none text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-[var(--et-accent-light)]"
             />
           </div>
 

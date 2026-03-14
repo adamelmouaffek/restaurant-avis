@@ -310,7 +310,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug, establi
 
   // --- Rendu ---
   return (
-    <PageTransition className="min-h-screen bg-[#0F172A] flex flex-col">
+    <PageTransition className="min-h-screen bg-[var(--et-bg)] flex flex-col">
       {/* Offline banner */}
       {!isOnline && (
         <div className="bg-red-600 text-white text-center py-2 px-4 text-sm font-medium flex items-center justify-center gap-2 flex-shrink-0">
@@ -319,7 +319,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug, establi
         </div>
       )}
       {/* Header */}
-      <header className="bg-[#1E293B] border-b border-white/10 px-4 py-3 flex items-center justify-between gap-4 flex-shrink-0">
+      <header className="bg-[var(--et-bg2)] border-b border-white/10 px-4 py-3 flex items-center justify-between gap-4 flex-shrink-0">
         <div>
           <h1 className="text-xl font-bold text-white leading-tight">
             {restaurantName}
@@ -331,7 +331,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug, establi
           {/* Toggle son */}
           <button
             onClick={() => setSoundEnabled((prev) => !prev)}
-            className={`p-2 rounded-lg transition-colors ${soundEnabled ? "bg-green-600 hover:bg-green-500 text-white" : "bg-[#1E293B] hover:bg-[#334155] text-gray-400"}`}
+            className={`p-2 rounded-lg transition-colors ${soundEnabled ? "bg-green-600 hover:bg-green-500 text-white" : "bg-[var(--et-bg2)] hover:bg-[#334155] text-gray-400"}`}
             aria-label={soundEnabled ? "Desactiver le son" : "Activer le son"}
             title={soundEnabled ? "Son active" : "Son desactive"}
           >
@@ -401,7 +401,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug, establi
                       : value === "rush"
                       ? "bg-orange-500/30 text-orange-200 border-orange-500/60"
                       : "bg-white text-gray-900 border-white"
-                    : `bg-[#1E293B] text-gray-400 border-white/10 hover:bg-[#334155] hover:text-gray-200 ${colorClass}`
+                    : `bg-[var(--et-bg2)] text-gray-400 border-white/10 hover:bg-[#334155] hover:text-gray-200 ${colorClass}`
                 }`}
               >
                 {label}
@@ -425,7 +425,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug, establi
             <p className="text-red-400 font-medium">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-[#1E293B] hover:bg-[#334155] text-white rounded-lg text-sm"
+              className="px-4 py-2 bg-[var(--et-bg2)] hover:bg-[#334155] text-white rounded-lg text-sm"
             >
               Recharger la page
             </button>

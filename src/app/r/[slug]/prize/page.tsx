@@ -16,7 +16,7 @@ export default function PrizePage() {
 
   if (!prizeName || !prizeIcon) {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4">
+      <main className="min-h-dvh bg-[var(--et-bg)] flex items-center justify-center px-4">
         <PageTransition>
           <div className="text-center space-y-4 max-w-sm">
             <h2 className="text-lg font-semibold text-white">
@@ -32,7 +32,7 @@ export default function PrizePage() {
   }
 
   return (
-    <main className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-dvh bg-[var(--et-bg)] flex flex-col items-center justify-center px-4 py-12">
       <PageTransition>
         <FadeIn delay={0.1}>
           <PrizeReveal

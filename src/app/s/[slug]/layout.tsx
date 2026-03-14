@@ -63,7 +63,7 @@ export default function ServerSlugLayout({
   if (!checked) {
     return (
       <div className="min-h-dvh bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[var(--et-accent)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -77,20 +77,22 @@ export default function ServerSlugLayout({
   if (!session) {
     return (
       <div className="min-h-dvh bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[var(--et-accent)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   // Authenticated pages: wrap with server layout
   return (
-    <ServerLayout
-      slug={slug}
-      staffName={session.staffName}
-      restaurantName={slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-      establishmentType={(session.establishmentType as EstablishmentType) || "restaurant"}
-    >
-      {children}
-    </ServerLayout>
+    <div data-et={session.establishmentType || "restaurant"}>
+      <ServerLayout
+        slug={slug}
+        staffName={session.staffName}
+        restaurantName={slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+        establishmentType={(session.establishmentType as EstablishmentType) || "restaurant"}
+      >
+        {children}
+      </ServerLayout>
+    </div>
   );
 }

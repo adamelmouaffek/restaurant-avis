@@ -3,6 +3,36 @@
 @tailwind utilities;
 
 @layer base {
+  :root,
+  [data-et="restaurant"] {
+    --et-bg: #0F172A;
+    --et-bg2: #1E293B;
+    --et-accent: #3B82F6;
+    --et-accent-light: #60A5FA;
+    --et-accent-rgb: 59, 130, 246;
+  }
+  [data-et="hotel"] {
+    --et-bg: #0D0D0D;
+    --et-bg2: #1C1917;
+    --et-accent: #B8860B;
+    --et-accent-light: #DAA520;
+    --et-accent-rgb: 184, 134, 11;
+  }
+  [data-et="cafe"] {
+    --et-bg: #1A0A0F;
+    --et-bg2: #2D1520;
+    --et-accent: #9F1239;
+    --et-accent-light: #E11D48;
+    --et-accent-rgb: 159, 18, 57;
+  }
+  [data-et="bar"] {
+    --et-bg: #0F0A20;
+    --et-bg2: #1E1040;
+    --et-accent: #7C3AED;
+    --et-accent-light: #A78BFA;
+    --et-accent-rgb: 124, 58, 237;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -61,32 +91,32 @@
 /* ─── Brand utilities ─────────────────────────────────── */
 @layer utilities {
   .section-dark {
-    @apply bg-[#0F172A] text-white;
+    @apply bg-[var(--et-bg)] text-white;
   }
   .section-light {
     @apply bg-white text-slate-900;
   }
   .text-gradient-orange,
   .text-gradient-emerald {
-    @apply bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)] bg-clip-text text-transparent;
   }
   .glow-orange,
   .glow-emerald {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 20px rgba(var(--et-accent-rgb), 0.3), 0 0 60px rgba(var(--et-accent-rgb), 0.1);
   }
   .glow-orange-intense,
   .glow-emerald-intense {
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 80px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 30px rgba(var(--et-accent-rgb), 0.5), 0 0 80px rgba(var(--et-accent-rgb), 0.2);
   }
   .glow-blue {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 20px rgba(var(--et-accent-rgb), 0.3), 0 0 60px rgba(var(--et-accent-rgb), 0.1);
   }
   .nav-link-underline {
     @apply relative;
   }
   .nav-link-underline::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-[#3B82F6] transition-all duration-300;
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-[var(--et-accent)] transition-all duration-300;
   }
   .nav-link-underline:hover::after {
     @apply w-full;

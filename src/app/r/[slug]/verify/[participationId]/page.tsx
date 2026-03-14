@@ -53,15 +53,15 @@ export default function VerifyPrizePage() {
 
   if (loading) {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4">
-        <div className="w-10 h-10 border-4 border-white/10 border-t-blue-400 rounded-full animate-spin" />
+      <main className="min-h-dvh bg-[var(--et-bg)] flex items-center justify-center px-4">
+        <div className="w-10 h-10 border-4 border-white/10 border-t-[var(--et-accent-light)] rounded-full animate-spin" />
       </main>
     );
   }
 
   if (error || !data) {
     return (
-      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4">
+      <main className="min-h-dvh bg-[var(--et-bg)] flex items-center justify-center px-4">
         <div className="text-center space-y-4 max-w-sm">
           <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 text-red-400">
@@ -77,7 +77,7 @@ export default function VerifyPrizePage() {
   }
 
   return (
-    <main className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-dvh bg-[var(--et-bg)] flex flex-col items-center justify-center px-4 py-12">
       <PageTransition>
         <FadeIn delay={0.1}>
           <div className="w-full max-w-sm mx-auto space-y-6 text-center">
@@ -119,7 +119,7 @@ export default function VerifyPrizePage() {
               <button
                 onClick={handleClaim}
                 disabled={claiming}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)] text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
               >
                 {claiming ? "Validation..." : "Marquer comme utilise"}
               </button>
