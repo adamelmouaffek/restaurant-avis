@@ -123,6 +123,25 @@
   }
 }
 
+@layer utilities {
+  /* Hide scrollbar but keep scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Safe area padding for bottom nav on notch devices */
+  .pb-safe-area {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
 @layer components {
   @keyframes scroll-left {
     0% { transform: translateX(0); }
