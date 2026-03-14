@@ -1,17 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import type { OrderWithItems, OrderStatus } from "@/shared/types";
+import type { OrderWithItems, OrderStatus, EstablishmentType } from "@/shared/types";
 import { ORDER_STATUS_LABELS } from "@/modules/menu/types";
 import { KDSTimerBadge } from "./KDSTimerBadge";
 import { KDSRejectModal } from "./KDSRejectModal";
 import { KDSItemChecklist } from "./KDSItemChecklist";
+import { getLabels } from "@/shared/lib/labels";
 
 interface KDSOrderCardProps {
   order: OrderWithItems;
   onStatusChange: (orderId: string, newStatus: OrderStatus) => void;
   onReject: (orderId: string, reason: string) => void;
   restaurantSlug: string;
+  establishmentType?: EstablishmentType;
 }
 
 // Couleurs des badges statut — variantes dark pour le KDS
@@ -58,7 +60,7 @@ function PriorityBadge({ priority }: { priority: "normal" | "rush" | "vip" }) {
 }
 
 // Source badge
-function SourceBadge({ source }: { source: "client" | "waiter" }) {
+function SourceBadge({ source, waiterLabel }: { source: "client" | "waiter"; waiterLabel: string }) {
   const isClient = source === "client";
   return (
     <span
@@ -68,7 +70,7 @@ function SourceBadge({ source }: { source: "client" | "waiter" }) {
           : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
       }`}
     >
-      {isClient ? "Client" : "Serveur"}
+      {isClient ? "Client" : waiterLabel}
     </span>
   );
 }
@@ -110,7 +112,9 @@ export function KDSOrderCard({
   onStatusChange,
   onReject,
   restaurantSlug,
+  establishmentType = "restaurant",
 }: KDSOrderCardProps) {
+  const labels = getLabels(establishmentType);
   const [showRejectModal, setShowRejectModal] = useState(false);
 
   const actionBtn = ACTION_BUTTONS[order.status];
@@ -128,17 +132,17 @@ export function KDSOrderCard({
   return (
     <>
       <div
-        className={`bg-gray-800 border border-gray-700 rounded-xl flex flex-col overflow-hidden transition-shadow ${priorityBorder}`}
+        className={`bg-[#1E293B] border border-white/10 rounded-xl flex flex-col overflow-hidden transition-shadow ${priorityBorder}`}
       >
         {/* Header */}
-        <div className="flex items-start justify-between px-4 pt-4 pb-3 border-b border-gray-700">
+        <div className="flex items-start justify-between px-4 pt-4 pb-3 border-b border-white/10">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <p className="text-2xl font-bold tracking-tight text-white">
-                Table {order.table_number}
+                {labels.table} {order.table_number}
               </p>
               <PriorityBadge priority={priority} />
-              <SourceBadge source={source} />
+              <SourceBadge source={source} waiterLabel={labels.waiter} />
             </div>
             <div className="flex items-center gap-2 mt-1.5">
               <KDSTimerBadge createdAt={order.created_at} priority={priority} />
@@ -168,7 +172,7 @@ export function KDSOrderCard({
 
           {/* Notes generales */}
           {order.notes && (
-            <div className="mt-3 pt-3 border-t border-gray-700">
+            <div className="mt-3 pt-3 border-t border-white/10">
               <p className="text-xs text-gray-400 italic">
                 Note : {order.notes}
               </p>
@@ -177,7 +181,7 @@ export function KDSOrderCard({
         </div>
 
         {/* Footer */}
-        <div className="px-4 pb-4 pt-3 border-t border-gray-700 flex items-center justify-between gap-2">
+        <div className="px-4 pb-4 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-gray-300">
             Total :{" "}
             <span className="text-white">
@@ -200,7 +204,7 @@ export function KDSOrderCard({
             {canCancel && (
               <button
                 onClick={() => onStatusChange(order.id, "cancelled")}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors"
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1E293B] hover:bg-[#334155] text-gray-300 transition-colors"
               >
                 Annuler
               </button>

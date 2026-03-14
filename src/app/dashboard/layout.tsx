@@ -14,18 +14,19 @@ export default async function DashboardLayout({
     return <>{children}</>;
   }
 
-  // Fetch restaurant name
+  // Fetch restaurant name + type
   const { data: restaurant } = await supabaseAdmin
     .from("restaurants")
-    .select("name")
+    .select("name, establishment_type")
     .eq("id", session.restaurantId)
     .single();
 
   const restaurantName = restaurant?.name || "Restaurant";
+  const establishmentType = restaurant?.establishment_type || "restaurant";
 
   return (
     <div className="min-h-screen bg-muted/30">
-      <Sidebar restaurantName={restaurantName} />
+      <Sidebar restaurantName={restaurantName} establishmentType={establishmentType} />
       <main className="lg:pl-64">
         <div className="p-6 pt-16 lg:pt-6 max-w-7xl mx-auto">
           {children}

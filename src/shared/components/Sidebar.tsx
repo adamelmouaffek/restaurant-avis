@@ -16,30 +16,35 @@ import {
   ClipboardList,
   LayoutGrid,
   Users,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { Separator } from "@/shared/components/ui/separator";
-
-const navItems = [
-  { href: "/dashboard", label: "Apercu", icon: LayoutDashboard },
-  { href: "/dashboard/prizes", label: "Cadeaux", icon: Gift },
-  { href: "/dashboard/reviews", label: "Avis", icon: Star },
-  { href: "/dashboard/qr-codes", label: "QR Codes", icon: QrCode },
-  { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
-  { href: "/dashboard/orders", label: "Commandes", icon: ClipboardList },
-  { href: "/dashboard/tables", label: "Tables", icon: LayoutGrid },
-  { href: "/dashboard/staff", label: "Equipe", icon: Users },
-  { href: "/dashboard/stats", label: "Stats", icon: BarChart3 },
-];
+import { getLabels } from "@/shared/lib/labels";
+import type { EstablishmentType } from "@/shared/types";
 
 interface SidebarProps {
   restaurantName: string;
+  establishmentType?: EstablishmentType;
 }
 
-export function Sidebar({ restaurantName }: SidebarProps) {
+export function Sidebar({ restaurantName, establishmentType = "restaurant" }: SidebarProps) {
+  const labels = getLabels(establishmentType);
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navItems = [
+    { href: "/dashboard", label: "Apercu", icon: LayoutDashboard },
+    { href: "/dashboard/prizes", label: "Cadeaux", icon: Gift },
+    { href: "/dashboard/reviews", label: "Avis", icon: Star },
+    { href: "/dashboard/qr-codes", label: "QR Codes", icon: QrCode },
+    { href: "/dashboard/menu", label: labels.menu, icon: UtensilsCrossed },
+    { href: "/dashboard/orders", label: "Commandes", icon: ClipboardList },
+    { href: "/dashboard/tables", label: labels.tables, icon: LayoutGrid },
+    { href: "/dashboard/staff", label: "Equipe", icon: Users },
+    { href: "/dashboard/stats", label: "Stats", icon: BarChart3 },
+    { href: "/dashboard/settings", label: "Reglages", icon: Settings },
+  ];
 
   const handleLogout = async () => {
     document.cookie =
@@ -53,16 +58,16 @@ export function Sidebar({ restaurantName }: SidebarProps) {
   };
 
   const navContent = (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-[#0F172A] text-white">
       {/* Header */}
-      <div className="p-6">
-        <h2 className="text-lg font-bold text-foreground truncate">
+      <div className="p-6 bg-gradient-to-r from-[#3B82F6] to-[#60A5FA]">
+        <h2 className="text-lg font-bold text-white truncate">
           {restaurantName}
         </h2>
-        <p className="text-xs text-muted-foreground mt-1">Back-office</p>
+        <p className="text-xs text-white/70 mt-1">Back-office</p>
       </div>
 
-      <Separator />
+      <div className="h-px bg-white/10" />
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">
@@ -76,8 +81,8 @@ export function Sidebar({ restaurantName }: SidebarProps) {
               onClick={() => setMobileOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 active
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-blue-600 text-white"
+                  : "text-white/60 hover:bg-white/10 hover:text-white"
               }`}
             >
               <Icon className="h-5 w-5 flex-shrink-0" />
@@ -87,13 +92,13 @@ export function Sidebar({ restaurantName }: SidebarProps) {
         })}
       </nav>
 
-      <Separator />
+      <div className="h-px bg-white/10" />
 
       {/* Logout */}
       <div className="p-4">
         <Button
           variant="ghost"
-          className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive"
+          className="w-full justify-start gap-3 text-white/60 hover:text-red-400 hover:bg-white/10"
           onClick={handleLogout}
         >
           <LogOut className="h-5 w-5" />
@@ -111,7 +116,7 @@ export function Sidebar({ restaurantName }: SidebarProps) {
           variant="outline"
           size="icon"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="bg-white shadow-md"
+          className="bg-[#0F172A] text-white border-white/10 shadow-md"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
@@ -127,7 +132,7 @@ export function Sidebar({ restaurantName }: SidebarProps) {
 
       {/* Mobile sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-200 ease-in-out lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#0F172A] border-r border-white/10 transform transition-transform duration-200 ease-in-out lg:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -135,7 +140,7 @@ export function Sidebar({ restaurantName }: SidebarProps) {
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r">
+      <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[#0F172A] border-r border-white/10">
         {navContent}
       </aside>
     </>

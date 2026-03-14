@@ -14,6 +14,8 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 import { UserPlus } from "lucide-react";
+import { getLabels } from "@/shared/lib/labels";
+import type { EstablishmentType } from "@/shared/types";
 
 export default function DashboardSignupPage() {
   const router = useRouter();
@@ -24,8 +26,11 @@ export default function DashboardSignupPage() {
   const [tableCount, setTableCount] = useState(6);
   const [firstServerName, setFirstServerName] = useState("");
   const [firstServerPin, setFirstServerPin] = useState("");
+  const [establishmentType, setEstablishmentType] = useState<EstablishmentType>("restaurant");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const labels = getLabels(establishmentType);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +63,7 @@ export default function DashboardSignupPage() {
           password,
           confirmPassword,
           tableCount,
+          establishmentType,
           firstServer: firstServerName
             ? { name: firstServerName, pin: firstServerPin }
             : undefined,
@@ -87,7 +93,7 @@ export default function DashboardSignupPage() {
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
             <UserPlus className="h-6 w-6 text-primary" />
           </div>
-          <CardTitle className="text-xl">Creer votre restaurant</CardTitle>
+          <CardTitle className="text-xl">Creer votre {labels.establishmentLabel.toLowerCase()}</CardTitle>
           <CardDescription>
             Inscrivez-vous pour acceder a votre espace gerant
           </CardDescription>
@@ -95,7 +101,7 @@ export default function DashboardSignupPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Nom du restaurant</Label>
+              <Label htmlFor="name">Nom du {labels.establishment}</Label>
               <Input
                 id="name"
                 type="text"
@@ -106,6 +112,20 @@ export default function DashboardSignupPage() {
                 minLength={2}
                 maxLength={100}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="type">Type d&apos;etablissement</Label>
+              <select
+                id="type"
+                value={establishmentType}
+                onChange={(e) => setEstablishmentType(e.target.value as EstablishmentType)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              >
+                <option value="restaurant">Restaurant</option>
+                <option value="hotel">Hotel</option>
+                <option value="cafe">Cafe</option>
+                <option value="bar">Bar</option>
+              </select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -162,13 +182,13 @@ export default function DashboardSignupPage() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-white px-2 text-muted-foreground">
-                  Optionnel : Premier serveur
+                  Optionnel : Premier {labels.staffLabel}
                 </span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="serverName">Nom du serveur</Label>
+              <Label htmlFor="serverName">Nom du {labels.staffLabel}</Label>
               <Input
                 id="serverName"
                 type="text"
@@ -181,7 +201,7 @@ export default function DashboardSignupPage() {
 
             {firstServerName && (
               <div className="space-y-2">
-                <Label htmlFor="serverPin">PIN du serveur (4 chiffres)</Label>
+                <Label htmlFor="serverPin">PIN du {labels.staffLabel} (4 chiffres)</Label>
                 <Input
                   id="serverPin"
                   type="text"
@@ -201,7 +221,7 @@ export default function DashboardSignupPage() {
             )}
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creation en cours..." : "Creer mon restaurant"}
+              {loading ? "Creation en cours..." : `Creer mon ${labels.establishment}`}
             </Button>
           </form>
 

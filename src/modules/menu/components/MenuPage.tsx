@@ -356,6 +356,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
                       onAdd={() => addToCart(item)}
                       onRemove={() => removeFromCart(item.id)}
                       isAvailable={item.is_available !== false}
+                      categoryName={category.name}
                     />
                   </StaggerItem>
                 ))}
@@ -370,6 +371,7 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
         restaurantId={restaurant.id}
         tableNumber={tableNumber}
         tableSessionId={tableSessionId}
+        establishmentType={restaurant.establishment_type}
       />
 
       {/* "Voir mes commandes" pill (above cart badge, bottom-right) */}

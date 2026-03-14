@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { Lock, Utensils } from "lucide-react";
 import PinPad from "@/modules/server/components/PinPad";
+import { getLabels } from "@/shared/lib/labels";
+import type { EstablishmentType } from "@/shared/types";
 
 export default function ServerLoginPage() {
   const params = useParams();
@@ -13,6 +15,29 @@ export default function ServerLoginPage() {
 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [establishmentType, setEstablishmentType] = useState<EstablishmentType>("restaurant");
+
+  // Fetch establishment type for labels
+  useEffect(() => {
+    async function fetchType() {
+      try {
+        const { supabase } = await import("@/shared/lib/supabase/client");
+        const { data } = await supabase
+          .from("restaurants")
+          .select("establishment_type")
+          .eq("slug", slug)
+          .single();
+        if (data?.establishment_type) {
+          setEstablishmentType(data.establishment_type);
+        }
+      } catch {
+        // Default to restaurant
+      }
+    }
+    fetchType();
+  }, [slug]);
+
+  const labels = getLabels(establishmentType);
 
   const handlePinSubmit = useCallback(
     async (pin: string) => {
@@ -54,7 +79,7 @@ export default function ServerLoginPage() {
           <div className="w-16 h-16 rounded-2xl bg-blue-600/20 flex items-center justify-center mb-4">
             <Utensils className="w-8 h-8 text-blue-400" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Espace Serveur</h1>
+          <h1 className="text-2xl font-bold text-white">{labels.serverSpace}</h1>
           <p className="text-sm text-gray-400 mt-1">
             Entrez votre code PIN a 4 chiffres
           </p>

@@ -83,11 +83,11 @@ export function EmailReviewForm({
 
   if (alreadyParticipated) {
     return (
-      <Card className="w-full max-w-md mx-auto border-0 shadow-lg">
+      <Card className="w-full max-w-md mx-auto bg-white/5 border border-white/10 shadow-none">
         <CardContent className="p-8 sm:p-10">
           <div className="flex flex-col items-center text-center space-y-6">
             {/* Check icon */}
-            <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -96,7 +96,7 @@ export function EmailReviewForm({
                 strokeWidth={2}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="w-10 h-10 text-green-500"
+                className="w-10 h-10 text-green-400"
               >
                 <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
                 <polyline points="22 4 12 14.01 9 11.01" />
@@ -105,12 +105,12 @@ export function EmailReviewForm({
 
             {/* Message */}
             <div className="space-y-2">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+              <h2 className="text-xl sm:text-2xl font-bold text-white">
                 Vous avez deja donne votre avis !
               </h2>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-sm text-white/60 leading-relaxed">
                 Merci pour votre participation. Votre avis pour{" "}
-                <span className="font-medium text-gray-700">{restaurantName}</span>{" "}
+                <span className="font-medium text-white/80">{restaurantName}</span>{" "}
                 a bien ete pris en compte.
               </p>
             </div>
@@ -118,7 +118,7 @@ export function EmailReviewForm({
             {/* CTA */}
             <Link
               href={`/r/${slug}`}
-              className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-gray-900 text-white font-semibold text-base shadow-md transition-all duration-200 hover:bg-gray-800 hover:shadow-lg active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -142,22 +142,22 @@ export function EmailReviewForm({
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto border-0 shadow-lg">
+    <Card className="w-full max-w-md mx-auto bg-white/5 border border-white/10 shadow-none">
       <CardContent className="p-6 sm:p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="text-center space-y-2">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-white">
               Tester rapidement
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-white/60">
               Donnez votre avis pour{" "}
-              <span className="font-medium text-gray-700">{restaurantName}</span>
+              <span className="font-medium text-white/80">{restaurantName}</span>
             </p>
           </div>
 
           {/* Email */}
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="text-sm font-medium text-white/70">
               Votre email
             </label>
             <Input
@@ -169,14 +169,15 @@ export function EmailReviewForm({
                 setFormData((prev) => ({ ...prev, email: e.target.value }))
               }
               required
+              className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
             />
           </div>
 
           {/* Name (optional) */}
           <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium text-gray-700">
+            <label htmlFor="name" className="text-sm font-medium text-white/70">
               Votre nom{" "}
-              <span className="text-gray-400 font-normal">(optionnel)</span>
+              <span className="text-white/40 font-normal">(optionnel)</span>
             </label>
             <Input
               id="name"
@@ -186,12 +187,13 @@ export function EmailReviewForm({
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, name: e.target.value }))
               }
+              className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
             />
           </div>
 
           {/* Star Rating */}
           <div className="flex flex-col items-center gap-2">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-white/70">
               Votre note
             </label>
             <StarRating
@@ -199,7 +201,7 @@ export function EmailReviewForm({
               onChange={(rating) => setFormData((prev) => ({ ...prev, rating }))}
             />
             {formData.rating > 0 && (
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-white/60">
                 {formData.rating === 1 && "Décevant"}
                 {formData.rating === 2 && "Moyen"}
                 {formData.rating === 3 && "Correct"}
@@ -213,10 +215,10 @@ export function EmailReviewForm({
           <div className="space-y-2">
             <label
               htmlFor="comment"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-white/70"
             >
               Votre commentaire{" "}
-              <span className="text-gray-400 font-normal">(optionnel)</span>
+              <span className="text-white/40 font-normal">(optionnel)</span>
             </label>
             <Textarea
               id="comment"
@@ -226,13 +228,13 @@ export function EmailReviewForm({
                 setFormData((prev) => ({ ...prev, comment: e.target.value }))
               }
               rows={4}
-              className="resize-none text-base"
+              className="resize-none text-base bg-white/5 border-white/10 text-white placeholder:text-white/30"
             />
           </div>
 
           {/* Error */}
           {error && (
-            <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 text-center">
+            <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-400 text-center">
               {error}
             </div>
           )}

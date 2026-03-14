@@ -11,9 +11,12 @@ import {
   BarChart3,
   ExternalLink,
 } from "lucide-react";
+import { getLabels } from "@/shared/lib/labels";
+import type { EstablishmentType } from "@/shared/types";
 
 interface DashboardQuickLinksProps {
   slug: string;
+  establishmentType?: EstablishmentType;
 }
 
 const links = [
@@ -73,7 +76,8 @@ const links = [
   },
 ];
 
-export function DashboardQuickLinks({ slug }: DashboardQuickLinksProps) {
+export function DashboardQuickLinks({ slug, establishmentType = "restaurant" }: DashboardQuickLinksProps) {
+  const labels = getLabels(establishmentType);
   const externalLinks = [
     {
       href: `/m/${slug}/table/1`,
@@ -86,7 +90,7 @@ export function DashboardQuickLinks({ slug }: DashboardQuickLinksProps) {
     {
       href: `/s/${slug}`,
       icon: ClipboardList,
-      label: "Interface serveur",
+      label: labels.serverSpace,
       desc: "Gestion des tables et commandes",
       color: "text-emerald-600",
       bg: "bg-emerald-50 hover:bg-emerald-100",
@@ -94,7 +98,7 @@ export function DashboardQuickLinks({ slug }: DashboardQuickLinksProps) {
     {
       href: `/kds/${slug}`,
       icon: MonitorSmartphone,
-      label: "Ecran cuisine",
+      label: labels.kitchenScreen,
       desc: "KDS temps reel",
       color: "text-sky-600",
       bg: "bg-sky-50 hover:bg-sky-100",

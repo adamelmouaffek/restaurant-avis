@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     const angle = calculateWheelAngle(segmentIndex, totalSegments);
 
     // Enregistrer la participation
-    const { error: participationError } = await supabaseAdmin
+    const { data: participation, error: participationError } = await supabaseAdmin
       .from("participations")
       .insert({
         participant_id,
@@ -59,7 +59,9 @@ export async function POST(request: NextRequest) {
         review_id,
         prize_id: prize.id,
         prize_name: prize.name,
-      });
+      })
+      .select("id")
+      .single();
 
     if (participationError) {
       return NextResponse.json({ error: participationError.message }, { status: 500 });
@@ -73,6 +75,7 @@ export async function POST(request: NextRequest) {
       prizeColor: prize.color,
       segmentIndex,
       angle,
+      participationId: participation.id,
     });
   } catch {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

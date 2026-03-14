@@ -91,6 +91,7 @@ export function SpinningWheel({
             prizeIcon: data.prizeIcon,
             prizeColor: data.prizeColor,
             segmentIndex: data.segmentIndex,
+            participationId: data.participationId,
           });
         }, 1500);
       }, 4200);

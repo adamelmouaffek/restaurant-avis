@@ -17,7 +17,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { PageTransition, FadeIn } from "@/shared/components/animations";
-import type { OrderStatus, OrderWithItems } from "@/shared/types";
+import type { OrderStatus, OrderWithItems, EstablishmentType } from "@/shared/types";
+import { getLabels } from "@/shared/lib/labels";
 
 // Supabase client for realtime subscriptions
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -94,6 +95,28 @@ export default function OrderStatusPage() {
   const [error, setError] = useState<string | null>(null);
   const [tableSessionId, setTableSessionId] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [establishmentType, setEstablishmentType] = useState<EstablishmentType>("restaurant");
+
+  const labels = getLabels(establishmentType);
+
+  // Fetch establishment type
+  useEffect(() => {
+    async function fetchEstablishmentType() {
+      try {
+        const { data } = await supabase
+          .from("restaurants")
+          .select("establishment_type")
+          .eq("slug", slug)
+          .single();
+        if (data?.establishment_type) {
+          setEstablishmentType(data.establishment_type);
+        }
+      } catch {
+        // Fallback to default labels
+      }
+    }
+    fetchEstablishmentType();
+  }, [slug]);
 
   // Get table session ID from localStorage
   useEffect(() => {
@@ -194,7 +217,7 @@ export default function OrderStatusPage() {
 
       alert(
         type === "call_waiter"
-          ? "Le serveur a ete appele !"
+          ? `Le ${labels.staffLabel} a ete appele !`
           : "Demande d'addition envoyee !"
       );
     } catch {
@@ -247,7 +270,7 @@ export default function OrderStatusPage() {
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
           <div>
             <h1 className="font-bold text-gray-900 text-lg">Mes commandes</h1>
-            <p className="text-xs text-gray-500">Table {tableNumber}</p>
+            <p className="text-xs text-gray-500">{labels.table} {tableNumber}</p>
           </div>
           <button
             onClick={handleRefresh}
@@ -346,7 +369,7 @@ export default function OrderStatusPage() {
                 className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl bg-white border border-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-50 transition-colors"
               >
                 <Bell className="w-4 h-4 text-blue-500" />
-                Appeler le serveur
+                Appeler le {labels.staffLabel}
               </button>
               <button
                 onClick={() => handleServiceRequest("request_bill")}

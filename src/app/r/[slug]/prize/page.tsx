@@ -12,16 +12,17 @@ export default function PrizePage() {
   const prizeName = searchParams.get("name");
   const prizeIcon = searchParams.get("icon");
   const prizeDescription = searchParams.get("description") || null;
+  const participationId = searchParams.get("participationId");
 
   if (!prizeName || !prizeIcon) {
     return (
-      <main className="min-h-dvh bg-white flex items-center justify-center px-4">
+      <main className="min-h-dvh bg-[#0F172A] flex items-center justify-center px-4">
         <PageTransition>
           <div className="text-center space-y-4 max-w-sm">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-white">
               Aucun cadeau a afficher
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-white/60">
               Cette page est accessible apres avoir tourne la roue.
             </p>
           </div>
@@ -31,7 +32,7 @@ export default function PrizePage() {
   }
 
   return (
-    <main className="min-h-dvh bg-gradient-to-b from-white to-amber-50/30 flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4 py-12">
       <PageTransition>
         <FadeIn delay={0.1}>
           <PrizeReveal
@@ -39,6 +40,7 @@ export default function PrizePage() {
             prizeIcon={prizeIcon}
             prizeDescription={prizeDescription}
             slug={slug}
+            participationId={participationId || undefined}
           />
         </FadeIn>
       </PageTransition>

@@ -5,6 +5,8 @@ import { StatsCards } from "@/modules/avis/components/StatsCards";
 import { DashboardQuickLinks } from "@/modules/menu/components/DashboardQuickLinks";
 import { OnboardingChecklist } from "@/modules/admin/components/OnboardingChecklist";
 import { PageTransition, FadeIn, AnimatedCounter } from "@/shared/components/animations";
+import { getLabels } from "@/shared/lib/labels";
+import type { EstablishmentType } from "@/shared/types";
 
 export default async function DashboardPage() {
   const session = await getDashboardSession();
@@ -38,7 +40,7 @@ export default async function DashboardPage() {
       .gte("created_at", new Date().toISOString().split("T")[0]),
     supabaseAdmin
       .from("restaurants")
-      .select("slug")
+      .select("slug, establishment_type")
       .eq("id", restaurantId)
       .single(),
     supabaseAdmin
@@ -71,6 +73,8 @@ export default async function DashboardPage() {
   const revenueToday = (ordersTodayRes.data || []).reduce((sum, o) => sum + (o.total_amount || 0), 0);
 
   const slug = restaurantRes.data?.slug || "";
+  const establishmentType = (restaurantRes.data?.establishment_type || "restaurant") as EstablishmentType;
+  const etLabels = getLabels(establishmentType);
   const staffCount = staffCountRes.count ?? 0;
   const tableCount = tableCountRes.count ?? 0;
   const menuItemCount = menuItemCountRes.count ?? 0;
@@ -80,7 +84,7 @@ export default async function DashboardPage() {
       <div>
         <h1 className="text-2xl font-bold">Apercu</h1>
         <p className="text-muted-foreground mt-1">
-          Vue d&apos;ensemble de votre restaurant
+          Vue d&apos;ensemble de votre {etLabels.establishment}
         </p>
       </div>
 
@@ -90,6 +94,7 @@ export default async function DashboardPage() {
         staffCount={staffCount}
         menuItemCount={menuItemCount}
         tableCount={tableCount}
+        establishmentType={establishmentType}
       />
 
       {/* Stats Avis */}
@@ -169,7 +174,7 @@ export default async function DashboardPage() {
 
       {/* Liens rapides */}
       <FadeIn delay={0.3}>
-        <DashboardQuickLinks slug={slug} />
+        <DashboardQuickLinks slug={slug} establishmentType={establishmentType} />
       </FadeIn>
     </PageTransition>
   );

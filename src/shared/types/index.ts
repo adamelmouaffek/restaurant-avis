@@ -1,3 +1,5 @@
+export type EstablishmentType = "restaurant" | "hotel" | "cafe" | "bar";
+
 export interface Restaurant {
   id: string;
   name: string;
@@ -8,6 +10,7 @@ export interface Restaurant {
   google_place_id: string | null;
   logo_url: string | null;
   primary_color: string;
+  establishment_type: EstablishmentType;
   created_at: string;
 }
 

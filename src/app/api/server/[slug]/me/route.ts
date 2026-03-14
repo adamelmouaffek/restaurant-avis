@@ -24,5 +24,6 @@ export async function GET(
     restaurantId: session.restaurantId,
     slug: session.slug,
     role: session.role,
+    establishmentType: session.establishmentType || "restaurant",
   });
 }

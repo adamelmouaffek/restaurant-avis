@@ -11,6 +11,7 @@ import {
   History,
   CreditCard,
   CheckCircle2,
+  Trash2,
 } from "lucide-react";
 import type { OrderWithItems, OrderStatus } from "@/shared/types";
 import ServerOrderCard from "./ServerOrderCard";
@@ -37,16 +38,18 @@ export default function TableDetailView({ slug, tableNumber }: TableDetailViewPr
   const [refreshing, setRefreshing] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
+  const [clearing, setClearing] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const fetchOrders = useCallback(
     async (showLoader = false) => {
       if (showLoader) setLoading(true);
       else setRefreshing(true);
       try {
-        const res = await fetch(`/api/server/${slug}/orders`);
+        const res = await fetch(`/api/server/${slug}/orders?status=all&table=${tableNumber}`);
         if (res.ok) {
           const allOrders: OrderWithItems[] = await res.json();
-          setOrders(allOrders.filter((o) => o.table_number === tableNumber));
+          setOrders(allOrders);
         }
       } catch {
         // Silent fail
@@ -65,7 +68,7 @@ export default function TableDetailView({ slug, tableNumber }: TableDetailViewPr
     return () => clearInterval(interval);
   }, [fetchOrders]);
 
-  // Action handler for order updates (same pattern as orders/page.tsx)
+  // Action handler for order updates
   const handleAction = useCallback(
     async (orderId: string, _action: string, payload?: Record<string, unknown>) => {
       try {
@@ -94,7 +97,7 @@ export default function TableDetailView({ slug, tableNumber }: TableDetailViewPr
     [slug, fetchOrders]
   );
 
-  // Pay all unpaid orders
+  // Pay all unpaid orders + auto-clear history
   const handlePayAll = useCallback(async () => {
     const unpaid = orders.filter(
       (o) => !o.paid && !["cancelled", "rejected"].includes(o.status)
@@ -112,13 +115,42 @@ export default function TableDetailView({ slug, tableNumber }: TableDetailViewPr
           })
         )
       );
+      // After payment, clear the table history
+      await fetch(`/api/server/${slug}/orders/clear-table`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table_number: tableNumber }),
+      });
       await fetchOrders(false);
     } catch {
       alert("Erreur lors de l'encaissement");
     } finally {
       setPaying(false);
     }
-  }, [orders, slug, fetchOrders]);
+  }, [orders, slug, tableNumber, fetchOrders]);
+
+  // Clear history manually
+  const handleClearHistory = useCallback(async () => {
+    setClearing(true);
+    try {
+      const res = await fetch(`/api/server/${slug}/orders/clear-table`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table_number: tableNumber }),
+      });
+      if (res.ok) {
+        await fetchOrders(false);
+        setShowClearConfirm(false);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert(err.error || "Erreur lors du nettoyage");
+      }
+    } catch {
+      alert("Erreur reseau");
+    } finally {
+      setClearing(false);
+    }
+  }, [slug, tableNumber, fetchOrders]);
 
   // Filtered orders
   const activeOrders = orders.filter((o) =>
@@ -166,6 +198,9 @@ export default function TableDetailView({ slug, tableNumber }: TableDetailViewPr
           {TAB_CONFIG.map((t) => {
             const Icon = t.icon;
             const isActive = t.key === tab;
+            const count = t.key === "active" ? activeOrders.length
+              : t.key === "history" ? historyOrders.length
+              : billOrders.length;
             return (
               <button
                 key={t.key}
@@ -181,6 +216,13 @@ export default function TableDetailView({ slug, tableNumber }: TableDetailViewPr
               >
                 <Icon className="w-3.5 h-3.5" />
                 {t.label}
+                {count > 0 && (
+                  <span className={`ml-0.5 text-[10px] font-bold ${
+                    isActive ? "text-blue-200" : "text-gray-400"
+                  }`}>
+                    {count}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -237,17 +279,54 @@ export default function TableDetailView({ slug, tableNumber }: TableDetailViewPr
                     <p className="text-sm font-medium">Aucun historique</p>
                   </div>
                 ) : (
-                  historyOrders.map((order) => (
-                    <ServerOrderCard
-                      key={order.id}
-                      order={order}
-                      isExpanded={expandedId === order.id}
-                      onToggle={() =>
-                        setExpandedId((prev) => (prev === order.id ? null : order.id))
-                      }
-                      onAction={handleAction}
-                    />
-                  ))
+                  <>
+                    {historyOrders.map((order) => (
+                      <ServerOrderCard
+                        key={order.id}
+                        order={order}
+                        isExpanded={expandedId === order.id}
+                        onToggle={() =>
+                          setExpandedId((prev) => (prev === order.id ? null : order.id))
+                        }
+                        onAction={handleAction}
+                      />
+                    ))}
+
+                    {/* Clear history button */}
+                    {!showClearConfirm ? (
+                      <button
+                        onClick={() => setShowClearConfirm(true)}
+                        className="w-full py-3 rounded-xl bg-gray-100 text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-200 active:scale-[0.99] transition-all mt-4 text-sm"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Vider l&apos;historique
+                      </button>
+                    ) : (
+                      <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-4">
+                        <p className="text-sm text-red-700 font-medium mb-3">
+                          Supprimer l&apos;historique de la table {tableNumber} ?
+                        </p>
+                        <p className="text-xs text-red-500 mb-4">
+                          Les commandes terminees seront archivees et ne seront plus visibles ici.
+                        </p>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={handleClearHistory}
+                            disabled={clearing}
+                            className="flex-1 py-2.5 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-500 active:scale-[0.98] transition-all disabled:opacity-50"
+                          >
+                            {clearing ? "Suppression..." : "Confirmer"}
+                          </button>
+                          <button
+                            onClick={() => setShowClearConfirm(false)}
+                            className="flex-1 py-2.5 rounded-lg bg-white border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 active:scale-[0.98] transition-all"
+                          >
+                            Annuler
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             )}
@@ -351,11 +430,22 @@ export default function TableDetailView({ slug, tableNumber }: TableDetailViewPr
                     )}
 
                     {allPaid && (
-                      <div className="text-center py-4">
-                        <div className="flex items-center justify-center gap-2 text-green-600">
-                          <CheckCircle2 className="w-5 h-5" />
-                          <span className="font-semibold text-sm">Tout est encaisse</span>
+                      <div className="space-y-3 mt-2">
+                        <div className="text-center py-3">
+                          <div className="flex items-center justify-center gap-2 text-green-600">
+                            <CheckCircle2 className="w-5 h-5" />
+                            <span className="font-semibold text-sm">Tout est encaisse</span>
+                          </div>
                         </div>
+                        {/* Clear table after full payment */}
+                        <button
+                          onClick={handleClearHistory}
+                          disabled={clearing}
+                          className="w-full py-3 rounded-xl bg-gray-100 text-gray-600 font-medium flex items-center justify-center gap-2 hover:bg-gray-200 active:scale-[0.99] transition-all text-sm disabled:opacity-50"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          {clearing ? "Nettoyage..." : "Cloturer la table"}
+                        </button>
                       </div>
                     )}
                   </>

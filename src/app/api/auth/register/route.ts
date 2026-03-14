@@ -6,6 +6,7 @@ import { signJWT } from "@/shared/lib/jwt";
 import { rateLimit } from "@/shared/lib/rate-limit";
 import { getClientIp } from "@/shared/lib/get-client-ip";
 import { sanitizeString, EMAIL_REGEX, MIN_PASSWORD_LENGTH } from "@/shared/lib/validation";
+import { getLabels } from "@/shared/lib/labels";
 
 function slugify(text: string): string {
   return text
@@ -30,7 +31,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, email, password, confirmPassword, tableCount, firstServer } = body;
+    const { name, email, password, confirmPassword, tableCount, firstServer, establishmentType } = body;
+
+    // Validate establishment type
+    const VALID_TYPES = ["restaurant", "hotel", "cafe", "bar"];
+    const validType = VALID_TYPES.includes(establishmentType) ? establishmentType : "restaurant";
 
     // Validate required fields
     if (!name || !email || !password || !confirmPassword) {
@@ -111,6 +116,7 @@ export async function POST(request: NextRequest) {
         slug,
         owner_email: email.toLowerCase().trim(),
         owner_password_hash: passwordHash,
+        establishment_type: validType,
       })
       .select("id, name, slug, owner_email")
       .single();
@@ -124,12 +130,14 @@ export async function POST(request: NextRequest) {
 
     // Seed initial data (non-blocking — failures don't affect registration)
     try {
-      // 3 default menu categories
-      await supabaseAdmin.from("menu_categories").insert([
-        { restaurant_id: restaurant.id, name: "Entrees", sort_order: 0 },
-        { restaurant_id: restaurant.id, name: "Plats", sort_order: 1 },
-        { restaurant_id: restaurant.id, name: "Desserts", sort_order: 2 },
-      ]);
+      // Default menu categories based on establishment type
+      const typeLabels = getLabels(validType);
+      const categoryInserts = typeLabels.defaultCategories.map((catName, i) => ({
+        restaurant_id: restaurant.id,
+        name: catName,
+        sort_order: i,
+      }));
+      await supabaseAdmin.from("menu_categories").insert(categoryInserts);
 
       // Dynamic tables based on user input
       const validTableCount = Math.min(Math.max(parseInt(tableCount) || 6, 1), 50);

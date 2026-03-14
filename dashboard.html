@@ -692,27 +692,27 @@ const PROJECT_DATA = {
     stack: "Next.js 14 + Tailwind + Shadcn/UI + Supabase + Vercel"
   },
   sprint: {
-    name: "Module 1 \u2014 Menu QR + Commande + KDS",
-    goal: "Menu digital fonctionnel avec commande depuis table et ecran cuisine temps reel",
+    name: "Module 1 \u2014 Menu QR + Commande + KDS + Labels",
+    goal: "Menu digital fonctionnel avec commande, KDS, labels dynamiques et type etablissement",
     startDate: "2026-03-11",
-    progress: 83
+    progress: 100
   },
   kpis: {
-    totalTasks: 12,
-    done: 10,
+    totalTasks: 19,
+    done: 19,
     inProgress: 0,
-    todo: 2,
+    todo: 0,
     backlogTotal: 100,
-    sprintsCompleted: 4,
-    sessionsTotal: 6
+    sprintsCompleted: 5,
+    sessionsTotal: 7
   },
   agents: [
     { name: "Strategist", emoji: "\ud83c\udfaf", active: false, tasksAssigned: 0, tasksCompleted: 0, lastActivity: "Sprint MVP planning", skills: ["writing-plans"] },
-    { name: "Architect", emoji: "\ud83d\udcd0", active: true, tasksAssigned: 2, tasksCompleted: 2, lastActivity: "ADR-001 Stack technique", skills: ["brainstorming", "writing-plans"] },
-    { name: "Builder", emoji: "\ud83d\udd28", active: true, tasksAssigned: 9, tasksCompleted: 8, lastActivity: "Module Menu complet (35 fichiers)", skills: ["test-driven-development", "executing-plans", "dispatching-parallel-agents"] },
+    { name: "Architect", emoji: "\ud83d\udcd0", active: true, tasksAssigned: 3, tasksCompleted: 3, lastActivity: "ADR-005 Labels dynamiques getLabels()", skills: ["brainstorming", "writing-plans"] },
+    { name: "Builder", emoji: "\ud83d\udd28", active: true, tasksAssigned: 15, tasksCompleted: 15, lastActivity: "Labels dynamiques + Settings + QR recompense", skills: ["test-driven-development", "executing-plans", "dispatching-parallel-agents"] },
     { name: "Operator", emoji: "\ud83d\ude80", active: true, tasksAssigned: 2, tasksCompleted: 2, lastActivity: "Deploy Vercel prod", skills: ["verification-before-completion"] },
-    { name: "Investigator", emoji: "\ud83d\udd0d", active: true, tasksAssigned: 3, tasksCompleted: 2, lastActivity: "Fix KDS PATCH auth", skills: ["systematic-debugging"] },
-    { name: "Reporter", emoji: "\ud83d\udcca", active: true, tasksAssigned: 0, tasksCompleted: 1, lastActivity: "Setup Session-Sprint v2", skills: ["verification-before-completion"] }
+    { name: "Investigator", emoji: "\ud83d\udd0d", active: true, tasksAssigned: 4, tasksCompleted: 4, lastActivity: "Theme sync pages avis", skills: ["systematic-debugging"] },
+    { name: "Reporter", emoji: "\ud83d\udcca", active: true, tasksAssigned: 0, tasksCompleted: 1, lastActivity: "Dashboard 360 update S7", skills: ["verification-before-completion"] }
   ],
   tasks: [
     { id: "T-M01", title: "Schema DB 5 tables menu", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M01", completedAt: "2026-03-11", session: "S5" },
@@ -725,8 +725,15 @@ const PROJECT_DATA = {
     { id: "T-M08", title: "Sidebar Menu + Commandes", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M05", completedAt: "2026-03-11", session: "S5" },
     { id: "T-M09", title: "Fix KDS PATCH (slug auth)", status: "done", priority: "P0", agent: "Investigator", sprint: "Module 1", story: "US-M03", completedAt: "2026-03-12", session: "S6" },
     { id: "T-M10", title: "Build + deploy Vercel", status: "done", priority: "P0", agent: "Operator", sprint: "Module 1", story: "US-M05", completedAt: "2026-03-12", session: "S6" },
-    { id: "T-M11", title: "Verification end-to-end prod", status: "todo", priority: "P0", agent: "Investigator", sprint: "Module 1", story: "US-M05", completedAt: null, session: null },
-    { id: "T-M12", title: "Generation QR codes tables", status: "todo", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M01", completedAt: null, session: null }
+    { id: "T-M11", title: "Verification end-to-end prod", status: "done", priority: "P0", agent: "Investigator", sprint: "Module 1", story: "US-M05", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M12", title: "Generation QR codes tables", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M01", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M13", title: "Champ establishment_type restaurants", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M06", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M14", title: "Labels dynamiques getLabels(type)", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M06", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M15", title: "Integration labels toutes interfaces", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M06", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M16", title: "Theme sync pages avis (dark navy)", status: "done", priority: "P1", agent: "Investigator", sprint: "Module 1", story: "US-M07", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M17", title: "QR code recompense page prize", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M08", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M18", title: "Page verification recompense /r/[slug]/verify", status: "done", priority: "P0", agent: "Builder", sprint: "Module 1", story: "US-M08", completedAt: "2026-03-14", session: "S7" },
+    { id: "T-M19", title: "Page reglages admin /dashboard/settings", status: "done", priority: "P1", agent: "Builder", sprint: "Module 1", story: "US-M09", completedAt: "2026-03-14", session: "S7" }
   ],
   stories: [
     // Module 1 : Menu QR + Commande + Paiement
@@ -747,7 +754,7 @@ const PROJECT_DATA = {
     { id: "US-015", story: "Marquer plat indisponible (86)", priority: "P0", status: "backlog", agent: "Builder", sprint: "Module 1" },
     { id: "US-016", story: "CRUD categories et plats dashboard", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
     { id: "US-017", story: "Voir et gerer commandes dashboard", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
-    { id: "US-018", story: "Generer QR codes par table", priority: "P0", status: "in-progress", agent: "Builder", sprint: "Module 1" },
+    { id: "US-018", story: "Generer QR codes par table", priority: "P0", status: "done", agent: "Builder", sprint: "Module 1" },
     { id: "US-019", story: "Uploader photos plats menu", priority: "P0", status: "backlog", agent: "Builder", sprint: "Module 1" },
     { id: "US-020", story: "Notifications sonores KDS", priority: "P0", status: "backlog", agent: "Builder", sprint: "Module 1" },
     // Module 2 : Roue Cadeaux + Avis
@@ -761,6 +768,7 @@ const PROJECT_DATA = {
     { id: "US-028", story: "Rappel SMS 2h apres visite", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 2" },
     { id: "US-029", story: "Animation confetti cadeau gagne", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
     { id: "US-030", story: "Bon cadeau a presenter au serveur", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
+    { id: "US-030b", story: "QR code verification recompense par staff", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
     { id: "US-031", story: "Gerer cadeaux et probabilites dashboard", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
     { id: "US-032", story: "Consulter avis recus dashboard", priority: "P0", status: "done", agent: "Builder", sprint: "Module 2" },
     { id: "US-033", story: "Analytics spins roue", priority: "P1", status: "backlog", agent: "Builder", sprint: "Module 2" },
@@ -824,6 +832,11 @@ const PROJECT_DATA = {
     { id: "US-088", story: "Suggestions hashtags populaires", priority: "P3", status: "backlog", agent: "Builder", sprint: "Module 5" },
     { id: "US-089", story: "Benchmark concurrentiel reseaux", priority: "P3", status: "backlog", agent: "Builder", sprint: "Module 5" },
     { id: "US-090", story: "Mediatheque photos et videos", priority: "P2", status: "backlog", agent: "Builder", sprint: "Module 5" },
+    // Transverse : Type etablissement, Labels, Settings
+    { id: "US-091a", story: "Type etablissement (restaurant/hotel/cafe/bar)", priority: "P0", status: "done", agent: "Builder", sprint: "Transverse" },
+    { id: "US-091b", story: "Labels dynamiques selon type etablissement", priority: "P0", status: "done", agent: "Builder", sprint: "Transverse" },
+    { id: "US-091c", story: "Page reglages admin (type, nom, Google Maps URL)", priority: "P1", status: "done", agent: "Builder", sprint: "Transverse" },
+    { id: "US-091d", story: "Theme unifie pages avis (dark navy)", priority: "P1", status: "done", agent: "Investigator", sprint: "Transverse" },
     // Transverse : Billing, Admin, Compliance
     { id: "US-091", story: "Abonnements Stripe (4 plans)", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
     { id: "US-092", story: "Portail client facturation", priority: "P2", status: "backlog", agent: "Builder", sprint: "Transverse" },
@@ -842,30 +855,42 @@ const PROJECT_DATA = {
     { session: "S3", date: "2026-03-07", remaining: 0, ideal: 16 },
     { session: "S4", date: "2026-03-09", remaining: 12, ideal: 12 },
     { session: "S5", date: "2026-03-11", remaining: 4, ideal: 8 },
-    { session: "S6", date: "2026-03-12", remaining: 2, ideal: 4 }
+    { session: "S6", date: "2026-03-12", remaining: 2, ideal: 4 },
+    { session: "S7", date: "2026-03-14", remaining: 0, ideal: 0 }
   ],
   decisions: [
     { id: "ADR-001", title: "Stack: Next.js 14 + Supabase + Vercel", date: "2026-03-07", status: "accepted", impact: "high", agent: "Architect" },
     { id: "ADR-002", title: "Auth client Google OAuth via NextAuth.js v4", date: "2026-03-07", status: "accepted", impact: "high", agent: "Architect" },
     { id: "ADR-003", title: "Architecture modulaire src/modules/", date: "2026-03-07", status: "accepted", impact: "high", agent: "Architect" },
-    { id: "ADR-004", title: "KDS auth par slug (pas session)", date: "2026-03-12", status: "accepted", impact: "medium", agent: "Investigator" }
+    { id: "ADR-004", title: "KDS auth par slug (pas session)", date: "2026-03-12", status: "accepted", impact: "medium", agent: "Investigator" },
+    { id: "ADR-005", title: "Labels dynamiques via getLabels() pure function", date: "2026-03-14", status: "accepted", impact: "high", agent: "Architect" },
+    { id: "ADR-006", title: "establishment_type colonne simple (pas table separee)", date: "2026-03-14", status: "accepted", impact: "medium", agent: "Architect" },
+    { id: "ADR-007", title: "QR code recompense affiche (pas email — free tier)", date: "2026-03-14", status: "accepted", impact: "medium", agent: "Architect" }
   ],
   sessions: [
     { date: "2026-03-07", summary: "MVP Roue Cadeaux + Avis complet (72 points, 3 sprints)", tasksCompleted: 24, agents: ["Strategist", "Architect", "Builder", "Operator"] },
     { date: "2026-03-08", summary: "Fix Google OAuth 404 (pages.signIn)", tasksCompleted: 1, agents: ["Investigator"] },
     { date: "2026-03-09", summary: "Fix OAuth + git credentials + Google app production", tasksCompleted: 3, agents: ["Investigator", "Operator"] },
     { date: "2026-03-11", summary: "Module 1 complet: 35 fichiers, menu + commande + KDS", tasksCompleted: 8, agents: ["Builder", "Architect"] },
-    { date: "2026-03-12", summary: "Fix KDS PATCH + setup Session-Sprint v2", tasksCompleted: 3, agents: ["Investigator", "Operator", "Reporter"] }
+    { date: "2026-03-12", summary: "Fix KDS PATCH + setup Session-Sprint v2", tasksCompleted: 3, agents: ["Investigator", "Operator", "Reporter"] },
+    { date: "2026-03-14", summary: "Type etablissement + labels dynamiques + theme avis + QR recompense + page settings", tasksCompleted: 9, agents: ["Builder", "Architect", "Investigator", "Reporter"] }
   ],
-  backlog: { p0: 4, p1: 24, p2: 42, icebox: 7 },
+  backlog: { p0: 2, p1: 22, p2: 42, icebox: 7 },
   skills: [
-    { name: "writing-plans", usedBy: ["Strategist", "Architect"], usedCount: 4, lastUsed: "2026-03-12", description: "Planification structuree avant implementation" },
-    { name: "dispatching-parallel-agents", usedBy: ["Builder"], usedCount: 2, lastUsed: "2026-03-11", description: "4 agents paralleles pour 35 fichiers" },
-    { name: "systematic-debugging", usedBy: ["Investigator"], usedCount: 4, lastUsed: "2026-03-12", description: "Fix OAuth, KDS PATCH, git credentials" },
-    { name: "verification-before-completion", usedBy: ["Reporter", "Operator"], usedCount: 5, lastUsed: "2026-03-12", description: "Build + deploy + verification prod" },
-    { name: "executing-plans", usedBy: ["Builder"], usedCount: 3, lastUsed: "2026-03-11", description: "Execution du plan Module 1" }
+    { name: "writing-plans", usedBy: ["Strategist", "Architect"], usedCount: 5, lastUsed: "2026-03-14", description: "Planification structuree avant implementation" },
+    { name: "dispatching-parallel-agents", usedBy: ["Builder"], usedCount: 3, lastUsed: "2026-03-14", description: "Labels dynamiques sur ~25 fichiers en parallele" },
+    { name: "systematic-debugging", usedBy: ["Investigator"], usedCount: 5, lastUsed: "2026-03-14", description: "Fix OAuth, KDS PATCH, theme sync avis" },
+    { name: "verification-before-completion", usedBy: ["Reporter", "Operator"], usedCount: 6, lastUsed: "2026-03-14", description: "Build + deploy + verification prod" },
+    { name: "executing-plans", usedBy: ["Builder"], usedCount: 4, lastUsed: "2026-03-14", description: "Labels + Settings + QR recompense" }
   ],
   activityFeed: [
+    { time: "2026-03-14 18:00", type: "report", agent: "Reporter", emoji: "\ud83d\udcca", message: "Dashboard 360 mis a jour — Sprint Module 1 complet (19/19 taches)" },
+    { time: "2026-03-14 17:30", type: "task-done", agent: "Builder", emoji: "\u2705", message: "T-M19 Page reglages admin /dashboard/settings" },
+    { time: "2026-03-14 17:00", type: "task-done", agent: "Builder", emoji: "\u2705", message: "T-M17/18 QR code recompense + page verification staff" },
+    { time: "2026-03-14 16:30", type: "task-done", agent: "Investigator", emoji: "\u2705", message: "T-M16 Theme sync pages avis (dark navy #0F172A)" },
+    { time: "2026-03-14 16:00", type: "task-done", agent: "Builder", emoji: "\u2705", message: "T-M13/14/15 Labels dynamiques getLabels() sur toutes interfaces" },
+    { time: "2026-03-14 15:30", type: "decision", agent: "Architect", emoji: "\ud83c\udfdb\ufe0f", message: "ADR-005/006/007: Labels pure function, establishment_type colonne, QR on-screen" },
+    { time: "2026-03-14 15:00", type: "session-start", agent: "\u2014", emoji: "\ud83d\udfe2", message: "Session S7 demarree — Type etablissement + labels + theme + QR" },
     { time: "2026-03-12 17:00", type: "report", agent: "Reporter", emoji: "\ud83d\udcca", message: "Setup Session-Sprint v2 complet" },
     { time: "2026-03-12 16:30", type: "task-done", agent: "Operator", emoji: "\u2705", message: "T-M10 Deploy Vercel prod" },
     { time: "2026-03-12 16:00", type: "task-done", agent: "Investigator", emoji: "\u2705", message: "T-M09 Fix KDS PATCH auth par slug" },

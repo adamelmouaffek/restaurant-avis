@@ -3,11 +3,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Bell, Receipt, X, Check } from "lucide-react";
+import type { EstablishmentType } from "@/shared/types";
+import { getLabels } from "@/shared/lib/labels";
 
 interface CallWaiterButtonProps {
   restaurantId: string;
   tableNumber: string;
   tableSessionId: string | null;
+  establishmentType?: EstablishmentType;
 }
 
 type RequestType = "call_waiter" | "request_bill";
@@ -16,7 +19,9 @@ export default function CallWaiterButton({
   restaurantId,
   tableNumber,
   tableSessionId,
+  establishmentType = "restaurant",
 }: CallWaiterButtonProps) {
+  const labels = getLabels(establishmentType);
   const [isOpen, setIsOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -114,7 +119,7 @@ export default function CallWaiterButton({
               className="absolute bottom-[76px] left-0 flex items-center gap-2 bg-white text-gray-900 rounded-full pl-3 pr-4 h-11 shadow-lg border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 whitespace-nowrap"
             >
               <Bell className="w-4 h-4 text-blue-500" />
-              <span className="text-sm font-medium">Appeler le serveur</span>
+              <span className="text-sm font-medium">Appeler le {labels.staffLabel}</span>
             </motion.button>
           </>
         )}
@@ -155,7 +160,7 @@ export default function CallWaiterButton({
             ? `Veuillez patienter ${cooldown}s`
             : isOpen
               ? "Fermer le menu"
-              : "Appeler le serveur"
+              : `Appeler le ${labels.staffLabel}`
         }
       >
         <AnimatePresence mode="wait">

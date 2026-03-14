@@ -76,6 +76,7 @@ export default function WheelPage() {
       name: result.prizeName,
       icon: result.prizeIcon,
       description: result.prizeDescription || "",
+      participationId: result.participationId,
     });
     router.push(`/r/${slug}/prize?${prizeParams.toString()}`);
   };

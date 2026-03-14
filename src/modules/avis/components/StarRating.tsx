@@ -25,7 +25,7 @@ export function StarRating({ value, onChange }: StarRatingProps) {
             aria-label={`${star} etoile${star > 1 ? "s" : ""}`}
             className={cn(
               "relative p-1 transition-transform duration-150 ease-out",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 rounded-sm",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-sm",
               isActive ? "scale-110" : "scale-100",
               "active:scale-125"
             )}
@@ -42,7 +42,7 @@ export function StarRating({ value, onChange }: StarRatingProps) {
                 "w-10 h-10 sm:w-12 sm:h-12 transition-colors duration-200",
                 isActive
                   ? "fill-amber-400 stroke-amber-500"
-                  : "fill-gray-200 stroke-gray-300"
+                  : "fill-white/10 stroke-white/20"
               )}
               strokeWidth={1.5}
             >

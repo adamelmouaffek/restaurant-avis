@@ -20,7 +20,7 @@ export async function POST(
   // Get restaurant by slug
   const { data: restaurant } = await supabaseAdmin
     .from("restaurants")
-    .select("id")
+    .select("id, establishment_type")
     .eq("slug", slug)
     .single();
 
@@ -67,6 +67,7 @@ export async function POST(
     restaurantId: restaurant.id,
     slug,
     role: matchedStaff.role,
+    establishmentType: restaurant.establishment_type || "restaurant",
   };
 
   const response = NextResponse.json({

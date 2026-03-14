@@ -36,7 +36,15 @@ export async function GET(
     .order("created_at", { ascending: false })
     .limit(100);
 
-  if (status && status !== "all") {
+  // Filter by table number if provided
+  const tableNumber = url.searchParams.get("table");
+  if (tableNumber) {
+    query = query.eq("table_number", tableNumber);
+  }
+
+  if (status === "all") {
+    // No status filter — return everything
+  } else if (status) {
     query = query.eq("status", status);
   } else {
     query = query.in("status", ["pending", "confirmed", "preparing", "ready"]);

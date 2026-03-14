@@ -2,15 +2,17 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/shared/lib/supabase/client";
-import type { OrderWithItems, OrderStatus } from "@/shared/types";
+import type { OrderWithItems, OrderStatus, EstablishmentType } from "@/shared/types";
 import { KDSFilters, type KDSFilter } from "./KDSFilters";
 import { KDSOrderCard } from "./KDSOrderCard";
 import { PageTransition } from "@/shared/components/animations";
+import { getLabels } from "@/shared/lib/labels";
 
 interface KDSBoardProps {
   restaurantId: string;
   restaurantName: string;
   restaurantSlug: string;
+  establishmentType?: EstablishmentType;
 }
 
 // --- Son d'alerte via Web Audio API ---
@@ -87,7 +89,8 @@ function sortOrders(orders: OrderWithItems[]): OrderWithItems[] {
 
 type PriorityFilter = "all" | "rush" | "vip" | "normal";
 
-export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBoardProps) {
+export function KDSBoard({ restaurantId, restaurantName, restaurantSlug, establishmentType = "restaurant" }: KDSBoardProps) {
+  const labels = getLabels(establishmentType);
   const [orders, setOrders] = useState<OrderWithItems[]>([]);
   const [activeFilter, setActiveFilter] = useState<KDSFilter>("all");
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("all");
@@ -307,7 +310,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
 
   // --- Rendu ---
   return (
-    <PageTransition className="min-h-screen bg-gray-900 flex flex-col">
+    <PageTransition className="min-h-screen bg-[#0F172A] flex flex-col">
       {/* Offline banner */}
       {!isOnline && (
         <div className="bg-red-600 text-white text-center py-2 px-4 text-sm font-medium flex items-center justify-center gap-2 flex-shrink-0">
@@ -316,19 +319,19 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
         </div>
       )}
       {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between gap-4 flex-shrink-0">
+      <header className="bg-[#1E293B] border-b border-white/10 px-4 py-3 flex items-center justify-between gap-4 flex-shrink-0">
         <div>
           <h1 className="text-xl font-bold text-white leading-tight">
             {restaurantName}
           </h1>
-          <p className="text-sm text-gray-400">Ecran cuisine (KDS)</p>
+          <p className="text-sm text-gray-400">{labels.kitchenScreen} (KDS)</p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Toggle son */}
           <button
             onClick={() => setSoundEnabled((prev) => !prev)}
-            className={`p-2 rounded-lg transition-colors ${soundEnabled ? "bg-green-600 hover:bg-green-500 text-white" : "bg-gray-700 hover:bg-gray-600 text-gray-400"}`}
+            className={`p-2 rounded-lg transition-colors ${soundEnabled ? "bg-green-600 hover:bg-green-500 text-white" : "bg-[#1E293B] hover:bg-[#334155] text-gray-400"}`}
             aria-label={soundEnabled ? "Desactiver le son" : "Activer le son"}
             title={soundEnabled ? "Son active" : "Son desactive"}
           >
@@ -398,7 +401,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
                       : value === "rush"
                       ? "bg-orange-500/30 text-orange-200 border-orange-500/60"
                       : "bg-white text-gray-900 border-white"
-                    : `bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700 hover:text-gray-200 ${colorClass}`
+                    : `bg-[#1E293B] text-gray-400 border-white/10 hover:bg-[#334155] hover:text-gray-200 ${colorClass}`
                 }`}
               >
                 {label}
@@ -422,7 +425,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
             <p className="text-red-400 font-medium">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+              className="px-4 py-2 bg-[#1E293B] hover:bg-[#334155] text-white rounded-lg text-sm"
             >
               Recharger la page
             </button>
@@ -446,6 +449,7 @@ export function KDSBoard({ restaurantId, restaurantName, restaurantSlug }: KDSBo
                 onStatusChange={handleStatusChange}
                 onReject={handleReject}
                 restaurantSlug={restaurantSlug}
+                establishmentType={establishmentType}
               />
             ))}
           </div>

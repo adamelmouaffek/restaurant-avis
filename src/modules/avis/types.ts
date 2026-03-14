@@ -5,6 +5,7 @@ export interface SpinResult {
   prizeIcon: string;
   prizeColor: string;
   segmentIndex: number;
+  participationId: string;
 }
 
 export interface ReviewFormData {

@@ -7,6 +7,7 @@ export interface ServerSession {
   restaurantId: string;
   slug: string;
   role: "waiter" | "manager" | "kitchen";
+  establishmentType?: string;
 }
 
 export async function getServerSession(): Promise<ServerSession | null> {

@@ -18,7 +18,7 @@ export default async function KDSPage({ params }: KDSPageProps) {
 
   const { data: restaurant, error } = await supabaseAdmin
     .from("restaurants")
-    .select("id, name, slug")
+    .select("id, name, slug, establishment_type")
     .eq("slug", slug)
     .single();
 
@@ -31,6 +31,7 @@ export default async function KDSPage({ params }: KDSPageProps) {
       restaurantId={restaurant.id}
       restaurantName={restaurant.name}
       restaurantSlug={slug}
+      establishmentType={restaurant.establishment_type ?? "restaurant"}
     />
   );
 }

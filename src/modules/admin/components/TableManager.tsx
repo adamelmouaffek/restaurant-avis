@@ -12,14 +12,20 @@ import {
   Users as UsersIcon,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import type { RestaurantTable } from "@/shared/types";
+import { getLabels } from "@/shared/lib/labels";
+import type { RestaurantTable, EstablishmentType } from "@/shared/types";
 
 interface TableFormData {
   number: string;
   capacity: string;
 }
 
-export function TableManager() {
+interface TableManagerProps {
+  establishmentType?: EstablishmentType;
+}
+
+export function TableManager({ establishmentType = "restaurant" }: TableManagerProps) {
+  const labels = getLabels(establishmentType);
   const [tables, setTables] = useState<RestaurantTable[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -185,7 +191,7 @@ export function TableManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Gestion des tables</h1>
+          <h1 className="text-2xl font-bold text-foreground">Gestion des {labels.tables.toLowerCase()}</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {tables.length} table{tables.length !== 1 ? "s" : ""} ·{" "}
             {activeTables.length} active{activeTables.length !== 1 ? "s" : ""}

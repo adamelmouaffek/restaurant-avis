@@ -1,8 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { PageTransition, FadeIn } from "@/shared/components/animations";
+import type { EstablishmentType } from "@/shared/types";
+import { getLabels } from "@/shared/lib/labels";
+import { supabase } from "@/shared/lib/supabase/client";
 
 function ConfirmationContent({ slug }: { slug: string }) {
   const searchParams = useSearchParams();
@@ -11,6 +15,28 @@ function ConfirmationContent({ slug }: { slug: string }) {
   const orderId = searchParams.get("order_id");
   const tableNumber = searchParams.get("table_number") ?? "1";
   const totalRaw = searchParams.get("total");
+
+  const [establishmentType, setEstablishmentType] = useState<EstablishmentType>("restaurant");
+
+  useEffect(() => {
+    async function fetchEstablishmentType() {
+      try {
+        const { data } = await supabase
+          .from("restaurants")
+          .select("establishment_type")
+          .eq("slug", slug)
+          .single();
+        if (data?.establishment_type) {
+          setEstablishmentType(data.establishment_type);
+        }
+      } catch {
+        // Fallback to default labels
+      }
+    }
+    fetchEstablishmentType();
+  }, [slug]);
+
+  const labels = getLabels(establishmentType);
 
   // Formater le montant en euros (total en centimes ou en euros selon l'API)
   const totalFormatted = totalRaw
@@ -47,13 +73,13 @@ function ConfirmationContent({ slug }: { slug: string }) {
               Commande envoyee !
             </h1>
             <p className="text-base font-medium text-gray-600">
-              Table {tableNumber}&nbsp;&mdash;&nbsp;Total&nbsp;: {totalFormatted}&nbsp;&euro;
+              {labels.table} {tableNumber}&nbsp;&mdash;&nbsp;Total&nbsp;: {totalFormatted}&nbsp;&euro;
             </p>
           </div>
 
           {/* Message */}
           <p className="text-sm text-gray-500 leading-relaxed">
-            Votre commande est en cours de preparation. Un serveur vous apportera vos plats.
+            Votre commande est en cours de preparation. Vos plats vous seront apportes par le {labels.staffLabel}.
           </p>
 
           {/* Numero de commande (subtil) */}

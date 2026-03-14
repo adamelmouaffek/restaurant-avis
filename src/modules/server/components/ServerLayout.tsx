@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { LayoutGrid, ClipboardList, Bell } from "lucide-react";
 import ServiceNotificationBell from "./ServiceNotificationBell";
+import { getLabels } from "@/shared/lib/labels";
+import type { EstablishmentType } from "@/shared/types";
 
 interface ServerLayoutProps {
   children: React.ReactNode;
@@ -11,39 +13,42 @@ interface ServerLayoutProps {
   staffName: string;
   restaurantName: string;
   notificationCount?: number;
+  establishmentType?: EstablishmentType;
 }
-
-const TABS = [
-  {
-    key: "tables",
-    label: "Tables",
-    icon: LayoutGrid,
-    href: (slug: string) => `/s/${slug}/tables`,
-    match: "/tables",
-  },
-  {
-    key: "orders",
-    label: "Commandes",
-    icon: ClipboardList,
-    href: (slug: string) => `/s/${slug}/orders`,
-    match: "/orders",
-  },
-  {
-    key: "notifications",
-    label: "Alertes",
-    icon: Bell,
-    href: (slug: string) => `/s/${slug}/notifications`,
-    match: "/notifications",
-  },
-];
 
 export default function ServerLayout({
   children,
   slug,
   staffName,
   restaurantName,
+  establishmentType = "restaurant",
 }: ServerLayoutProps) {
   const pathname = usePathname();
+  const labels = getLabels(establishmentType);
+
+  const TABS = [
+    {
+      key: "tables",
+      label: labels.tables,
+      icon: LayoutGrid,
+      href: (s: string) => `/s/${s}/tables`,
+      match: "/tables",
+    },
+    {
+      key: "orders",
+      label: "Commandes",
+      icon: ClipboardList,
+      href: (s: string) => `/s/${s}/orders`,
+      match: "/orders",
+    },
+    {
+      key: "notifications",
+      label: "Alertes",
+      icon: Bell,
+      href: (s: string) => `/s/${s}/notifications`,
+      match: "/notifications",
+    },
+  ];
 
   return (
     <div className="min-h-dvh bg-gray-50 flex flex-col">
@@ -60,7 +65,7 @@ export default function ServerLayout({
       <main className="flex-1 pb-20">{children}</main>
 
       {/* Bottom tab bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 safe-area-bottom">
+      <nav className="fixed bottom-0 left-0 right-0 bg-[#0F172A] border-t border-white/10 z-40 safe-area-bottom">
         <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
           {TABS.map((tab) => {
             const isActive = pathname?.includes(tab.match) ?? false;
@@ -72,8 +77,8 @@ export default function ServerLayout({
                 href={tab.href(slug)}
                 className={`flex flex-col items-center justify-center gap-0.5 px-4 py-2 rounded-lg transition-colors ${
                   isActive
-                    ? "text-blue-600"
-                    : "text-gray-400 hover:text-gray-600"
+                    ? "text-blue-400"
+                    : "text-white/40 hover:text-white/70"
                 }`}
               >
                 <Icon

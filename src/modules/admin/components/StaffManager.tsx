@@ -13,6 +13,8 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { getLabels } from "@/shared/lib/labels";
+import type { EstablishmentType } from "@/shared/types";
 
 interface StaffMember {
   id: string;
@@ -21,12 +23,6 @@ interface StaffMember {
   is_active: boolean;
   created_at: string;
 }
-
-const ROLE_LABELS: Record<string, string> = {
-  waiter: "Serveur",
-  manager: "Manager",
-  kitchen: "Cuisine",
-};
 
 const ROLE_BADGE_CLASSES: Record<string, string> = {
   waiter: "bg-blue-100 text-blue-700 border-blue-200",
@@ -40,7 +36,17 @@ interface StaffFormData {
   role: "waiter" | "manager" | "kitchen";
 }
 
-export function StaffManager() {
+interface StaffManagerProps {
+  establishmentType?: EstablishmentType;
+}
+
+export function StaffManager({ establishmentType = "restaurant" }: StaffManagerProps) {
+  const labels = getLabels(establishmentType);
+  const ROLE_LABELS: Record<string, string> = {
+    waiter: labels.waiter,
+    manager: "Manager",
+    kitchen: labels.kitchen,
+  };
   const [staff, setStaff] = useState<StaffMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -303,9 +309,9 @@ export function StaffManager() {
                   }
                   className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="waiter">Serveur</option>
+                  <option value="waiter">{labels.waiter}</option>
                   <option value="manager">Manager</option>
-                  <option value="kitchen">Cuisine</option>
+                  <option value="kitchen">{labels.kitchen}</option>
                 </select>
               </div>
             </div>

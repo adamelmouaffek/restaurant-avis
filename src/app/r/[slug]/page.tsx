@@ -35,10 +35,8 @@ export default async function RestaurantPage({ params }: PageProps) {
     notFound();
   }
 
-  const primaryColor = restaurant.primary_color || "#f59e0b";
-
   return (
-    <main className="min-h-dvh bg-white flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-dvh bg-[#0F172A] flex flex-col items-center justify-center px-4 py-12">
       <PageTransition className="w-full max-w-md mx-auto flex flex-col items-center gap-8 text-center">
         {/* Logo / Restaurant identity */}
         <FadeIn direction="down" delay={0.1}>
@@ -54,13 +52,12 @@ export default async function RestaurantPage({ params }: PageProps) {
               />
             ) : (
               <div
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl mx-auto shadow-lg flex items-center justify-center text-white text-3xl sm:text-4xl font-bold"
-                style={{ backgroundColor: primaryColor }}
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl mx-auto shadow-lg flex items-center justify-center text-white text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#3B82F6] to-[#60A5FA]"
               >
                 {restaurant.name.charAt(0).toUpperCase()}
               </div>
             )}
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
               {restaurant.name}
             </h1>
           </div>
@@ -69,10 +66,10 @@ export default async function RestaurantPage({ params }: PageProps) {
         {/* Value proposition */}
         <FadeIn delay={0.2}>
           <div className="space-y-3">
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+            <p className="text-base sm:text-lg text-white/60 leading-relaxed">
               Votre avis compte pour nous !
             </p>
-            <p className="text-sm text-gray-500 leading-relaxed">
+            <p className="text-sm text-white/40 leading-relaxed">
               Partagez votre experience et tentez de gagner un cadeau en tournant
               notre roue de la chance.
             </p>
@@ -82,14 +79,13 @@ export default async function RestaurantPage({ params }: PageProps) {
         {/* Gift icon */}
         <FadeIn delay={0.3}>
           <div
-            className="w-16 h-16 rounded-full flex items-center justify-center shadow-md"
-            style={{ backgroundColor: `${primaryColor}20` }}
+            className="w-16 h-16 rounded-full flex items-center justify-center bg-white/5 border border-white/10"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
-              stroke={primaryColor}
+              stroke="#3B82F6"
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -107,15 +103,14 @@ export default async function RestaurantPage({ params }: PageProps) {
         <FadeIn delay={0.4}>
           <Link
             href={`/r/${restaurant.slug}/review`}
-            className="w-full max-w-[280px] h-14 rounded-2xl font-semibold text-lg text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center"
-            style={{ backgroundColor: primaryColor }}
+            className="w-full max-w-[280px] h-14 rounded-2xl font-semibold text-lg text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center bg-gradient-to-r from-[#3B82F6] to-[#60A5FA]"
           >
             Donner mon avis
           </Link>
         </FadeIn>
 
         {/* Subtle footer */}
-        <p className="text-xs text-gray-400 mt-4">
+        <p className="text-xs text-white/30 mt-4">
           Simple, rapide et gratuit
         </p>
       </PageTransition>

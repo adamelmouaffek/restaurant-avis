@@ -13,12 +13,15 @@ import {
   X,
   Rocket,
 } from "lucide-react";
+import { getLabels } from "@/shared/lib/labels";
+import type { EstablishmentType } from "@/shared/types";
 
 interface OnboardingChecklistProps {
   slug: string;
   staffCount: number;
   menuItemCount: number;
   tableCount: number;
+  establishmentType?: EstablishmentType;
 }
 
 const DISMISS_KEY = "onboarding_dismissed";
@@ -28,7 +31,9 @@ export function OnboardingChecklist({
   staffCount,
   menuItemCount,
   tableCount,
+  establishmentType = "restaurant",
 }: OnboardingChecklistProps) {
+  const labels = getLabels(establishmentType);
   const [dismissed, setDismissed] = useState(true); // start hidden to avoid flash
 
   useEffect(() => {
@@ -37,25 +42,25 @@ export function OnboardingChecklist({
 
   const steps = [
     {
-      label: "Ajouter des articles au menu",
+      label: `Ajouter des articles ${labels.menu === "Menu" ? "au menu" : "a la carte"}`,
       href: "/dashboard/menu",
       done: menuItemCount > 0,
       icon: UtensilsCrossed,
     },
     {
-      label: "Creer votre equipe (serveur, cuisine)",
+      label: `Creer votre equipe (${labels.staffLabel}, ${labels.kitchen.toLowerCase()})`,
       href: "/dashboard/staff",
       done: staffCount > 0,
       icon: Users,
     },
     {
-      label: "Configurer vos tables",
+      label: `Configurer vos ${labels.tables.toLowerCase()}`,
       href: "/dashboard/tables",
       done: tableCount > 2,
       icon: LayoutGrid,
     },
     {
-      label: "Tester le menu client",
+      label: `Tester ${labels.menu === "Menu" ? "le menu" : "la carte"} client`,
       href: `/m/${slug}/table/1`,
       done: false,
       icon: ExternalLink,
@@ -89,7 +94,7 @@ export function OnboardingChecklist({
           </div>
           <div>
             <h3 className="font-semibold text-lg">
-              {allDone ? "Votre restaurant est pret !" : "Bienvenue ! Configurez votre restaurant"}
+              {allDone ? `Votre ${labels.establishment} est pret !` : `Bienvenue ! Configurez votre ${labels.establishment}`}
             </h3>
             <p className="text-sm text-muted-foreground">
               {completedCount}/3 etapes completees

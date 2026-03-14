@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import ServerLayout from "@/modules/server/components/ServerLayout";
+import type { EstablishmentType } from "@/shared/types";
 
 interface SessionData {
   staffId: string;
@@ -10,6 +11,7 @@ interface SessionData {
   restaurantId: string;
   slug: string;
   role: string;
+  establishmentType?: string;
 }
 
 export default function ServerSlugLayout({
@@ -86,6 +88,7 @@ export default function ServerSlugLayout({
       slug={slug}
       staffName={session.staffName}
       restaurantName={slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+      establishmentType={(session.establishmentType as EstablishmentType) || "restaurant"}
     >
       {children}
     </ServerLayout>

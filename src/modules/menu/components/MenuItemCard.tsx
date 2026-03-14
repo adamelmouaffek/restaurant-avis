@@ -1,15 +1,31 @@
 import Image from "next/image";
 import type { MenuItem } from "@/shared/types";
 
+function getCategoryFallback(categoryName?: string): { gradient: string; emoji: string } {
+  const key = (categoryName || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  if (key.includes("entree") || key.includes("salade") || key.includes("soupe") || key.includes("starter"))
+    return { gradient: "from-emerald-400 to-teal-500", emoji: "🥗" };
+  if (key.includes("plat") || key.includes("viande") || key.includes("poisson") || key.includes("main"))
+    return { gradient: "from-orange-400 to-red-500", emoji: "🥩" };
+  if (key.includes("dessert") || key.includes("sucre") || key.includes("patisserie"))
+    return { gradient: "from-pink-400 to-rose-500", emoji: "🍰" };
+  if (key.includes("boisson") || key.includes("drink") || key.includes("cocktail") || key.includes("vin") || key.includes("biere"))
+    return { gradient: "from-blue-400 to-cyan-500", emoji: "🍹" };
+  if (key.includes("petit") || key.includes("breakfast"))
+    return { gradient: "from-amber-400 to-yellow-500", emoji: "🥐" };
+  return { gradient: "from-gray-400 to-slate-500", emoji: "🍽️" };
+}
+
 interface MenuItemCardProps {
   item: MenuItem;
   quantity: number;
   onAdd: () => void;
   onRemove: () => void;
   isAvailable?: boolean;
+  categoryName?: string;
 }
 
-export default function MenuItemCard({ item, quantity, onAdd, onRemove, isAvailable = true }: MenuItemCardProps) {
+export default function MenuItemCard({ item, quantity, onAdd, onRemove, isAvailable = true, categoryName }: MenuItemCardProps) {
   const priceFormatted = item.price.toFixed(2).replace(".", ",");
 
   return (
@@ -67,11 +83,14 @@ export default function MenuItemCard({ item, quantity, onAdd, onRemove, isAvaila
               height={80}
               className="w-full h-full object-cover"
             />
-          ) : (
-            <span className="text-3xl" role="img" aria-label="Plat">
-              🍽️
-            </span>
-          )}
+          ) : (() => {
+            const fb = getCategoryFallback(categoryName);
+            return (
+              <div className={`w-full h-full bg-gradient-to-br ${fb.gradient} flex items-center justify-center`}>
+                <span className="text-2xl drop-shadow-sm">{fb.emoji}</span>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Controles +/- */}

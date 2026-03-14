@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS restaurants (
   google_place_id TEXT,
   logo_url TEXT,
   primary_color TEXT DEFAULT '#E63946',
+  establishment_type TEXT NOT NULL DEFAULT 'restaurant'
+    CHECK (establishment_type IN ('restaurant', 'hotel', 'cafe', 'bar')),
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
