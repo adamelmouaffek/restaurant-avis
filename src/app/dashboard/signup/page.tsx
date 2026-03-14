@@ -27,6 +27,7 @@ export default function DashboardSignupPage() {
   const [firstServerName, setFirstServerName] = useState("");
   const [firstServerPin, setFirstServerPin] = useState("");
   const [establishmentType, setEstablishmentType] = useState<EstablishmentType>("restaurant");
+  const [seedDemoData, setSeedDemoData] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -64,6 +65,7 @@ export default function DashboardSignupPage() {
           confirmPassword,
           tableCount,
           establishmentType,
+          seedDemoData,
           firstServer: firstServerName
             ? { name: firstServerName, pin: firstServerPin }
             : undefined,
@@ -173,6 +175,24 @@ export default function DashboardSignupPage() {
                 value={tableCount}
                 onChange={(e) => setTableCount(parseInt(e.target.value) || 1)}
               />
+            </div>
+
+            <div className="flex items-start gap-3 rounded-lg border border-input p-3">
+              <input
+                type="checkbox"
+                id="seedDemo"
+                checked={seedDemoData}
+                onChange={(e) => setSeedDemoData(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+              />
+              <div>
+                <Label htmlFor="seedDemo" className="cursor-pointer">
+                  Ajouter des donnees de demonstration
+                </Label>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Articles de {labels.menu.toLowerCase()}, cadeaux pour la roue. Modifiables depuis le dashboard.
+                </p>
+              </div>
             </div>
 
             {/* Separator */}

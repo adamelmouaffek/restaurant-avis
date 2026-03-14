@@ -123,7 +123,7 @@ export default function ReviewPage() {
 
           <div className="w-full max-w-md mx-auto space-y-4">
             <FadeIn delay={0.1}>
-              <div className="bg-white/5 rounded-xl border border-white/10 shadow-none p-8 space-y-6">
+              <div className="bg-white/[0.08] rounded-xl border border-white/15 shadow-none p-8 space-y-6">
                 <div className="text-center space-y-2">
                   <h2 className="text-xl font-semibold text-white">
                     Donnez votre avis
@@ -152,7 +152,7 @@ export default function ReviewPage() {
                 <Button
                   onClick={() => setAuthMode("email")}
                   variant="outline"
-                  className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg border border-white/20 text-white hover:bg-white/10"
+                  className="w-full h-12 text-base font-semibold rounded-xl shadow-md transition-all duration-200 hover:shadow-lg border-2 border-white/40 text-white bg-white/10 hover:bg-white/20"
                 >
                   Continuer avec un email
                 </Button>
@@ -185,7 +185,7 @@ export default function ReviewPage() {
 
           <button
             onClick={() => setAuthMode("choice")}
-            className="text-xs text-white/40 hover:text-white/60 mt-6 transition-colors min-h-[44px] px-4"
+            className="text-sm text-white/50 hover:text-white/80 mt-6 transition-colors min-h-[44px] px-4 underline underline-offset-2"
           >
             Retour au choix d&apos;authentification
           </button>
@@ -230,7 +230,7 @@ export default function ReviewPage() {
 
         <button
           onClick={() => setAuthMode("choice")}
-          className="text-xs text-white/40 hover:text-white/60 mt-6 transition-colors min-h-[44px] px-4"
+          className="text-sm text-white/50 hover:text-white/80 mt-6 transition-colors min-h-[44px] px-4 underline underline-offset-2"
         >
           Retour au choix d&apos;authentification
         </button>

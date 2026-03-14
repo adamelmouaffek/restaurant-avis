@@ -90,7 +90,7 @@ export function ReviewForm({
 
   if (alreadyParticipated) {
     return (
-      <Card className="w-full max-w-md mx-auto bg-white/5 border border-white/10 shadow-none">
+      <Card className="w-full max-w-md mx-auto bg-white/[0.08] border border-white/15 shadow-none">
         <CardContent className="p-8 sm:p-10">
           <div className="flex flex-col items-center text-center space-y-6">
             {/* Check icon */}
@@ -149,7 +149,7 @@ export function ReviewForm({
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-white/5 border border-white/10 shadow-none">
+    <Card className="w-full max-w-md mx-auto bg-white/[0.08] border border-white/15 shadow-none">
       <CardContent className="p-6 sm:p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="text-center space-y-2">
@@ -199,7 +199,7 @@ export function ReviewForm({
                 setFormData((prev) => ({ ...prev, comment: e.target.value }))
               }
               rows={4}
-              className="resize-none text-base bg-white/5 border-white/10 text-white placeholder:text-white/30"
+              className="resize-none text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-400"
             />
           </div>
 

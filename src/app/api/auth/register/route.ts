@@ -6,7 +6,7 @@ import { signJWT } from "@/shared/lib/jwt";
 import { rateLimit } from "@/shared/lib/rate-limit";
 import { getClientIp } from "@/shared/lib/get-client-ip";
 import { sanitizeString, EMAIL_REGEX, MIN_PASSWORD_LENGTH } from "@/shared/lib/validation";
-import { getLabels } from "@/shared/lib/labels";
+import { getLabels, getDemoMenuItems, getDemoPrizes } from "@/shared/lib/labels";
 
 function slugify(text: string): string {
   return text
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, email, password, confirmPassword, tableCount, firstServer, establishmentType } = body;
+    const { name, email, password, confirmPassword, tableCount, firstServer, establishmentType, seedDemoData } = body;
 
     // Validate establishment type
     const VALID_TYPES = ["restaurant", "hotel", "cafe", "bar"];
@@ -157,6 +157,46 @@ export async function POST(request: NextRequest) {
           pin: hashedPin,
           role: "waiter",
         });
+      }
+
+      // Seed demo data (menu items + prizes) if user opted in
+      if (seedDemoData) {
+        // Fetch the created categories to get their IDs
+        const { data: createdCategories } = await supabaseAdmin
+          .from("menu_categories")
+          .select("id, sort_order")
+          .eq("restaurant_id", restaurant.id)
+          .order("sort_order");
+
+        if (createdCategories && createdCategories.length > 0) {
+          const demoItems = getDemoMenuItems(validType);
+          const menuInserts = demoItems
+            .filter((item) => item.categoryIndex < createdCategories.length)
+            .map((item, i) => ({
+              restaurant_id: restaurant.id,
+              category_id: createdCategories[item.categoryIndex].id,
+              name: item.name,
+              description: item.description,
+              price: item.price,
+              sort_order: i,
+            }));
+          if (menuInserts.length > 0) {
+            await supabaseAdmin.from("menu_items").insert(menuInserts);
+          }
+        }
+
+        // Seed demo prizes
+        const demoPrizes = getDemoPrizes(validType);
+        const prizeInserts = demoPrizes.map((p) => ({
+          restaurant_id: restaurant.id,
+          name: p.name,
+          description: p.description,
+          probability: p.probability,
+          color: p.color,
+          icon: p.icon,
+          is_active: true,
+        }));
+        await supabaseAdmin.from("prizes").insert(prizeInserts);
       }
     } catch {
       // Seed failure is not critical
