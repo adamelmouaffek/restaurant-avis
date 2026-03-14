@@ -159,17 +159,40 @@ export function SpinningWheel({
                 const midAngle = startAngle + seg / 2;
                 const color = i % 2 === 0 ? C1 : C2;
 
-                // Text along the radius: exterior → center
-                // Position text at 85% of radius, reading from outside toward center
-                const textDist = R * 0.58;
+                // Emoji position — near the outer edge
+                const emojiDist = R * 0.78;
+                const ep = polar(CX, CY, emojiDist, midAngle);
+
+                // Text position — middle of segment
+                const textDist = R * 0.50;
                 const tp = polar(CX, CY, textDist, midAngle);
 
-                // Rotate text so it reads along the radius from exterior to center
-                // For segments on the bottom half, flip 180 so text isn't upside down
+                // Rotate text to read along radius
                 const isBottom = midAngle > 90 && midAngle < 270;
                 const textRotation = isBottom ? midAngle + 180 : midAngle;
 
-                const label = prize.name.length > 14 ? prize.name.slice(0, 13) + "\u2026" : prize.name;
+                // Split long names into 2 lines
+                const maxLen = n <= 5 ? 16 : 12;
+                const name = prize.name;
+                let line1 = name;
+                let line2 = "";
+                if (name.length > maxLen) {
+                  const words = name.split(" ");
+                  line1 = "";
+                  for (const word of words) {
+                    if ((line1 + " " + word).trim().length <= maxLen) {
+                      line1 = (line1 + " " + word).trim();
+                    } else {
+                      line2 = (line2 + " " + word).trim();
+                    }
+                  }
+                  if (line2.length > maxLen) {
+                    line2 = line2.slice(0, maxLen - 1) + "\u2026";
+                  }
+                }
+
+                const fontSize = n <= 5 ? 16 : n <= 6 ? 14 : 12;
+                const emojiSize = n <= 5 ? 28 : n <= 6 ? 24 : 20;
 
                 return (
                   <g key={prize.id}>
@@ -187,22 +210,52 @@ export function SpinningWheel({
                       opacity="0.8"
                     />
 
-                    {/* Prize name — bold white text along radius */}
+                    {/* Prize emoji — large, near outer edge */}
                     <text
-                      x={tp.x}
-                      y={tp.y}
+                      x={ep.x}
+                      y={ep.y}
                       textAnchor="middle"
                       dominantBaseline="central"
-                      fontSize="18"
+                      fontSize={emojiSize}
+                      transform={`rotate(${textRotation}, ${ep.x}, ${ep.y})`}
+                    >
+                      {prize.icon}
+                    </text>
+
+                    {/* Prize name — bold white text, 1 or 2 lines */}
+                    <text
+                      x={tp.x}
+                      y={line2 ? tp.y - fontSize * 0.55 : tp.y}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontSize={fontSize}
                       fontWeight="800"
                       fontFamily="system-ui, -apple-system, sans-serif"
                       fill="white"
                       filter="url(#ts)"
                       transform={`rotate(${textRotation}, ${tp.x}, ${tp.y})`}
-                      letterSpacing="0.5"
+                      letterSpacing="0.3"
                     >
-                      {label}
+                      {line1}
                     </text>
+                    {line2 && (
+                      <text
+                        x={tp.x}
+                        y={tp.y + fontSize * 0.65}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={fontSize - 1}
+                        fontWeight="700"
+                        fontFamily="system-ui, -apple-system, sans-serif"
+                        fill="white"
+                        opacity="0.85"
+                        filter="url(#ts)"
+                        transform={`rotate(${textRotation}, ${tp.x}, ${tp.y})`}
+                        letterSpacing="0.3"
+                      >
+                        {line2}
+                      </text>
+                    )}
                   </g>
                 );
               })}
