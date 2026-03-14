@@ -378,18 +378,16 @@ export default function MenuPage({ restaurant, tableNumber }: MenuPageProps) {
         establishmentType={restaurant.establishment_type}
       />
 
-      {/* "Voir mes commandes" pill (above cart badge, bottom-right) */}
-      {orderCount > 0 && (
-        <div className="fixed bottom-[88px] right-4 sm:right-6 z-50">
-          <Link
-            href={`/m/${restaurant.slug}/table/${tableNumber}/status`}
-            className="flex items-center gap-1.5 bg-white border border-blue-200 text-blue-600 text-xs font-medium px-3 py-1.5 rounded-full shadow-md hover:bg-blue-50 transition-colors"
-          >
-            <ClipboardList className="w-3.5 h-3.5" />
-            Mes commandes
-          </Link>
-        </div>
-      )}
+      {/* "Voir mes commandes" pill (above cart badge, bottom-right) — toujours visible */}
+      <div className="fixed bottom-[88px] right-4 sm:right-6 z-50">
+        <Link
+          href={`/m/${restaurant.slug}/table/${tableNumber}/status`}
+          className="flex items-center gap-1.5 bg-white border border-blue-200 text-blue-600 text-xs font-medium px-3 py-1.5 rounded-full shadow-md hover:bg-blue-50 transition-colors"
+        >
+          <ClipboardList className="w-3.5 h-3.5" />
+          Mes commandes{orderCount > 0 ? ` (${orderCount})` : ""}
+        </Link>
+      </div>
 
       {/* Badge panier flottant */}
       <CartBadge count={totalItems} onClick={() => setIsCartOpen(true)} />
