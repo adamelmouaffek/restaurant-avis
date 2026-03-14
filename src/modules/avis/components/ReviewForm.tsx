@@ -12,7 +12,6 @@ import type { ReviewFormData } from "@/modules/avis/types";
 interface ReviewFormProps {
   restaurantId: string;
   restaurantName: string;
-  googleMapsUrl: string | null;
   userEmail: string;
   userName: string | null;
   googleSub: string;
@@ -22,7 +21,6 @@ interface ReviewFormProps {
 export function ReviewForm({
   restaurantId,
   restaurantName,
-  googleMapsUrl,
   userEmail,
   userName,
   googleSub,
@@ -37,10 +35,6 @@ export function ReviewForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [alreadyParticipated, setAlreadyParticipated] = useState(false);
-  const [googleMapsPrompt, setGoogleMapsPrompt] = useState<{
-    participantId: string;
-    reviewId: string;
-  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,94 +72,13 @@ export function ReviewForm({
         return;
       }
 
-      // Si le restaurant a un lien Google Maps et la note est >= 4,
-      // montrer un ecran intermediaire pour laisser un avis Google
-      if (googleMapsUrl && formData.rating >= 4) {
-        setGoogleMapsPrompt({
-          participantId: data.participantId,
-          reviewId: data.reviewId,
-        });
-        return;
-      }
-
       onSuccess(data.participantId, data.reviewId);
     } catch {
-      setError("Erreur de connexion. Veuillez réessayer.");
+      setError("Erreur de connexion. Veuillez reessayer.");
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  // Ecran intermediaire : proposer de laisser un avis Google Maps
-  if (googleMapsPrompt && googleMapsUrl) {
-    return (
-      <Card className="w-full max-w-md mx-auto bg-white/[0.08] border border-white/15 shadow-none">
-        <CardContent className="p-8 sm:p-10">
-          <div className="flex flex-col items-center text-center space-y-6">
-            {/* Google icon */}
-            <div className="w-20 h-20 rounded-full bg-yellow-500/10 flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-10 h-10 text-yellow-400"
-              >
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
-            </div>
-
-            {/* Message */}
-            <div className="space-y-2">
-              <h2 className="text-xl sm:text-2xl font-bold text-white">
-                Merci pour votre avis !
-              </h2>
-              <p className="text-sm text-white/60 leading-relaxed">
-                Votre experience chez{" "}
-                <span className="font-medium text-white/80">{restaurantName}</span>{" "}
-                vous a plu ? Aidez-les en laissant aussi un avis sur Google Maps !
-              </p>
-            </div>
-
-            {/* Google Maps CTA */}
-            <a
-              href={googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full h-12 px-8 rounded-xl bg-gradient-to-r from-[#4285F4] to-[#34A853] text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-5 h-5"
-              >
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-              Laisser un avis Google
-            </a>
-
-            {/* Skip button */}
-            <button
-              onClick={() => onSuccess(googleMapsPrompt.participantId, googleMapsPrompt.reviewId)}
-              className="text-sm text-white/50 hover:text-white/80 transition-colors min-h-[44px] px-4 underline underline-offset-2"
-            >
-              Passer et continuer
-            </button>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   if (alreadyParticipated) {
     return (
@@ -189,7 +102,6 @@ export function ReviewForm({
               </svg>
             </div>
 
-            {/* Message */}
             <div className="space-y-2">
               <h2 className="text-xl sm:text-2xl font-bold text-white">
                 Vous avez deja donne votre avis !
@@ -201,33 +113,6 @@ export function ReviewForm({
               </p>
             </div>
 
-            {/* Google Maps CTA (if URL exists) */}
-            {googleMapsUrl && (
-              <a
-                href={googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full h-12 px-8 rounded-xl bg-gradient-to-r from-[#4285F4] to-[#34A853] text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-5 h-5"
-                >
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                  <polyline points="15 3 21 3 21 9" />
-                  <line x1="10" y1="14" x2="21" y2="3" />
-                </svg>
-                Laisser un avis Google
-              </a>
-            )}
-
-            {/* Back CTA */}
             <Link
               href={`/r/${slug}`}
               className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-gradient-to-r from-[var(--et-accent)] to-[var(--et-accent-light)] text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
@@ -262,7 +147,7 @@ export function ReviewForm({
               Votre avis compte !
             </h2>
             <p className="text-sm text-white/60">
-              Comment était votre expérience chez{" "}
+              Comment etait votre experience chez{" "}
               <span className="font-medium text-white/80">{restaurantName}</span> ?
             </p>
           </div>
@@ -278,10 +163,10 @@ export function ReviewForm({
             />
             {formData.rating > 0 && (
               <span className="text-sm text-white/60">
-                {formData.rating === 1 && "Décevant"}
+                {formData.rating === 1 && "Decevant"}
                 {formData.rating === 2 && "Moyen"}
                 {formData.rating === 3 && "Correct"}
-                {formData.rating === 4 && "Très bien"}
+                {formData.rating === 4 && "Tres bien"}
                 {formData.rating === 5 && "Excellent !"}
               </span>
             )}
@@ -298,7 +183,7 @@ export function ReviewForm({
             </label>
             <Textarea
               id="comment"
-              placeholder="Partagez votre expérience..."
+              placeholder="Partagez votre experience..."
               value={formData.comment}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, comment: e.target.value }))

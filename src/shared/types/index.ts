@@ -40,8 +40,12 @@ export interface Review {
   id: string;
   restaurant_id: string;
   participant_id: string;
-  rating: number;
+  rating: number | null;
   comment: string | null;
+  google_maps_flow?: boolean;
+  google_review_trust?: string;
+  google_maps_departure_at?: string;
+  google_maps_return_at?: string;
   created_at: string;
 }
 
