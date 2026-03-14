@@ -1,24 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { getKdsSession } from "@/shared/lib/kds-auth";
-import type { OrderStatus } from "@/shared/types";
+import { validateTransition, type OrderStatusValue } from "@/shared/lib/order-rules";
 
 export const dynamic = "force-dynamic";
-
-const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  pending: ["confirmed", "cancelled", "rejected"],
-  confirmed: ["preparing", "cancelled", "rejected"],
-  preparing: ["ready"],
-  ready: ["delivered"],
-  delivered: [],
-  cancelled: [],
-  rejected: ["pending"],
-};
 
 /**
  * PATCH /api/kds/[slug]/orders/[id]
  *
  * KDS route protected by signed JWT session cookie.
+ * Role: "kitchen" — can confirm, prepare, mark ready. CANNOT deliver or handle payment.
  */
 export async function PATCH(
   request: NextRequest,
@@ -32,7 +23,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
   }
 
-  // Résoudre le slug → restaurant
+  // Resoudre le slug → restaurant
   const { data: restaurant, error: restaurantError } = await supabaseAdmin
     .from("restaurants")
     .select("id")
@@ -43,11 +34,11 @@ export async function PATCH(
     return NextResponse.json({ error: "Restaurant introuvable" }, { status: 404 });
   }
 
-  let body: { status?: OrderStatus; rejection_reason?: string; estimated_prep_minutes?: number };
+  let body: { status?: string; rejection_reason?: string; estimated_prep_minutes?: number };
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Corps de requête JSON invalide" }, { status: 400 });
+    return NextResponse.json({ error: "Corps de requete JSON invalide" }, { status: 400 });
   }
 
   const { status: newStatus, rejection_reason, estimated_prep_minutes } = body;
@@ -56,7 +47,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Le champ status est requis" }, { status: 400 });
   }
 
-  // Récupérer la commande actuelle
+  // Recuperer la commande actuelle
   const { data: order, error: fetchError } = await supabaseAdmin
     .from("orders")
     .select("id, status, restaurant_id")
@@ -67,23 +58,20 @@ export async function PATCH(
     return NextResponse.json({ error: "Commande introuvable" }, { status: 404 });
   }
 
-  // Vérifier que la commande appartient bien à ce restaurant (slug)
+  // Verifier que la commande appartient bien a ce restaurant
   if (order.restaurant_id !== restaurant.id) {
-    return NextResponse.json({ error: "Accès non autorisé à cette commande" }, { status: 403 });
+    return NextResponse.json({ error: "Acces non autorise a cette commande" }, { status: 403 });
   }
 
-  const currentStatus = order.status as OrderStatus;
-  const allowedNext = ALLOWED_TRANSITIONS[currentStatus];
+  // Validate transition with role-based permissions
+  const error = validateTransition(
+    order.status as OrderStatusValue,
+    newStatus as OrderStatusValue,
+    "kitchen"
+  );
 
-  if (!allowedNext.includes(newStatus)) {
-    return NextResponse.json(
-      {
-        error: `Transition invalide : "${currentStatus}" → "${newStatus}". Autorisées : ${
-          allowedNext.length > 0 ? allowedNext.join(", ") : "aucune"
-        }`,
-      },
-      { status: 400 }
-    );
+  if (error) {
+    return NextResponse.json({ error }, { status: 400 });
   }
 
   const updatePayload: Record<string, unknown> = {

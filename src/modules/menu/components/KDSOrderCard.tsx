@@ -20,9 +20,13 @@ interface KDSOrderCardProps {
 const STATUS_BADGE_CLASSES: Record<OrderStatus, string> = {
   pending: "bg-yellow-500/20 text-yellow-300 border border-yellow-500/40",
   confirmed: "bg-blue-500/20 text-blue-300 border border-blue-500/40",
+  modification_requested: "bg-amber-500/20 text-amber-300 border border-amber-500/40",
   preparing: "bg-orange-500/20 text-orange-300 border border-orange-500/40",
+  partially_ready: "bg-lime-500/20 text-lime-300 border border-lime-500/40",
   ready: "bg-green-500/20 text-green-300 border border-green-500/40",
   delivered: "bg-gray-500/20 text-gray-300 border border-gray-500/40",
+  awaiting_payment: "bg-indigo-500/20 text-indigo-300 border border-indigo-500/40",
+  paid: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40",
   cancelled: "bg-red-500/20 text-red-300 border border-red-500/40",
   rejected: "bg-red-500/20 text-red-300 border border-red-500/40",
 };
@@ -93,14 +97,14 @@ const ACTION_BUTTONS: Partial<Record<OrderStatus, ActionButton>> = {
     className: "bg-orange-600 hover:bg-orange-500 text-white",
   },
   preparing: {
+    label: "Partiellement prete",
+    nextStatus: "partially_ready",
+    className: "bg-lime-600 hover:bg-lime-500 text-white",
+  },
+  partially_ready: {
     label: "Prete !",
     nextStatus: "ready",
     className: "bg-green-600 hover:bg-green-500 text-white",
-  },
-  ready: {
-    label: "Servie",
-    nextStatus: "delivered",
-    className: "bg-gray-600 hover:bg-gray-500 text-white",
   },
 };
 

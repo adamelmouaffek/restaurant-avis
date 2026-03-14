@@ -25,9 +25,13 @@ interface ServerOrderDetailModalProps {
 const STATUS_LABELS: Record<OrderStatus, string> = {
   pending: "En attente",
   confirmed: "Confirmee",
+  modification_requested: "Modification",
   preparing: "En preparation",
+  partially_ready: "Partiellement prete",
   ready: "Prete",
   delivered: "Servie",
+  awaiting_payment: "Attente paiement",
+  paid: "Payee",
   cancelled: "Annulee",
   rejected: "Refusee",
 };
@@ -35,9 +39,13 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
 const STATUS_COLORS: Record<OrderStatus, string> = {
   pending: "bg-yellow-100 text-yellow-800",
   confirmed: "bg-blue-100 text-blue-800",
+  modification_requested: "bg-amber-100 text-amber-800",
   preparing: "bg-orange-100 text-orange-800",
+  partially_ready: "bg-lime-100 text-lime-800",
   ready: "bg-green-100 text-green-800",
   delivered: "bg-gray-100 text-gray-800",
+  awaiting_payment: "bg-indigo-100 text-indigo-800",
+  paid: "bg-emerald-100 text-emerald-800",
   cancelled: "bg-red-100 text-red-800",
   rejected: "bg-red-100 text-red-800",
 };
@@ -46,22 +54,33 @@ const STATUS_FLOW: OrderStatus[] = [
   "pending",
   "confirmed",
   "preparing",
+  "partially_ready",
   "ready",
   "delivered",
+  "awaiting_payment",
+  "paid",
 ];
 
 const NEXT_STATUS_MAP: Partial<Record<OrderStatus, OrderStatus>> = {
   pending: "confirmed",
   confirmed: "preparing",
-  preparing: "ready",
+  modification_requested: "confirmed",
+  preparing: "partially_ready",
+  partially_ready: "ready",
   ready: "delivered",
+  delivered: "awaiting_payment",
+  awaiting_payment: "paid",
 };
 
 const NEXT_LABEL_MAP: Partial<Record<OrderStatus, string>> = {
   pending: "Confirmer",
   confirmed: "En preparation",
-  preparing: "Prete a servir",
+  modification_requested: "Reconfirmer",
+  preparing: "Partiellement prete",
+  partially_ready: "Prete a servir",
   ready: "Servie",
+  delivered: "Attente paiement",
+  awaiting_payment: "Marquer payee",
 };
 
 export default function ServerOrderDetailModal({

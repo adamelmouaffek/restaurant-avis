@@ -28,9 +28,13 @@ const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
 const NEXT_STATUS: Record<OrderStatus, OrderStatus | null> = {
   pending: "confirmed",
   confirmed: "preparing",
-  preparing: "ready",
+  modification_requested: "confirmed",
+  preparing: "partially_ready",
+  partially_ready: "ready",
   ready: "delivered",
-  delivered: null,
+  delivered: "awaiting_payment",
+  awaiting_payment: "paid",
+  paid: null,
   cancelled: null,
   rejected: "pending",
 };
@@ -38,9 +42,13 @@ const NEXT_STATUS: Record<OrderStatus, OrderStatus | null> = {
 const NEXT_STATUS_LABEL: Record<OrderStatus, string> = {
   pending: "Confirmer",
   confirmed: "Demarrer preparation",
-  preparing: "Marquer prete",
+  modification_requested: "Reconfirmer",
+  preparing: "Partiellement prete",
+  partially_ready: "Marquer prete",
   ready: "Marquer servie",
-  delivered: "",
+  delivered: "Attente paiement",
+  awaiting_payment: "Marquer payee",
+  paid: "",
   cancelled: "",
   rejected: "Re-soumettre",
 };

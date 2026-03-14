@@ -1,22 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { getDashboardSession } from "@/shared/lib/dashboard-auth";
-import type { OrderStatus, OrderWithItems } from "@/shared/types";
+import { validateTransition, type OrderStatusValue } from "@/shared/lib/order-rules";
+import type { OrderWithItems } from "@/shared/types";
 
 export const dynamic = "force-dynamic";
 
-// Transitions de statut autorisées
-const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  pending: ["confirmed", "rejected", "cancelled"],
-  confirmed: ["preparing", "rejected", "cancelled"],
-  preparing: ["ready"],
-  ready: ["delivered"],
-  delivered: [],
-  cancelled: [],
-  rejected: ["pending"],
-};
-
-// PATCH : Changer le statut d'une commande (protégé dashboard)
+// PATCH : Changer le statut d'une commande (protege dashboard — role "dashboard")
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -25,19 +15,19 @@ export async function PATCH(
 
   if (!session) {
     return NextResponse.json(
-      { error: "Non autorisé — connexion au dashboard requise" },
+      { error: "Non autorise — connexion au dashboard requise" },
       { status: 401 }
     );
   }
 
   const { id } = params;
 
-  let body: { status?: OrderStatus };
+  let body: { status?: string };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json(
-      { error: "Corps de requête JSON invalide" },
+      { error: "Corps de requete JSON invalide" },
       { status: 400 }
     );
   }
@@ -51,7 +41,7 @@ export async function PATCH(
     );
   }
 
-  // Récupérer la commande actuelle
+  // Recuperer la commande actuelle
   const { data: order, error: fetchError } = await supabaseAdmin
     .from("orders")
     .select("*")
@@ -65,29 +55,26 @@ export async function PATCH(
     );
   }
 
-  // Vérifier que le restaurant appartient à la session connectée
+  // Verifier que le restaurant appartient a la session connectee
   if (session.restaurantId !== order.restaurant_id) {
     return NextResponse.json(
-      { error: "Accès non autorisé à cette commande" },
+      { error: "Acces non autorise a cette commande" },
       { status: 403 }
     );
   }
 
-  const currentStatus = order.status as OrderStatus;
-  const allowedNext = ALLOWED_TRANSITIONS[currentStatus];
+  // Validate transition with role-based permissions
+  const error = validateTransition(
+    order.status as OrderStatusValue,
+    newStatus as OrderStatusValue,
+    "dashboard"
+  );
 
-  if (!allowedNext.includes(newStatus)) {
-    return NextResponse.json(
-      {
-        error: `Transition de statut invalide : "${currentStatus}" → "${newStatus}". Transitions autorisées depuis "${currentStatus}" : ${
-          allowedNext.length > 0 ? allowedNext.join(", ") : "aucune"
-        }`,
-      },
-      { status: 400 }
-    );
+  if (error) {
+    return NextResponse.json({ error }, { status: 400 });
   }
 
-  // Appliquer la mise à jour
+  // Appliquer la mise a jour
   const { data: updatedOrder, error: updateError } = await supabaseAdmin
     .from("orders")
     .update({ status: newStatus, updated_at: new Date().toISOString() })

@@ -115,11 +115,15 @@ export interface MenuItemWithCategory extends MenuItem {
 export type OrderStatus =
   | "pending"
   | "confirmed"
+  | "modification_requested"
   | "preparing"
+  | "partially_ready"
   | "ready"
   | "delivered"
-  | "cancelled"
-  | "rejected";
+  | "awaiting_payment"
+  | "paid"
+  | "rejected"
+  | "cancelled";
 
 export interface Order {
   id: string;

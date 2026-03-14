@@ -15,6 +15,10 @@ import {
   Bell,
   Receipt,
   RefreshCw,
+  CreditCard,
+  Wallet,
+  PenLine,
+  Loader2,
 } from "lucide-react";
 import { PageTransition } from "@/shared/components/animations";
 import type { OrderStatus, OrderWithItems, EstablishmentType } from "@/shared/types";
@@ -70,6 +74,30 @@ const STATUS_CONFIG: Record<
     color: "text-red-700",
     bgColor: "bg-red-100 border-red-200",
     icon: AlertCircle,
+  },
+  modification_requested: {
+    label: "Modification demandee",
+    color: "text-purple-700",
+    bgColor: "bg-purple-100 border-purple-200",
+    icon: PenLine,
+  },
+  partially_ready: {
+    label: "Partiellement prete",
+    color: "text-teal-700",
+    bgColor: "bg-teal-100 border-teal-200",
+    icon: Loader2,
+  },
+  awaiting_payment: {
+    label: "Attente paiement",
+    color: "text-indigo-700",
+    bgColor: "bg-indigo-100 border-indigo-200",
+    icon: CreditCard,
+  },
+  paid: {
+    label: "Payee",
+    color: "text-emerald-700",
+    bgColor: "bg-emerald-100 border-emerald-200",
+    icon: Wallet,
   },
 };
 
@@ -237,12 +265,32 @@ export default function OrderStatusPage() {
     }
   };
 
-  // Active orders (not delivered/cancelled)
+  // Cancel order (client can only cancel pending orders)
+  const handleCancelOrder = async (orderId: string) => {
+    if (!confirm("Voulez-vous vraiment annuler cette commande ?")) return;
+    try {
+      const res = await fetch(`/api/menu/orders/${orderId}/cancel`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table_session_id: tableSessionId }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.error || "Impossible d'annuler cette commande");
+        return;
+      }
+      fetchOrders();
+    } catch {
+      alert("Erreur lors de l'annulation");
+    }
+  };
+
+  // Active orders (not terminal)
   const activeOrders = orders.filter(
-    (o) => o.status !== "delivered" && o.status !== "cancelled"
+    (o) => !["delivered", "cancelled", "paid", "awaiting_payment"].includes(o.status)
   );
   const completedOrders = orders.filter(
-    (o) => o.status === "delivered" || o.status === "cancelled"
+    (o) => ["delivered", "cancelled", "paid", "awaiting_payment"].includes(o.status)
   );
 
   // Note: no session check — we always try to fetch by table number as fallback
@@ -313,7 +361,7 @@ export default function OrderStatusPage() {
             <div className="space-y-4">
               <AnimatePresence>
                 {activeOrders.map((order) => (
-                  <OrderCard key={order.id} order={order} />
+                  <OrderCard key={order.id} order={order} onCancel={handleCancelOrder} />
                 ))}
               </AnimatePresence>
             </div>
@@ -371,9 +419,10 @@ export default function OrderStatusPage() {
 }
 
 /* ===== Order Card Component ===== */
-function OrderCard({ order }: { order: OrderWithItems }) {
+function OrderCard({ order, onCancel }: { order: OrderWithItems; onCancel?: (orderId: string) => void }) {
   const statusConfig = STATUS_CONFIG[order.status] ?? STATUS_CONFIG.pending;
   const StatusIcon = statusConfig.icon;
+  const canCancel = order.status === "pending" && onCancel;
 
   return (
     <motion.div
@@ -410,14 +459,24 @@ function OrderCard({ order }: { order: OrderWithItems }) {
         ))}
       </div>
 
-      {/* Footer with total */}
+      {/* Footer with total + cancel button */}
       <div className="px-4 py-2.5 border-t border-gray-100 flex items-center justify-between bg-gray-50">
         <span className="text-xs text-gray-500 uppercase tracking-wide">
           Ref. {order.id.slice(0, 8).toUpperCase()}
         </span>
-        <span className="font-bold text-gray-900 text-sm tabular-nums">
-          {formatPrice(order.total_amount)}&nbsp;&euro;
-        </span>
+        <div className="flex items-center gap-3">
+          {canCancel && (
+            <button
+              onClick={() => onCancel(order.id)}
+              className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
+            >
+              Annuler
+            </button>
+          )}
+          <span className="font-bold text-gray-900 text-sm tabular-nums">
+            {formatPrice(order.total_amount)}&nbsp;&euro;
+          </span>
+        </div>
       </div>
     </motion.div>
   );

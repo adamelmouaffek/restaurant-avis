@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { getServerSession } from "@/shared/lib/server-auth";
+import { validateTransition, type OrderStatusValue } from "@/shared/lib/order-rules";
 
 export const dynamic = "force-dynamic";
 
-const ALLOWED_TRANSITIONS: Record<string, string[]> = {
-  pending: ["confirmed", "cancelled", "rejected"],
-  confirmed: ["preparing", "cancelled", "rejected"],
-  preparing: ["ready"],
-  ready: ["delivered"],
-  rejected: ["pending"],
-  delivered: [],
-  cancelled: [],
-};
-
+/**
+ * PATCH /api/server/[slug]/orders/[id]
+ *
+ * Server/waiter route protected by signed JWT session cookie.
+ * Role: "server" — can serve, handle payment, request modifications, cancel.
+ * CANNOT start preparation (that's the kitchen's job).
+ */
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string; id: string }> }
@@ -39,15 +37,18 @@ export async function PATCH(
 
   const updates: Record<string, unknown> = {};
 
-  // Status change
+  // Status change — validated with role-based permissions
   if (body.status) {
-    const allowed = ALLOWED_TRANSITIONS[order.status] || [];
-    if (!allowed.includes(body.status)) {
-      return NextResponse.json(
-        { error: `Transition ${order.status} -> ${body.status} non autorisee` },
-        { status: 400 }
-      );
+    const error = validateTransition(
+      order.status as OrderStatusValue,
+      body.status as OrderStatusValue,
+      "server"
+    );
+
+    if (error) {
+      return NextResponse.json({ error }, { status: 400 });
     }
+
     updates.status = body.status;
   }
 
@@ -84,7 +85,7 @@ export async function PATCH(
     }
   }
 
-  // Mark as paid
+  // Mark as paid — use status transition instead of boolean
   if (body.paid !== undefined) {
     updates.paid = body.paid;
     if (body.payment_method) {
