@@ -17,3 +17,6 @@ export const MAX_LENGTHS = {
   rejectionReason: 500,
   description: 500,
 } as const;
+
+export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const MIN_PASSWORD_LENGTH = 8;

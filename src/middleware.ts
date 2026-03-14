@@ -33,6 +33,7 @@ const RATE_LIMITS: Record<string, [number, number]> = {
   "POST:/api/kds/auth": [5, 5 * 60 * 1000],           // 5 per 5min (KDS PIN)
   "POST:/api/avis/reviews": [3, 60 * 60 * 1000],      // 3 per hour
   "POST:/api/avis/wheel/spin": [5, 60 * 60 * 1000],   // 5 per hour
+  "POST:/api/auth/register": [3, 60 * 60 * 1000],     // 3 per hour
 };
 
 function getSpecificRateLimit(method: string, pathname: string): [number, number] | null {
@@ -52,7 +53,7 @@ export async function middleware(request: NextRequest) {
   const method = request.method;
 
   // --- Dashboard auth protection ---
-  if (pathname.startsWith("/dashboard") && pathname !== "/dashboard/login") {
+  if (pathname.startsWith("/dashboard") && pathname !== "/dashboard/login" && pathname !== "/dashboard/signup") {
     const session = request.cookies.get("dashboard_session");
 
     if (!session?.value) {

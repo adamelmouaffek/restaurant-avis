@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/shared/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { StatsCards } from "@/modules/avis/components/StatsCards";
 import { DashboardQuickLinks } from "@/modules/menu/components/DashboardQuickLinks";
+import { OnboardingChecklist } from "@/modules/admin/components/OnboardingChecklist";
 import { PageTransition, FadeIn, AnimatedCounter } from "@/shared/components/animations";
 
 export default async function DashboardPage() {
@@ -12,7 +13,7 @@ export default async function DashboardPage() {
   const restaurantId = session.restaurantId;
 
   // Fetch all stats in parallel
-  const [reviewsRes, participationsRes, prizesRes, ordersRes, ordersTodayRes, restaurantRes] = await Promise.all([
+  const [reviewsRes, participationsRes, prizesRes, ordersRes, ordersTodayRes, restaurantRes, staffCountRes, tableCountRes, menuItemCountRes] = await Promise.all([
     supabaseAdmin
       .from("reviews")
       .select("rating")
@@ -40,6 +41,18 @@ export default async function DashboardPage() {
       .select("slug")
       .eq("id", restaurantId)
       .single(),
+    supabaseAdmin
+      .from("staff")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurantId),
+    supabaseAdmin
+      .from("restaurant_tables")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurantId),
+    supabaseAdmin
+      .from("menu_items")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurantId),
   ]);
 
   const reviews = reviewsRes.data || [];
@@ -58,6 +71,9 @@ export default async function DashboardPage() {
   const revenueToday = (ordersTodayRes.data || []).reduce((sum, o) => sum + (o.total_amount || 0), 0);
 
   const slug = restaurantRes.data?.slug || "";
+  const staffCount = staffCountRes.count ?? 0;
+  const tableCount = tableCountRes.count ?? 0;
+  const menuItemCount = menuItemCountRes.count ?? 0;
 
   return (
     <PageTransition className="space-y-8">
@@ -67,6 +83,14 @@ export default async function DashboardPage() {
           Vue d&apos;ensemble de votre restaurant
         </p>
       </div>
+
+      {/* Onboarding checklist */}
+      <OnboardingChecklist
+        slug={slug}
+        staffCount={staffCount}
+        menuItemCount={menuItemCount}
+        tableCount={tableCount}
+      />
 
       {/* Stats Avis */}
       <FadeIn delay={0.1}>

@@ -59,7 +59,7 @@ export function HeroSection() {
             {/* CTAs */}
             <FadeIn delay={1.0}>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                <Link href="/r/la-belle-assiette">
+                <Link href="/dashboard/signup">
                   <Button
                     size="lg"
                     className="bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] text-white border-0 hover:glow-emerald transition-all text-base px-8 h-12 gap-2"

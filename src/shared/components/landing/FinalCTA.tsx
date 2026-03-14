@@ -33,7 +33,7 @@ export function FinalCTA() {
             <p className="text-lg text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed">
               Rejoignez les restaurants qui multiplient leurs avis Google par 6.
             </p>
-            <Link href="/r/la-belle-assiette">
+            <Link href="/dashboard/signup">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] text-white border-0 glow-emerald hover:glow-emerald-intense transition-all text-base px-8 h-12 gap-2"

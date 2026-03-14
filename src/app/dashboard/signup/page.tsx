@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -12,32 +13,44 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
-import { LogIn } from "lucide-react";
-import Link from "next/link";
+import { UserPlus } from "lucide-react";
 
-export default function DashboardLoginPage() {
+export default function DashboardSignupPage() {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (password !== confirmPassword) {
+      setError("Les mots de passe ne correspondent pas");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("Le mot de passe doit faire au moins 8 caracteres");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/dashboard", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password, confirmPassword }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Erreur de connexion");
+        setError(data.error || "Erreur lors de l'inscription");
         return;
       }
 
@@ -55,15 +68,28 @@ export default function DashboardLoginPage() {
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-            <LogIn className="h-6 w-6 text-primary" />
+            <UserPlus className="h-6 w-6 text-primary" />
           </div>
-          <CardTitle className="text-xl">Espace Gerant</CardTitle>
+          <CardTitle className="text-xl">Creer votre restaurant</CardTitle>
           <CardDescription>
-            Connectez-vous pour acceder a votre dashboard
+            Inscrivez-vous pour acceder a votre espace gerant
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Nom du restaurant</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Mon Restaurant"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                minLength={2}
+                maxLength={100}
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -80,10 +106,23 @@ export default function DashboardLoginPage() {
               <Input
                 id="password"
                 type="password"
-                placeholder="Votre mot de passe"
+                placeholder="8 caracteres minimum"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={8}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="Retapez votre mot de passe"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                minLength={8}
               />
             </div>
 
@@ -94,17 +133,17 @@ export default function DashboardLoginPage() {
             )}
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Connexion..." : "Se connecter"}
+              {loading ? "Creation en cours..." : "Creer mon restaurant"}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-4">
-            Pas encore de compte ?{" "}
+            Deja un compte ?{" "}
             <Link
-              href="/dashboard/signup"
+              href="/dashboard/login"
               className="text-primary hover:underline font-medium"
             >
-              S&apos;inscrire
+              Se connecter
             </Link>
           </p>
         </CardContent>

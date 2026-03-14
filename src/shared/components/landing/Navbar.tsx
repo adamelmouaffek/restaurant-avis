@@ -122,12 +122,12 @@ export function Navbar() {
             <div className="w-px h-5 bg-white/15" />
 
             {/* Primary CTA */}
-            <Link href="/r/la-belle-assiette">
+            <Link href="/dashboard/signup">
               <Button
                 className="bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] text-white border-0 hover:shadow-lg hover:shadow-blue-500/25 transition-all text-sm h-9 px-4"
                 size="sm"
               >
-                Demo Avis
+                S&apos;inscrire gratuitement
               </Button>
             </Link>
           </div>
@@ -203,11 +203,11 @@ export function Navbar() {
 
               {/* CTA */}
               <Link
-                href="/r/la-belle-assiette"
+                href="/dashboard/signup"
                 onClick={() => setMobileOpen(false)}
               >
                 <Button className="w-full bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] text-white border-0 hover:opacity-90 transition-opacity mt-2">
-                  Demo Avis
+                  S&apos;inscrire gratuitement
                 </Button>
               </Link>
             </div>
