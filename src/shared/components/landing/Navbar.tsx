@@ -29,9 +29,9 @@ const demoLinks = [
   },
   {
     label: "Serveur",
-    href: "/m/la-belle-assiette/table/1",
+    href: "/s/la-belle-assiette",
     icon: MonitorSmartphone,
-    description: "Vue table serveur",
+    description: "Interface serveur",
   },
   {
     label: "Cuisine",

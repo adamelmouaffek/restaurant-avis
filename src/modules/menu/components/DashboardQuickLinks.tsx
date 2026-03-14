@@ -84,6 +84,14 @@ export function DashboardQuickLinks({ slug }: DashboardQuickLinksProps) {
       bg: "bg-orange-50 hover:bg-orange-100",
     },
     {
+      href: `/s/${slug}`,
+      icon: ClipboardList,
+      label: "Interface serveur",
+      desc: "Gestion des tables et commandes",
+      color: "text-emerald-600",
+      bg: "bg-emerald-50 hover:bg-emerald-100",
+    },
+    {
       href: `/kds/${slug}`,
       icon: MonitorSmartphone,
       label: "Ecran cuisine",
@@ -127,7 +135,7 @@ export function DashboardQuickLinks({ slug }: DashboardQuickLinksProps) {
       {slug && (
         <>
           <h3 className="text-sm font-medium text-muted-foreground mt-4">Vue client (liens publics)</h3>
-          <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
+          <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
             {externalLinks.map((link) => {
               const Icon = link.icon;
               return (
