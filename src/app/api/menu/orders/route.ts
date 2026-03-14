@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { restaurant_id, table_number, notes, items } = body;
+    const { restaurant_id, table_number, table_session_id, notes, items } = body;
 
     // Rate limit par restaurant + table
     if (restaurant_id && table_number) {
@@ -105,16 +105,21 @@ export async function POST(request: NextRequest) {
     }, 0);
 
     // Insertion de la commande
+    const orderData: Record<string, unknown> = {
+      restaurant_id,
+      table_number,
+      notes: notes ?? null,
+      total_amount: totalAmount,
+      status: "pending",
+      payment_method: "server",
+    };
+    if (table_session_id) {
+      orderData.table_session_id = table_session_id;
+    }
+
     const { data: order, error: orderError } = await supabaseAdmin
       .from("orders")
-      .insert({
-        restaurant_id,
-        table_number,
-        notes: notes ?? null,
-        total_amount: totalAmount,
-        status: "pending",
-        payment_method: "server",
-      })
+      .insert(orderData)
       .select()
       .single();
 
